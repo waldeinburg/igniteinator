@@ -4,10 +4,10 @@ import SortSpec from "./SortSpec";
 const { sort } = testables;
 
 const sortSpecs = {
-    byNameAsc: new SortSpec(CARD_FIELDS.NAME, SortSpec.ASC),
-    byNameDesc: new SortSpec(CARD_FIELDS.NAME, SortSpec.DESC),
-    byCostAsc: new SortSpec(CARD_FIELDS.COST, SortSpec.ASC),
-    byCostDesc: new SortSpec(CARD_FIELDS.COST, SortSpec.DESC)
+    byNameAsc: SortSpec.fromField(CARD_FIELDS.NAME, SortSpec.ASC),
+    byNameDesc: SortSpec.fromField(CARD_FIELDS.NAME, SortSpec.DESC),
+    byCostAsc: SortSpec.fromField(CARD_FIELDS.COST, SortSpec.ASC),
+    byCostDesc: SortSpec.fromField(CARD_FIELDS.COST, SortSpec.DESC)
 }
 
 const sortCards = {

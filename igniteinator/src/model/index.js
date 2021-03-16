@@ -20,11 +20,12 @@ const imageBaseUrl = "http://ec2-54-219-252-233.us-west-1.compute.amazonaws.com/
  */
 const sort = (cards, sortSpecs) => cards.sort((a, b) => {
     for (const spec of sortSpecs) {
-        console.log(spec);
-        const f = spec.field;
-        if (a[f] !== b[f]) {
+        const f = spec.scoreFn;
+        const aScore = f(a);
+        const bScore = f(b);
+        if (aScore !== bScore) {
             const o = spec.order === SortSpec.ASC ? 1 : -1;
-            return a[f] > b[f] ? o : -o;
+            return aScore > bScore ? o : -o;
         }
     }
     return 0;
