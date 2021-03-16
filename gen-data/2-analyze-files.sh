@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+cd "${0%/*}" || exit 1
 source common.inc.sh
 
 BASIC_DATA_QUERY='{"id":.id, "name":.name}'
