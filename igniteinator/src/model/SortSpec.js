@@ -13,6 +13,9 @@ class SortSpec {
         this._order = order;
     }
 
+    flip = () => new SortSpec(this.scoreFn,
+        this.order === ORDERS.ASC ? ORDERS.DESC : ORDERS.ASC)
+
     get scoreFn() {
         return this._scoreFn;
     }

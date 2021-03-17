@@ -18,7 +18,7 @@ const imageBaseUrl = "http://ec2-54-219-252-233.us-west-1.compute.amazonaws.com/
  * @param {SortSpec[]} sortSpecs
  * @returns {Array}
  */
-const sort = (cards, sortSpecs) => cards.sort((a, b) => {
+const sortCards = (cards, sortSpecs) => cards.sort((a, b) => {
     for (const spec of sortSpecs) {
         const f = spec.scoreFn;
         const aScore = f(a);
@@ -32,12 +32,37 @@ const sort = (cards, sortSpecs) => cards.sort((a, b) => {
 });
 
 /**
- * Return array of cards in the order of the given ids
+ * Filter array of cards
+ * 
+ * @param {CardData[]} cards 
+ * @param {Function[]} filters 
+ * @returns {CardData[]}
+ */
+const filterCards = (cards, filters) => {
+    const fs = [...filters];
+    const f = fs.shift();
+    console.log(filters, fs, f);
+    if (f === undefined)
+        return cards;
+    return filterCards(cards.filter(f), fs);
+}
+
+/**
+ * Return all cards as an array
+ * 
+ * @returns {CardData[]}
+ */
+const getAllCards = () => getCards(Object.keys(cards))
+
+/**
+ * Return array of cards in the order of the given ids or all if undefined
  * 
  * @param {String[]} ids 
  * @returns {CardData[]}
  */
-const getCards = ids => ids.map(id => cards[id]);
+const getCards = ids => ids === undefined ?
+    getAllCards() :
+    ids.map(id => cards[id]);
 
 /**
  * Return sorted array of cards
@@ -46,11 +71,12 @@ const getCards = ids => ids.map(id => cards[id]);
  * @param {SortSpec[]} sortSpecs 
  * @returns {CardData[]}
  */
-const getCardsSorted = (ids, sortSpecs) => sort(getCards(ids), sortSpecs);
+const getCardsFilteredAndSorted = (ids, filters, sortSpecs) =>
+    sortCards(filterCards(getCards(ids), filters), sortSpecs);
 
 const getFullImageUrl = path => imageBaseUrl + path;
 
 export const testables = {
-    sort: sort
+    sort: sortCards
 };
-export { getCardsSorted, getFullImageUrl, CARD_FIELDS, keys };
+export { getCardsFilteredAndSorted, getFullImageUrl, CARD_FIELDS, keys };
