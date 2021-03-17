@@ -1,6 +1,6 @@
 import Card from "./Card";
 
-const CardsList = (props) => props.cards.map(card => (
+const CardsList = ({ cards }) => cards.map(card => (
     <Card card={card} />
 ));
 

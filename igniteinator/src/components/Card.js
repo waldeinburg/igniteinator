@@ -1,14 +1,11 @@
-import { getFullImageUrl } from "../model";
+import CardImage from "./CardImage"
 
-const Card = props => {
-    const { card } = props;
-    return (
-        <div>
-            <div>{card.name}</div>
-            <div>{card.cost}</div>
-            {/* <div><img src={getFullImageUrl(card.image)} alt="Card" /></div> */}
-        </div>
-    );
-};
+const Card = ({ card }) => (
+    <div>
+        <div>{card.name}</div>
+        <div>{card.cost}</div>
+        <div><CardImage src={card.image} /></div>
+    </div>
+);
 
 export default Card;
