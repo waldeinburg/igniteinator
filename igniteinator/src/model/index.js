@@ -39,9 +39,7 @@ const sortCards = (cards, sortSpecs) => cards.sort((a, b) => {
  * @returns {CardData[]}
  */
 const filterCards = (cards, filters) => {
-    const fs = [...filters];
-    const f = fs.shift();
-    console.log(filters, fs, f);
+    const [f, ...fs] = filters;
     if (f === undefined)
         return cards;
     return filterCards(cards.filter(f), fs);
@@ -77,6 +75,7 @@ const getCardsFilteredAndSorted = (ids, filters, sortSpecs) =>
 const getFullImageUrl = path => imageBaseUrl + path;
 
 export const testables = {
-    sort: sortCards
+    sort: sortCards,
+    filter: filterCards
 };
 export { getCardsFilteredAndSorted, getFullImageUrl, CARD_FIELDS, keys };
