@@ -4,24 +4,28 @@ const ORDERS = {
 };
 
 class SortSpec {
+
+    #scoreFn;
+    #order;
+
     /**
      * @param {Function} scoreFn 
      * @param {Number} order 
      */
     constructor(scoreFn, order) {
-        this._scoreFn = scoreFn
-        this._order = order;
+        this.#scoreFn = scoreFn
+        this.#order = order;
     }
 
     flip = () => new SortSpec(this.scoreFn,
         this.order === ORDERS.ASC ? ORDERS.DESC : ORDERS.ASC)
 
     get scoreFn() {
-        return this._scoreFn;
+        return this.#scoreFn;
     }
 
     get order() {
-        return this._order;
+        return this.#order;
     }
 
     static get ASC() {
