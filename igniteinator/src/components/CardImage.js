@@ -9,7 +9,6 @@ class CardImage extends React.Component {
         this.state = { load: false };
     }
 
-    // Local state should be ok for this purpose.
     onVisibilityChange = isVisible => {
         if (isVisible && !this.state.load)
             this.setState({ load: true })
