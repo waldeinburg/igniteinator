@@ -18,9 +18,8 @@
             "fig:test" ["run" "-m" "figwheel.main" "-co" "test.cljs.edn" "-m" "igniteinator.test-runner"]}
 
   :profiles {:dev {:dependencies   [[com.bhauman/figwheel-main "0.2.12"]
-                                    [com.bhauman/rebel-readline-cljs "0.1.4"]]
-
+                                    [com.bhauman/rebel-readline-cljs "0.1.4"]
+                                    [org.clojure/math.combinatorics "0.1.6"]]
                    :resource-paths ["target"]
                    ;; need to add the compiled assets to the :clean-targets
                    :clean-targets  ^{:protect false} ["target"]}})
-

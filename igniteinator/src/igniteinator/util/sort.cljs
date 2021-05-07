@@ -1,20 +1,30 @@
 (ns igniteinator.util.sort)
 
-(defn keyfn-hierarchy-comparator [keyfns]
-  "Returns a comparator from a vector of keyfn functions.
-   The comparator will compare (keyfn item) using compare until a non-zero result is found and
-   return that value or return zero if no comparison returns a non-zero value."
-  (fn [a b]
-    ;; Reduce keyfn functions, terminating if one returns a non-zero result.
+(defn keyfn-comparator
+  "Return a comparator that compares (keyfn item) with compare.
+   If reverse? is true the items will be compared in reverse order."
+  ([keyfn]
+   (keyfn-comparator keyfn false))
+  ([keyfn reverse?]
+   (if reverse?
+     #(compare (keyfn %2) (keyfn %1))
+     #(compare (keyfn %1) (keyfn %2)))))
+
+(defn comp-hierarchy-comparator [comps]
+  "Returns a comparator from a vector of comparators.
+   The resulting comparator will iterate through the comparators until a non-zero result is found
+   and return that value or return zero if no comparison returns a non-zero value."
+  (fn [x y]
+    ;; Reduce comparators, terminating if the previous returned a non-zero result.
     @(ensure-reduced
        (reduce
-         (fn [previous-result keyfn]
+         (fn [previous-result comp]
            (if (not= 0 previous-result)
              (reduced previous-result)
-             (compare (keyfn a) (keyfn b))))
+             (comp x y)))
          0
-         keyfns))))
+         comps))))
 
-(defn sort-by-hierarchy [keyfns coll]
-  "Sort by a comparator returned by (keyfn-hierarchy-comparator keyfns)."
-  (sort (keyfn-hierarchy-comparator keyfns) coll))
+(defn sort-by-hierarchy [comps coll]
+  "Sort by a comparator returned by (comp-hierarchy-comparator comparators)."
+  (sort (comp-hierarchy-comparator comps) coll))
