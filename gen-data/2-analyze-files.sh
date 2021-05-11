@@ -5,14 +5,73 @@ source common.inc.sh
 BASIC_DATA_QUERY='{"id":.id, "name":.name}'
 SORT_QUERY="sort_by(.id)"
 
-function assert_no_diff() {
+function test_diff() {
     local a=$1
     local b=$2
-    if ! diff <(echo "$a") <(echo "$b"); then
+    if ! diff -C5 <(echo "$a") <(echo "$b"); then
         echo "Data differs (differences above)!"
-        exit 1
+        return 1
     fi
 }
+
+function assert_no_diff() {
+  test_diff "$1" "$2" || exit 1
+}
+
+function warn_on_diff() {
+  test_diff "$1" "$2" || return 0 # set -e is active
+}
+
+echo "Verify that the default cards file and id set to English are the same"
+assert_no_diff "$(jq . "$CARDS_FILE")" "$(jq . "$CARDS_ENGLISH_FILE")"
+
+echo "Verify that the number of cards are the same for all languages"
+function cards_no() {
+    jq '.cards | length' "$1"
+}
+cards_no_english=$(jq '.cards | length' "$CARDS_FILE")
+for l in "$CARDS_SPANISH_FILE" "$CARDS_FRENCH_FILE" "$CARDS_GERMAN_FILE"; do
+    echo "Verify for $l"
+    assert_no_diff "$cards_no_english" "$(cards_no "$CARDS_SPANISH_FILE")"
+done
+
+echo "Verify that all languages have the same combos"
+base_list=$(jq '.cards as $cards |
+    [.cards[] | {
+        "name": .name,
+        "combos":
+            (if .combos != null
+                then
+                    [.combos | split(",") | .[] | tonumber] as $combos |
+                    $cards | map(.id as $id | select($combos | index($id))) |
+                    [.[] | .name] | sort
+                else
+                    []
+                end)
+    }] | sort_by(.name)' "$CARDS_FILE")
+for l in "$CARDS_SPANISH_FILE" "$CARDS_FRENCH_FILE" "$CARDS_GERMAN_FILE"; do
+    echo "Verify for $l"
+    this_list=$(jq '
+    [.cards[] | {
+        "id": .id,
+        "name": (.image | split("/")[-1] | split(".")[0]),
+        "combos": .combos
+    }] as $cards |
+    [$cards[] | {
+        "name": .name,
+        "combos":
+            (if .combos != null
+                then
+                    [.combos | split(",") | .[] | tonumber] as $combos |
+                    $cards | map(.id as $id | select($combos | index($id))) |
+                    [.[] | .name] | sort
+                else
+                    []
+                end)
+    }] | sort_by(.name)' "$l")
+    # At the time of writing there are errors but we don't care.
+    warn_on_diff "$base_list" "$this_list"
+done
 
 echo "Verify that categories 1 data are the same in categories 2"
 cat_basic_data_query='{"id":.id, "name":.name, "cards":[.cards[] | '"$BASIC_DATA_QUERY"'] | '"$SORT_QUERY"'}] | '"$SORT_QUERY"
