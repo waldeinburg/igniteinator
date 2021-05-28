@@ -2,6 +2,8 @@
 cd "${0%/*}" || exit 1
 source common.inc.sh
 
+mkdir -p "$DOWNLOAD_DIR"
+
 curl "$BASE_URL/api/cards" > "$CARDS_FILE"
 curl "$BASE_URL/api/cards?lang_id=1" > "$CARDS_ENGLISH_FILE"
 curl "$BASE_URL/api/cards?lang_id=2" > "$CARDS_SPANISH_FILE"

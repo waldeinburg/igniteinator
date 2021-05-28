@@ -22,6 +22,28 @@ function warn_on_diff() {
   test_diff "$1" "$2" || return 0 # set -e is active
 }
 
+echo "Verify that Poison Blade is still missing"
+if [[ "$(jq '.cards[] | select(.name == "Poison Blade")' "$CARDS_FILE")" ]]; then
+  echo "Poison Blade found! Please remove the adding of this card from the data generation script."
+  exit 1
+fi
+echo "Verify that the intended id for added Poison Blade card is not taken"
+if [[ "$(jq '.cards[] | select(.id == 999)' "$CARDS_FILE")" ]]; then
+  echo "Id 999 is taken! Please change the id of Poison Blade from the data generation script."
+  exit 1
+fi
+
+echo "Verify that name and image does not contain suspect stuff"
+if jq '.cards[] | [.name, .image]' "$CARDS_FILE" | grep -C10 '@'; then
+  echo "@ in name or image found! This would break image download script"
+  exit 1
+fi
+# Prevent data from stepping out of the download folder.
+if jq '.cards[] | .name' "$CARDS_FILE" | grep -FC10 '..'; then
+  echo ".. in name found! This could make download script dangerous!"
+  exit 1
+fi
+
 echo "Verify that the default cards file and id set to English are the same"
 assert_no_diff "$(jq . "$CARDS_FILE")" "$(jq . "$CARDS_ENGLISH_FILE")"
 

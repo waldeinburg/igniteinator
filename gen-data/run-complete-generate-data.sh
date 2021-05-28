@@ -6,8 +6,10 @@ function heading() {
 }
 
 heading "Fetching data ..."
-./1-fetch-data.sh
+./1-fetch-data.sh --images
 heading "Verifying integrity ..."
 ./2-analyze-files.sh
+heading "Downloading images ..."
+./3-download-images.sh
 heading "Generating data ..."
-./3-generate-data.sh
+./4-generate-data.sh
