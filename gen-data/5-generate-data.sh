@@ -2,8 +2,7 @@
 cd "${0%/*}" || exit 1
 source common.inc.sh
 
-gen_src_dir="../igniteinator/resources/public/generated"
-output_file="$gen_src_dir/data.json"
+output_file="$OUTPUT_DIR/data.json"
 
 # Get array, then reduce to map. That way we can easily change our mind about how the raw model should look.
 cards_array=$(

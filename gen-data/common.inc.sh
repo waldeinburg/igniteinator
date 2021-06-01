@@ -11,5 +11,8 @@ CARDS_GERMAN_FILE="$DOWNLOAD_DIR/cards-german.json"
 CAT1_FILE="$DOWNLOAD_DIR/categories-1.json"
 CAT2_FILE="$DOWNLOAD_DIR/categories-2.json"
 BASE_URL=http://ec2-54-219-252-233.us-west-1.compute.amazonaws.com
+OUTPUT_DIR=../igniteinator/resources/public/generated
+IMG_OUTPUT_DIR="$OUTPUT_DIR/img"
+IMG_OUTPUT_DIR_ENGLISH="$IMG_OUTPUT_DIR/en"
 
 set -e
