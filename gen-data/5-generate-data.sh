@@ -4,30 +4,29 @@ source common.inc.sh
 
 output_file="$OUTPUT_DIR/data.json"
 
-# Get array, then reduce to map. That way we can easily change our mind about how the raw model should look.
-cards_array=$(
-    jq --sort-keys '[.cards[] | {
-        "id": .id,
-        "name": .name,
-        "cost": .cost,
-        "image": .image,
-        "combos": (if .combos != null
-            then
-                [.combos | split(",") | .[] | tonumber] | sort
-            else
-                []
-            end)
-    }]' "$CARDS_FILE"
-)
-cards_map=$(jq --sort-keys 'reduce .[] as $card ({}; . + ($card | {"\(.id)": $card}))' <<<"$cards_array")
-
-# calculate in frontend and cache result instead of increasing bandwith usage.
-#keys_array=$(jq '[.cards[].id] | sort' "$CARDS_FILE")
-#fields_array=$(jq '.[0] | keys' <<<"$cards_array")
-
-# We could load the cards array dynamically and calculate the data then; but for now, precalculate everything.
-echo "Writing output to $(readlink -f $output_file) ..."
-# TODO: optimize size
-cat <<EOF >"$output_file"
-$cards_map;
-EOF
+echo "Writing output to $(readlink -f "$output_file") ..."
+jq --sort-keys '
+  # Add Poison Blade and use $cards instead of .cards.
+  (.cards + [{
+    "id": 999,
+    "name": "Poison Blade",
+    "cost": 9,
+    "combos": null
+  }]) as $cards | {
+  "cards": [$cards[]
+  | {
+    "id": .id,
+    "name": .name,
+    "cost": .cost,
+    "combos": (if .combos != null
+      then
+        [.combos | split(",") | .[] | tonumber] | sort
+      else
+        []
+      end)
+  }]
+}' "$CARDS_FILE" | \
+# Minify output by removing unnecessary whitespace.
+# We could also use short keys, but the saved bandwidth (about 1.5K saved) is not worth the reduced
+# code readability.
+perl -0777 -pe 's/\n *(?:(".*?":) )?/\1/g' > "$output_file"
