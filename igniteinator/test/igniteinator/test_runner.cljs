@@ -3,6 +3,7 @@
   (:require
     ;; require all the namespaces that you want to test
     [igniteinator.core-test]
+    [igniteinator.util.sort-test]
     [figwheel.main.testing :refer [run-tests-async]]))
 
 (defn -main [& args]

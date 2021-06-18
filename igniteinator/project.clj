@@ -8,6 +8,8 @@
 
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/clojurescript "1.10.773"]
+                 [org.clojure/core.async "1.3.618"]
+                 [cljs-http "0.1.46"]
                  [arttuka/reagent-material-ui "4.11.3-2"]]
 
   :source-paths ["src"]

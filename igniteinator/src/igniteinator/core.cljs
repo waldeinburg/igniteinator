@@ -1,16 +1,10 @@
 (ns ^:figwheel-hooks igniteinator.core
   (:require
     [goog.dom :as gdom]
-    [reagent.core :as reagent :refer [atom]]
     [reagent.dom :as rdom]
-    [igniteinator.ui.main :refer [main]]))
-
-(println "This text is printed from src/igniteinator/core.cljs. Go ahead and edit it and see reloading in action.")
-
-(defn multiply [a b] (* a b))
-
-;; define your app data so that it doesn't get over-written on reload
-(defonce app-state (atom {:text "Hello world!"}))
+    [igniteinator.ui.main :refer [main]]
+    [igniteinator.data-load :refer [load-data]]
+    [igniteinator.state :refer [state]]))
 
 (defn get-app-element []
   (gdom/getElement "app"))
@@ -20,6 +14,7 @@
 
 (defn mount-app-element []
   (when-let [el (get-app-element)]
+    (load-data)
     (mount el)))
 
 ;; conditionally start your application based on the presence of an "app" element
