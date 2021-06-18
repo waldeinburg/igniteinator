@@ -7,10 +7,19 @@
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]))
 
+(defn data->cards [data]
+  (reduce
+    (fn [c v]
+      (assoc c (:id v) v))
+    {}
+    (:cards data)))
+
 (defn- set-data! [data]
-  (set-state!
-    :data data
-    :mode :ready))
+  (let [cards (data->cards data)]
+    (set-state!
+      :data data
+      :cards cards
+      :mode :ready)))
 
 (defn load-data []
   (go
@@ -18,4 +27,4 @@
     (let [response (<! (http/get data-file-path))]
       (if (:success response)
         (set-data! (:body response))
-        (alert/fatal! (str (txt :data-load-error ) ": " (:error-text response)))))))
+        (alert/fatal! (str (txt :data-load-error) ": " (:error-text response)))))))
