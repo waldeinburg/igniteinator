@@ -7,5 +7,8 @@
                         :mode     :init
                         }))
 
+;; Easy access to language cursor.
+(defonce language (r/cursor state [:language]))
+
 (defn set-state! [& kvs]
   (swap! state #(apply assoc % kvs)))

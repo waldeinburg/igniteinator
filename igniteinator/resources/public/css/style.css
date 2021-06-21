@@ -1,2 +1,7 @@
 /* some style */
 
+.card-not-loaded {
+    width: 430px;
+    height: 600px;
+    background: #a0a0a0;
+}
