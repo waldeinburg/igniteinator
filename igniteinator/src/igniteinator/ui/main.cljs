@@ -1,6 +1,7 @@
 (ns igniteinator.ui.main
   (:require [igniteinator.state :refer [state]]
             [igniteinator.ui.card-list :refer [card-list]]
+            [igniteinator.ui.footer :refer [footer]]
             [reagent.core :as r]
             [reagent-material-ui.core.css-baseline :refer [css-baseline]]
             [reagent-material-ui.core.circular-progress :refer [circular-progress]]))
@@ -20,4 +21,5 @@
 (defn main []
   [:<>
    [css-baseline]
-   [content]])
+   [content]
+   [footer]])
