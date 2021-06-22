@@ -19,10 +19,10 @@
         loaded? (r/atom false)]
     (fn []
       (if @loaded?
-        [:img {:src src, :alt name}]
+        [:img {:src src, :alt name, :class "card-img"}]
         [visibility-sensor {:partial-visibility true
                             :on-change #(when % (reset! loaded? true))} ; %: visible?
-         [:div {:class "card-not-loaded"}]]))))
+         [:div {:class "card-img card-not-loaded"}]]))))
 
 (defn card [card]
   [card-image card])

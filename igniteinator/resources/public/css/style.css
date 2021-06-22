@@ -1,7 +1,12 @@
 /* some style */
 
 .card-not-loaded {
-    width: 430px;
-    height: 600px;
     background: #a0a0a0;
+}
+
+.card-img {
+    /* TODO: While this is theoretically fine (poker size) it turns out smaller on screen.
+             Replace with suitable relative sizing. */
+    width: 2.5in;
+    height: 3.5in;
 }
