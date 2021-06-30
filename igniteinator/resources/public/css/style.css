@@ -7,15 +7,11 @@ ol.card-list {
 
 .card-not-loaded {
     background: #a0a0a0;
-    width: 2.5in;
-    height: 3.5in;
+    /* Aspect ratio like a poker sized card. */
+    padding-top: 140%;
 }
 
 .card-img {
-    /* TODO: While this is theoretically fine (poker size) it turns out smaller on screen.
-             Replace with suitable relative sizing. */
-    /*width: 2.5in;
-    height: 3.5in;*/
     width: 100%;
     /* Avoid scaling over 100%. */
     max-width: 430px;

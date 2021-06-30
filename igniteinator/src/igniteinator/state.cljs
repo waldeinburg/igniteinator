@@ -2,9 +2,10 @@
   (:require [reagent.core :as r]))
 
 (defonce state (r/atom {
-                        :data     nil
-                        :language :en
-                        :mode     :init
+                        :data      nil
+                        :language  :en
+                        :mode      :init
+                        :card-size :normal
                         }))
 
 ;; Easy access to language cursor.

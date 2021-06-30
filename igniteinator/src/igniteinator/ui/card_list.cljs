@@ -1,6 +1,7 @@
 (ns igniteinator.ui.card-list
   (:require [igniteinator.state :refer [state language]]
             [igniteinator.constants :refer [img-base-path img-ext]]
+            [igniteinator.constants :as constants]
             [reagent.core :as r]
             [reagent-material-ui.util :refer [adapt-react-class]]
             [reagent-material-ui.core.box :refer [box]]
@@ -26,9 +27,10 @@
                             :on-change          #(when % (reset! loaded? true))} ; %: visible?
          [:div {:class "card-img card-not-loaded"}]]))))
 
-(defn card [card]
-  [grid {:component "li", :item true, :xs 6, :sm 4, :md 3, :lg 2}
-   [card-image card]])
+(let [size (r/cursor state [:card-size])]
+  (defn card [card]
+    [grid (into {:component "li", :item true} (get constants/card-sizes @size))
+     [card-image card]]))
 
 (defn card-list [cards]
   [grid {:component "ol", :container true, :class "card-list"}
