@@ -32,8 +32,13 @@
     [grid (into {:component "li", :item true} (get constants/card-sizes @size))
      [card-image card]]))
 
+(defn empty-card-list []
+  [:p "Empty list."])
+
 (defn card-list [cards]
   [grid {:component "ol", :container true, :class "card-list"}
-   (for [c cards]
-     ^{:key (:id c)}                                        ; Cf. example on https://reagent-project.github.io/
-     [card c])])
+   (if (empty? cards)
+     [empty-card-list]
+     (for [c cards]
+       ^{:key (:id c)}                                      ; Cf. example on https://reagent-project.github.io/
+       [card c]))])
