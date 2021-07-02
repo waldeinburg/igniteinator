@@ -24,3 +24,8 @@ else
   echo "Number of downloaded images was $downloaded_images; expected $total_number_of_cards!"
   exit 1
 fi
+
+if [[ "$(exiftool download/images/*.png | awk '/^Image Size/ {print $4}' | uniq -u)" ]]; then
+  echo "Expected all images to be the same size but this is not true"
+  exit 1
+fi
