@@ -3,19 +3,15 @@
     [cljs.test :refer-macros [deftest is are testing]]
     [clojure.math.combinatorics :as combo]
     [igniteinator.util.sort :refer
-     [keyfn-comparator sort-by-hierarchy]]))
+     [keyfn-comparator reverse-comparator sort-by-hierarchy]]))
 
-(defn m [res items]
-  (map-indexed
-    (fn [idx item]
-      (let [new-res (conj res item)
-            other   (concat
-                      (take idx items)
-                      (take-last (- (count items) idx 1) items))]
-        (if (empty? other)
-          new-res
-          (m new-res other))))
-    items))
+(deftest reverse-comparator-test
+  (let [rc (reverse-comparator compare)]
+    (are [x v]
+      (= (rc x 0) v)
+      0 0
+      1 -1
+      -1 1)))
 
 (let [a1b1       {:a 1 :b 1}
       a1b2       {:a 1 :b 2}
@@ -23,9 +19,9 @@
       a2b2       {:a 2 :b 2}
       all-perms  (combo/permutations [a1b1 a1b2 a2b1 a2b2])
       comp-a     (keyfn-comparator :a)
-      comp-a-rev (keyfn-comparator :a true)
+      comp-a-rev (reverse-comparator comp-a)
       comp-b     (keyfn-comparator :b)
-      comp-b-rev (keyfn-comparator :b true)]
+      comp-b-rev (reverse-comparator comp-b)]
 
   (deftest keyfn-comparator-test
     (are [comp a b res]
