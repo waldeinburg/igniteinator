@@ -8,7 +8,8 @@
      :language   :en
      :mode       :init
      :card-size  :normal
-     :cards-page {:filters  {:key :all, :args []}
+     :cards-page {:base     :all
+                  :filters  []
                   :sortings [{:key :name, :order :asc}]}
      }))
 

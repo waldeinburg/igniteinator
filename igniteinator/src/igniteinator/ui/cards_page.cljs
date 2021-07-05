@@ -6,4 +6,4 @@
 
 (let [page-state (r/cursor state [:cards-page])]
   (defn cards-page []
-    [card-list (get-cards (:filters @page-state) (:sortings @page-state))]))
+    [card-list (get-cards (:base @page-state) (:filters @page-state) (:sortings @page-state))]))
