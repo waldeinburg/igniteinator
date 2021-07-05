@@ -1,5 +1,5 @@
 (ns igniteinator.ui.main
-  (:require [igniteinator.state :refer [state]]
+  (:require [igniteinator.state :refer [data state]]
             [igniteinator.ui.card-list :refer [card-list]]
             [igniteinator.ui.header :refer [header]]
             [igniteinator.ui.footer :refer [footer]]
@@ -11,10 +11,11 @@
 (defn content []
   (let [mode (r/cursor state [:mode])]
     (fn []
+      (println "foo")
       (condp = @mode
         :init [:div "The monkeys are listening ..."]
         :loading [circular-progress]
-        :ready [card-list (vals (:cards @state))]
+        :ready [card-list (vals (:cards @data))]
         :fatal-error [:div (:fatal-message @state)]
         [:div (str "No such mode: " @mode)]))))
 

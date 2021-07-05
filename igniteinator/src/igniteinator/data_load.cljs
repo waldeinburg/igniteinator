@@ -1,6 +1,6 @@
 (ns igniteinator.data-load
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [igniteinator.state :refer [set-state!]]
+  (:require [igniteinator.state :as st]
             [igniteinator.constants :refer [data-file-path]]
             [igniteinator.text :refer [txt]]
             [igniteinator.ui.alert :as alert]
@@ -16,14 +16,12 @@
 
 (defn- set-data! [data]
   (let [cards (data->cards data)]
-    (set-state!
-      :data data
-      :cards cards
-      :mode :ready)))
+    (st/set-in! st/data :cards cards)
+    (st/set-state! :mode :ready)))
 
 (defn load-data []
   (go
-    (set-state! :mode :loading)
+    (st/set-state! :mode :loading)
     (let [response (<! (http/get data-file-path))]
       (if (:success response)
         (set-data! (:body response))
