@@ -4,10 +4,12 @@
 (defonce state
   (r/atom
     {
-     :data      nil
-     :language  :en
-     :mode      :init
-     :card-size :normal
+     :data       nil
+     :language   :en
+     :mode       :init
+     :card-size  :normal
+     :cards-page {:filters  {:key :all, :args []}
+                  :sortings [{:key :name, :order :asc}]}
      }))
 
 ;; Data object is stored in a separate atom to limit the amount of data to serialize each time state

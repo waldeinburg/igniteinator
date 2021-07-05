@@ -1,6 +1,6 @@
 (ns igniteinator.ui.main
-  (:require [igniteinator.state :refer [data state]]
-            [igniteinator.ui.card-list :refer [card-list]]
+  (:require [igniteinator.state :refer [state]]
+            [igniteinator.ui.cards-page :refer [cards-page]]
             [igniteinator.ui.header :refer [header]]
             [igniteinator.ui.footer :refer [footer]]
             [reagent.core :as r]
@@ -11,11 +11,10 @@
 (defn content []
   (let [mode (r/cursor state [:mode])]
     (fn []
-      (println "foo")
-      (condp = @mode
+      (case @mode
         :init [:div "The monkeys are listening ..."]
         :loading [circular-progress]
-        :ready [card-list (vals (:cards @data))]
+        :ready [cards-page]
         :fatal-error [:div (:fatal-message @state)]
         [:div (str "No such mode: " @mode)]))))
 
