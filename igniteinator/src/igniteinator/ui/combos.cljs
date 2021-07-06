@@ -1,6 +1,6 @@
 (ns igniteinator.ui.combos
-  (:require [igniteinator.state :refer [state assoc!]]
-            [igniteinator.model.cards :refer [get-card-from-id get-cards-from-ids]]
+  (:require [igniteinator.state :refer [state assoc-a!]]
+            [igniteinator.model.cards :refer [get-card-from-id get-cards]]
             [igniteinator.ui.page :refer [page]]
             [igniteinator.ui.back-button :refer [back-button]]
             [igniteinator.ui.card-list :refer [card-list]]
@@ -12,11 +12,11 @@
 (defonce page-state (r/cursor state [:combos-page]))
 
 (defn combos-list [card]
-  (let [cards (get-cards-from-ids (:combos card))]
+  (let [cards (get-cards (:combos card) [] (:sortings @page-state))]
     [card-list
      {:on-click-fn (fn [c]
                      (when (not-empty (:combos c))
-                       #(assoc! page-state :card-id (:id c))))
+                       #(assoc-a! page-state :card-id (:id c))))
       :tooltip-fn  (fn [c]
                      (case (:combos c)
                        [] (txt :no-combos)

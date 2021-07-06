@@ -13,7 +13,8 @@
      :cards-page    {:base     :all
                      :filters  []
                      :sortings [{:key :name, :order :asc}]}
-     :combos-page   {:card-id nil}
+     :combos-page   {:card-id nil
+                     :sortings [{:key :name, :order :asc}]}
      }))
 
 ;; Data object is stored in a separate atom to limit the amount of data to serialize each time state
@@ -23,11 +24,11 @@
 ;; Easy access to language cursor.
 (defonce language (r/cursor state [:language]))
 
-(defn assoc! [a & kvs]
+(defn assoc-a! [a & kvs]
   (swap! a #(apply assoc % kvs)))
 
 (defn set-state! [& kvs]
-  (apply assoc! state kvs))
+  (apply assoc-a! state kvs))
 
 (defn set-in-state! [& path-vs]
   (swap! state (fn [initial]
