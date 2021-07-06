@@ -3,10 +3,17 @@
             [igniteinator.ui.cards-page :refer [cards-page]]
             [igniteinator.ui.header :refer [header]]
             [igniteinator.ui.footer :refer [footer]]
+            [igniteinator.ui.combos :refer [combos-page]]
             [reagent.core :as r]
             [reagent-material-ui.core.css-baseline :refer [css-baseline]]
             [reagent-material-ui.core.container :refer [container]]
             [reagent-material-ui.core.circular-progress :refer [circular-progress]]))
+
+(defn pages []
+  ;; TODO: add router here?
+  [:<>
+   [cards-page]
+   [combos-page]])
 
 (defn content []
   (let [mode (r/cursor state [:mode])]
@@ -14,7 +21,7 @@
       (case @mode
         :init [:div "The monkeys are listening ..."]
         :loading [circular-progress]
-        :ready [cards-page]
+        :ready [pages]
         :fatal-error [:div (:fatal-message @state)]
         [:div (str "No such mode: " @mode)]))))
 

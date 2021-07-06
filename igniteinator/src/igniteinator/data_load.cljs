@@ -16,7 +16,7 @@
 
 (defn- set-data! [data]
   (let [cards (data->cards data)]
-    (st/set-in! st/data :cards cards)
+    (st/assoc! st/data :cards cards)
     (st/set-state! :mode :ready)))
 
 (defn load-data []

@@ -24,6 +24,9 @@
 (defn get-all-cards []
   (vals @cards))
 
+(defn get-card-from-id [id]
+  (get @cards id))
+
 (defn get-cards-from-ids [ids]
   (vals (select-keys @cards ids)))
 

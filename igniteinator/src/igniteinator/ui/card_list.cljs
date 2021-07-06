@@ -36,13 +36,19 @@
                              :on-change          #(when % (reset! loaded? true))} ; %: visible?
           [:div {:class "card-img card-not-loaded"}]])))))
 
+(defn card-container
+  ([card]
+   (card-container {} card))
+  ([props card]
+   [card-image props card]))
+
 (let [size (r/cursor state [:card-size])]
-  (defn card
+  (defn card-grid
     ([card]
      (card {} card))
     ([props card]
      [grid (into {:component "li", :item true} (get constants/card-sizes @size))
-      [card-image props card]])))
+      [card-container props card]])))
 
 (defn empty-card-list []
   [:p "Empty list."])
@@ -59,11 +65,12 @@
                        (:tooltip props) #(:tooltip props)
                        (:tooltip-fn props) (:tooltip-fn props)
                        :else (constantly nil))]
-     [grid {:component "ol", :container true, :class "card-list"}
-      (if (empty? cards)
-        [empty-card-list]
-        (for [c cards]
-          (let [on-click (on-click-fn c)
-                tooltip  (tooltip-fn c)]
-            ^{:key (:id c)}                                 ; Cf. example on https://reagent-project.github.io/
-            [card {:on-click on-click, :tooltip tooltip} c])))])))
+     (if (empty? cards)
+       [empty-card-list]
+       [grid {:component "ol", :container true, :class "card-list"}
+        (do
+          (for [c cards]
+            (let [on-click (on-click-fn c)
+                  tooltip  (tooltip-fn c)]
+              ^{:key (:id c)}                               ; Cf. example on https://reagent-project.github.io/
+              [card-grid {:on-click on-click, :tooltip tooltip} c])))]))))
