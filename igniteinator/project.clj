@@ -6,11 +6,12 @@
 
   :min-lein-version "2.7.1"
 
-  :dependencies [[org.clojure/clojure "1.10.0"]
-                 [org.clojure/clojurescript "1.10.773"]
+  :dependencies [[org.clojure/clojure "1.10.3"]
+                 [org.clojure/clojurescript "1.10.844"]
                  [org.clojure/core.async "1.3.618"]
                  [cljs-http "0.1.46"]
-                 [arttuka/reagent-material-ui "4.11.3-2"]]
+                 [arttuka/reagent-material-ui "4.11.3-2"
+                  :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server arttuka/reagent-material-ui-js]]]
 
   :source-paths ["src"]
 
@@ -19,7 +20,7 @@
             "fig:min"  ["run" "-m" "figwheel.main" "-O" "advanced" "-bo" "dev"]
             "fig:test" ["run" "-m" "figwheel.main" "-co" "test.cljs.edn" "-m" "igniteinator.test-runner"]}
 
-  :profiles {:dev {:dependencies   [[com.bhauman/figwheel-main "0.2.12"]
+  :profiles {:dev {:dependencies   [[com.bhauman/figwheel-main "0.2.13" :exclusions [org.clojure/clojurescript]]
                                     [com.bhauman/rebel-readline-cljs "0.1.4"]
                                     [org.clojure/math.combinatorics "0.1.6"]]
                    :resource-paths ["target"]

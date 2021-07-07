@@ -68,7 +68,7 @@
      (if (empty? cards)
        [empty-card-list]
        [grid {:component "ol", :container true, :class "card-list"}
-        (do
+        (doall
           (for [c cards]
             (let [on-click (on-click-fn c)
                   tooltip  (tooltip-fn c)]

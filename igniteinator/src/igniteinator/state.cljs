@@ -12,7 +12,8 @@
      :card-size     :normal
      :cards-page    {:base     :all
                      :filters  []
-                     :sortings [{:key :name, :order :asc}]}
+                     :sortings [{:key :name, :order :asc}]
+                     :card-selection #{}}
      :combos-page   {:card-id nil
                      :sortings [{:key :name, :order :asc}]}
      }))

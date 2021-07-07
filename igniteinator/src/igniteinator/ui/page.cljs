@@ -7,4 +7,4 @@
   [:<>
    [page-title title]
    ;; https://github.com/reagent-project/reagent/issues/68#issuecomment-77635279
-   (map-indexed #(with-meta %2 {:key %1}) children)])
+   (doall (map-indexed #(with-meta %2 {:key %1}) children))])

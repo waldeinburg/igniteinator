@@ -10,6 +10,9 @@
    :no-more-combos    {:en "No more known combos for this card"}
    :cards-page-title  {:en "Cards"}
    :combos-page-title {:en "Combos for"}
+   :card-selection    {:en "Card selection"}
+   :select-all        {:en "All"}
+   :select-some       {:en "Select cards"}
    })
 
 (defn txt [s]
