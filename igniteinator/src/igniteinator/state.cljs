@@ -10,11 +10,12 @@
      :current-page  :cards
      :previous-page nil
      :card-size     :normal
-     :cards-page    {:base     :all
-                     :filters  []
-                     :sortings [{:key :name, :order :asc}]
-                     :card-selection #{}}
-     :combos-page   {:card-id nil
+     :cards-page    {:base           :all
+                     :filters        []
+                     :sortings       [{:key :name, :order :asc}]
+                     :card-selection {:dialog-open? false
+                                      :ids          #{}}}
+     :combos-page   {:card-id  nil
                      :sortings [{:key :name, :order :asc}]}
      }))
 
@@ -28,12 +29,15 @@
 (defn assoc-a! [a & kvs]
   (swap! a #(apply assoc % kvs)))
 
+(defn assoc-in-a! [a & path-vs]
+  (swap! a (fn [initial]
+             (reduce (fn [st [p v]]
+                       (assoc-in st p v))
+               initial
+               (partition 2 path-vs)))))
+
 (defn set-state! [& kvs]
   (apply assoc-a! state kvs))
 
 (defn set-in-state! [& path-vs]
-  (swap! state (fn [initial]
-                 (reduce (fn [st [p v]]
-                           (assoc-in st p v))
-                   initial
-                   (partition 2 path-vs)))))
+  (apply assoc-in-a! state path-vs))

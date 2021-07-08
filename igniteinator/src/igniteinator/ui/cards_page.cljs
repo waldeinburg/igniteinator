@@ -1,5 +1,5 @@
 (ns igniteinator.ui.cards-page
-  (:require [igniteinator.state :refer [state set-in-state! assoc-a!]]
+  (:require [igniteinator.state :refer [state set-in-state! assoc-a! assoc-in-a!]]
             [igniteinator.ui.base-filtering :refer [base-filtering]]
             [igniteinator.ui.card-list :refer [card-list]]
             [igniteinator.ui.page :refer [page]]
@@ -17,17 +17,29 @@
     [:previous-page] :cards
     [:combos-page :card-id] (:id card)))
 
+(defn- update-from-card-selection! []
+  (assoc-a! page-state :base (:ids @card-selection-cursor)))
+
 (defn cards-page []
   (when (= :cards @current-page)
     [page (txt :cards-page-title)
      [base-filtering
-      {:selected-value        (if (= :all (:base @page-state))
-                                :all
-                                :some)
-       :on-change             #(case (keyword %2)
-                                 :all (assoc-a! page-state :base :all)
-                                 :some (assoc-a! page-state :base @card-selection-cursor))
-       :card-selection-cursor card-selection-cursor}]
+      {:selected-value      (if (= :all (:base @page-state))
+                              :all
+                              :some)
+       :on-change           #(case (keyword %2)
+                               :all (assoc-a! page-state :base :all)
+                               ;; This state is actually never reached because of the on-click
+                               ;; handler on the :some button. Instead, update-cards-from-selection!
+                               ;; is called when the window closes. That also looks more intuitive
+                               ;; as the list is not updated before selecting anything. But keep the
+                               ;; case so that we cannot break the app in the base-filtering
+                               ;; component by triggering on-change anyway.
+                               :some update-from-card-selection!
+                               ;; When a button is clicked without being changed.
+                               nil nil)
+       :on-dialog-close     update-from-card-selection!
+       :card-selection-atom card-selection-cursor}]
      [card-list
       {:on-click-fn (fn [card]
                       (when (not-empty (:combos card))
