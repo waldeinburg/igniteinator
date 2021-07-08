@@ -17,9 +17,6 @@
     [:previous-page] :cards
     [:combos-page :card-id] (:id card)))
 
-(defn- update-from-card-selection! []
-  (assoc-a! page-state :base (:ids @card-selection-cursor)))
-
 (defn cards-page []
   (when (= :cards @current-page)
     [page (txt :cards-page-title)
@@ -27,18 +24,11 @@
       {:selected-value      (if (= :all (:base @page-state))
                               :all
                               :some)
-       :on-change           #(case (keyword %2)
+       :on-change           #(case %
                                :all (assoc-a! page-state :base :all)
-                               ;; This state is actually never reached because of the on-click
-                               ;; handler on the :some button. Instead, update-cards-from-selection!
-                               ;; is called when the window closes. That also looks more intuitive
-                               ;; as the list is not updated before selecting anything. But keep the
-                               ;; case so that we cannot break the app in the base-filtering
-                               ;; component by triggering on-change anyway.
-                               :some update-from-card-selection!
+                               :some (assoc-a! page-state :base (:ids @card-selection-cursor))
                                ;; When a button is clicked without being changed.
                                nil nil)
-       :on-dialog-close     update-from-card-selection!
        :card-selection-atom card-selection-cursor}]
      [card-list
       {:on-click-fn (fn [card]

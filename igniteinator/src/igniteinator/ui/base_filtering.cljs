@@ -38,15 +38,15 @@
                                  :label   (:name c)}])))]]]])
 
 (defn base-filtering [props]
-  (let [{:keys [selected-value on-change on-dialog-close card-selection-atom]} props
+  (let [{:keys [selected-value on-change card-selection-atom]} props
         set-dialog-open! #(assoc-a! card-selection-atom :dialog-open? %)]
     [:<>
      [toggle-button-group {:value     selected-value, :exclusive true,
-                           :on-change on-change
+                           :on-change #(on-change (keyword %2))
                            :size      :small}
       [toggle-button {:value :all} (txt :select-all)]
       [toggle-button {:value :some, :on-click #(set-dialog-open! true)} (txt :select-some)]]
      [select-cards-dialog
       card-selection-atom
       #(do (set-dialog-open! false)
-           (on-dialog-close))]]))
+           (on-change :some))]]))
