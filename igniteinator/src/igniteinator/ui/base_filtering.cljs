@@ -1,13 +1,18 @@
 (ns igniteinator.ui.base-filtering
   (:require [igniteinator.state :refer [assoc-a!]]
             [igniteinator.text :refer [txt]]
-            [igniteinator.model.cards :refer [get-all-cards]]
+            [igniteinator.model.cards :refer [get-all-card-ids get-all-cards]]
+            [igniteinator.ui.tooltip :refer [tooltip]]
             [reagent.core :as r]
             [reagent-material-ui.core.dialog :refer [dialog]]
             [reagent-material-ui.core.dialog-title :refer [dialog-title]]
             [reagent-material-ui.core.dialog-content :refer [dialog-content]]
             [reagent-material-ui.core.dialog-actions :refer [dialog-actions]]
+            [reagent-material-ui.core.toolbar :refer [toolbar]]
+            [reagent-material-ui.core.button-group :refer [button-group]]
             [reagent-material-ui.core.button :refer [button]]
+            [reagent-material-ui.icons.check-box :refer [check-box] :rename {check-box check-box-icon}]
+            [reagent-material-ui.icons.check-box-outline-blank :refer [check-box-outline-blank]]
             [reagent-material-ui.core.form-control :refer [form-control]]
             [reagent-material-ui.core.form-label :refer [form-label]]
             [reagent-material-ui.core.form-group :refer [form-group]]
@@ -23,6 +28,13 @@
   [dialog {:open (:dialog-open? @card-selection-atom) :on-close on-close}
    [dialog-title (txt :select-cards-dialog-title)]
    [dialog-content
+    [toolbar {:disable-gutters true}
+     [tooltip (txt :select-all)
+      [button {:on-click #(assoc-a! card-selection-atom :ids (set (get-all-card-ids)))}
+       [check-box-icon]]]
+     [tooltip (txt :clear-selection)
+      [button {:on-click #(assoc-a! card-selection-atom :ids #{})}
+       [check-box-outline-blank]]]]
     [form-control {:component "fieldset"}
      [form-group
       (doall
@@ -44,8 +56,8 @@
      [toggle-button-group {:value     selected-value, :exclusive true,
                            :on-change #(on-change (keyword %2))
                            :size      :small}
-      [toggle-button {:value :all} (txt :select-all)]
-      [toggle-button {:value :some, :on-click #(set-dialog-open! true)} (txt :select-some)]]
+      [toggle-button {:value :all} (txt :select-all-button)]
+      [toggle-button {:value :some, :on-click #(set-dialog-open! true)} (txt :select-some-button)]]
      [select-cards-dialog
       card-selection-atom
       #(do (set-dialog-open! false)

@@ -21,6 +21,9 @@
              :desc (reverse-comparator c))))
     sorting-specs))
 
+(defn get-all-card-ids []
+  (keys @cards))
+
 (defn get-all-cards []
   (vals @cards))
 

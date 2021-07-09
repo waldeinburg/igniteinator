@@ -2,11 +2,11 @@
   (:require [igniteinator.state :refer [state language]]
             [igniteinator.constants :refer [img-base-path img-ext]]
             [igniteinator.constants :as constants]
+            [igniteinator.ui.tooltip :refer [tooltip]]
             [reagent.core :as r]
             [reagent-material-ui.util :refer [adapt-react-class]]
             [reagent-material-ui.core.box :refer [box]]
             [reagent-material-ui.core.grid :refer [grid]]
-            [reagent-material-ui.core.tooltip :refer [tooltip]]
             ["react-visibility-sensor" :as VisibilitySensor]))
 
 (def visibility-sensor (r/adapt-react-class (.-default VisibilitySensor)))
@@ -30,7 +30,7 @@
                           :class    ["card-img" (when (:on-click props) "MuiLink-button")]
                           :on-click (:on-click props)}]]
            (if-let [t (:tooltip props)]
-             [tooltip {:title t, :arrow true} img]
+             [tooltip t img]
              img))
          [visibility-sensor {:partial-visibility true
                              :on-change          #(when % (reset! loaded? true))} ; %: visible?
