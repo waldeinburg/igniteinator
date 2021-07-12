@@ -2,7 +2,7 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [igniteinator.state :as st]
             [igniteinator.constants :refer [data-file-path]]
-            [igniteinator.text :refer [txt]]
+            [igniteinator.text :refer [txt-c]]
             [igniteinator.ui.alert :as alert]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]))
@@ -25,4 +25,4 @@
     (let [response (<! (http/get data-file-path))]
       (if (:success response)
         (set-data! (:body response))
-        (alert/fatal! (str (txt :data-load-error) ": " (:error-text response)))))))
+        (alert/fatal! (str (txt-c :data-load-error) ": " (:error-text response)))))))

@@ -1,9 +1,11 @@
 (ns igniteinator.ui.search-bar
   (:require [igniteinator.util.event :as event]
+            [igniteinator.text :refer [txt-c txt]]
+            [igniteinator.constants :as const]
+            [igniteinator.util.string :as ss]
             [reagent.core :as r]
-            [reagent-material-ui.core.box :refer [box]]
+            [reagent-material-ui.core.link :refer [link]]
             [reagent-material-ui.core.text-field :refer [text-field]]
-            [reagent-material-ui.core.input :refer [input]]
             [reagent-material-ui.core.input-adornment :refer [input-adornment]]
             [reagent-material-ui.core.icon-button :refer [icon-button]]
             [reagent-material-ui.icons.search :refer [search] :rename {search search-icon}]
@@ -18,14 +20,26 @@
                                     (reset! search-str-atom ""))}
         [clear-icon]])]))
 
+(def regular-expressions-helper-text-elem
+  (r/as-element
+    [:<> (txt-c :using) " "
+     [link {:href   const/regular-expressions-site
+            :target "_blank"
+            :rel    :noreferrer}
+      (txt :regular-expressions)]]))
+
 (defn search-bar [_ _]
   (let [input-ref (r/atom nil)]
     (fn [search-str-atom {:keys [placeholder on-change] :or {on-change #()}}]
-      [input {:input-ref     #(reset! input-ref %)
-              :default-value @search-str-atom               ; not :value (will cause rerendering on input)
-              :placeholder   placeholder
-              :on-change     (fn [ev]
-                               (let [v (event/value ev)]
-                                 (reset! search-str-atom v)
-                                 (on-change v)))
-              :end-adornment (search-and-clear-icon input-ref search-str-atom)}])))
+      (let [re? (and
+                  (re-find #"[.*+?{}()\[\]^$\|\\]" @search-str-atom)
+                  (ss/re-pattern-no-error @search-str-atom))]
+        [text-field {:input-ref     #(reset! input-ref %)
+                     :default-value @search-str-atom        ; not :value (will cause rerendering on input)
+                     :placeholder   placeholder
+                     :on-change     (fn [ev]
+                                      (let [v (event/value ev)]
+                                        (reset! search-str-atom v)
+                                        (on-change v)))
+                     :helper-text   (when re? regular-expressions-helper-text-elem)
+                     :InputProps    {:end-adornment (search-and-clear-icon input-ref search-str-atom)}}]))))

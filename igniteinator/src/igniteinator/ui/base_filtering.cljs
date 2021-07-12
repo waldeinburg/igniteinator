@@ -1,6 +1,6 @@
 (ns igniteinator.ui.base-filtering
   (:require [igniteinator.state :refer [assoc-a!]]
-            [igniteinator.text :refer [txt]]
+            [igniteinator.text :refer [txt-c]]
             [igniteinator.model.cards :refer [get-all-card-ids get-cards]]
             [igniteinator.ui.tooltip :refer [tooltip]]
             [igniteinator.ui.search-bar :refer [search-bar]]
@@ -38,19 +38,19 @@
 (defn select-cards-dialog [card-selection-atom on-close]
   (let [search-str (r/cursor card-selection-atom [:search-str])]
     [dialog-at-top {:open (:dialog-open? @card-selection-atom) :on-close on-close}
-     [dialog-title (txt :select-cards-dialog-title)]
+     [dialog-title (txt-c :select-cards-dialog-title)]
      [dialog-content
       [toolbar {:disable-gutters true}
-       [tooltip (txt :select-all)
+       [tooltip (txt-c :select-all)
         [icon-button {:on-click #(assoc-a! card-selection-atom
                                    :ids (set (get-all-card-ids)))}
          [check-box-icon]]]
-       [tooltip (txt :clear-selection)
+       [tooltip (txt-c :clear-selection)
         [icon-button {:on-click #(assoc-a! card-selection-atom :ids #{})}
          [check-box-outline-blank]]]
        [search-bar
         search-str
-        {:placeholder (str (txt :search) " …")}]]
+        {:placeholder (str (txt-c :search) " …")}]]
       [form-control {:component "fieldset"}
        [form-group
         (doall
@@ -72,8 +72,8 @@
      [toggle-button-group {:value     selected-value, :exclusive true,
                            :on-change #(on-change (keyword %2))
                            :size      :small}
-      [toggle-button {:value :all} (txt :select-all-button)]
-      [toggle-button {:value :some, :on-click #(set-dialog-open! true)} (txt :select-some-button)]]
+      [toggle-button {:value :all} (txt-c :select-all-button)]
+      [toggle-button {:value :some, :on-click #(set-dialog-open! true)} (txt-c :select-some-button)]]
      [select-cards-dialog
       card-selection-atom
       #(do (set-dialog-open! false)

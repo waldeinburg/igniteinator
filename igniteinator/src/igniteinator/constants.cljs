@@ -5,6 +5,8 @@
 (defonce img-base-path "/generated/img")
 (defonce img-ext ".png")
 (defonce default-language :en)
+;; Link to a site that gives a quick overview of regexp. This one looks nice.
+(defonce regular-expressions-site "https://cheatography.com/davechild/cheat-sheets/regular-expressions/")
 
 (defonce card-sizes {
                      :small  {:xs 4, :sm 3, :md 2, :lg 1}

@@ -4,7 +4,7 @@
             [igniteinator.ui.card-list :refer [card-list]]
             [igniteinator.ui.page :refer [page]]
             [igniteinator.model.cards :refer [get-cards]]
-            [igniteinator.text :refer [txt]]
+            [igniteinator.text :refer [txt-c]]
             [reagent.core :as r]))
 
 (defonce current-page (r/cursor state [:current-page]))
@@ -19,7 +19,7 @@
 
 (defn cards-page []
   (when (= :cards @current-page)
-    [page (txt :cards-page-title)
+    [page (txt-c :cards-page-title)
      [base-filtering
       {:selected-value      (if (= :all (:base @page-state))
                               :all
@@ -36,6 +36,6 @@
                         #(show-combos card)))
        :tooltip-fn  (fn [card]
                       (if (not-empty (:combos card))
-                        (txt :show-combos)
-                        (txt :no-combos)))}
+                        (txt-c :show-combos)
+                        (txt-c :no-combos)))}
       (get-cards (:base @page-state) (:filters @page-state) (:sortings @page-state))]]))

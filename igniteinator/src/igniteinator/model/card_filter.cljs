@@ -1,9 +1,8 @@
 (ns igniteinator.model.card-filter
-  (:require [clojure.string :as s]))
+  (:require [clojure.string :as s]
+            [igniteinator.util.string :as ss]))
 
-(defn re-pattern-no-error [str]
-  (try (re-pattern str)
-       (catch js/SyntaxError _ nil)))
+
 
 (defonce filters
   {
@@ -13,7 +12,7 @@
                     (if (empty? re-str)
                       ;; No value mean no filtering.
                       (constantly true)
-                      (if-let [re (-> re-str s/lower-case re-pattern-no-error)]
+                      (if-let [re (-> re-str s/lower-case ss/re-pattern-no-error)]
                         #(re-find re (s/lower-case (:name %)))
                         ;; Invalid regexp? Match literal.
                         #(s/index-of (:name %) re-str))))
