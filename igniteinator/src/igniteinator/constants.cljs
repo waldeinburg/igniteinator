@@ -7,6 +7,8 @@
 (defonce default-language :en)
 ;; Link to a site that gives a quick overview of regexp. This one looks nice.
 (defonce regular-expressions-site "https://cheatography.com/davechild/cheat-sheets/regular-expressions/")
+;; This might change.
+(defonce ignite-link "http://gingersnapgaming.com")
 
 (defonce card-sizes {
                      :small  {:xs 4, :sm 3, :md 2, :lg 1}

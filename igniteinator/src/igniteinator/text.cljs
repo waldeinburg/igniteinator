@@ -4,6 +4,7 @@
 
 (defonce strings
   {
+   :subtitle                  {:en "an unoffical app for the board game"}
    :back                      {:en "back"}
    :select-all                {:en "select all"}
    :search                    {:en "search"}

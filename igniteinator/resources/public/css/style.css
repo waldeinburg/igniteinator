@@ -1,5 +1,10 @@
 /* some style */
 
+.subtitle {
+    font-size: smaller;
+    font-style: italic;
+}
+
 ol.card-list {
     padding: 0;
     list-style: none;

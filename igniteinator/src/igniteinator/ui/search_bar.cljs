@@ -3,8 +3,8 @@
             [igniteinator.text :refer [txt-c txt]]
             [igniteinator.constants :as const]
             [igniteinator.util.string :as ss]
+            [igniteinator.ui.link :refer [external-link]]
             [reagent.core :as r]
-            [reagent-material-ui.core.link :refer [link]]
             [reagent-material-ui.core.text-field :refer [text-field]]
             [reagent-material-ui.core.input-adornment :refer [input-adornment]]
             [reagent-material-ui.core.icon-button :refer [icon-button]]
@@ -23,10 +23,7 @@
 (def regular-expressions-helper-text-elem
   (r/as-element
     [:<> (txt-c :using) " "
-     [link {:href   const/regular-expressions-site
-            :target "_blank"
-            :rel    :noreferrer}
-      (txt :regular-expressions)]]))
+     [external-link const/regular-expressions-site (txt :regular-expressions)]]))
 
 (defn search-bar [_ _]
   (let [input-ref (r/atom nil)]
