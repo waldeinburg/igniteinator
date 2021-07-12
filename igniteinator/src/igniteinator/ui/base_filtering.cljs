@@ -1,16 +1,16 @@
 (ns igniteinator.ui.base-filtering
   (:require [igniteinator.state :refer [assoc-a!]]
             [igniteinator.text :refer [txt]]
-            [igniteinator.model.cards :refer [get-all-card-ids get-all-cards]]
+            [igniteinator.model.cards :refer [get-all-card-ids get-cards]]
             [igniteinator.ui.tooltip :refer [tooltip]]
+            [igniteinator.ui.search-bar :refer [search-bar]]
             [reagent.core :as r]
             [reagent-material-ui.core.dialog :refer [dialog]]
             [reagent-material-ui.core.dialog-title :refer [dialog-title]]
             [reagent-material-ui.core.dialog-content :refer [dialog-content]]
             [reagent-material-ui.core.dialog-actions :refer [dialog-actions]]
             [reagent-material-ui.core.toolbar :refer [toolbar]]
-            [reagent-material-ui.core.button-group :refer [button-group]]
-            [reagent-material-ui.core.button :refer [button]]
+            [reagent-material-ui.core.icon-button :refer [icon-button]]
             [reagent-material-ui.icons.check-box :refer [check-box] :rename {check-box check-box-icon}]
             [reagent-material-ui.icons.check-box-outline-blank :refer [check-box-outline-blank]]
             [reagent-material-ui.core.form-control :refer [form-control]]
@@ -24,30 +24,40 @@
 (defn checkbox-elem [props]
   (r/as-element [checkbox props]))
 
+(defn get-dialog-cards [search-str]
+  (get-cards :all
+    [{:key :name-contains, :args [search-str]}]
+    [{:key :name, :order :asc}]))
+
 (defn select-cards-dialog [card-selection-atom on-close]
-  [dialog {:open (:dialog-open? @card-selection-atom) :on-close on-close}
-   [dialog-title (txt :select-cards-dialog-title)]
-   [dialog-content
-    [toolbar {:disable-gutters true}
-     [tooltip (txt :select-all)
-      [button {:on-click #(assoc-a! card-selection-atom :ids (set (get-all-card-ids)))}
-       [check-box-icon]]]
-     [tooltip (txt :clear-selection)
-      [button {:on-click #(assoc-a! card-selection-atom :ids #{})}
-       [check-box-outline-blank]]]]
-    [form-control {:component "fieldset"}
-     [form-group
-      (doall
-        (for [c (sort-by :name (get-all-cards))]
-          (let [id (:id c)]
-            ^{:key id}
-            [form-control-label {:control (checkbox-elem
-                                            {:checked   (contains? (:ids @card-selection-atom) id)
-                                             :name      (str id)
-                                             :on-change #(let [f (if (.. % -target -checked)
-                                                                   conj disj)]
-                                                           (swap! card-selection-atom update :ids f id))})
-                                 :label   (:name c)}])))]]]])
+  (let [search-str (r/cursor card-selection-atom [:search-str])]
+    [dialog {:open (:dialog-open? @card-selection-atom) :on-close on-close}
+     [dialog-title (txt :select-cards-dialog-title)]
+     [dialog-content
+      [toolbar {:disable-gutters true}
+       [tooltip (txt :select-all)
+        [icon-button {:on-click #(assoc-a! card-selection-atom
+                                   :ids (set (get-all-card-ids)))}
+         [check-box-icon]]]
+       [tooltip (txt :clear-selection)
+        [icon-button {:on-click #(assoc-a! card-selection-atom :ids #{})}
+         [check-box-outline-blank]]]
+       [search-bar
+        search-str
+        {:placeholder (str (txt :search) " …")}]]
+      [form-control {:component "fieldset"}
+       [form-group
+        (doall
+          (for [c (get-dialog-cards @search-str)]
+            (let [id (:id c)]
+              ^{:key id}
+              [form-control-label {:control (checkbox-elem
+                                              {:checked   (contains? (:ids @card-selection-atom) id)
+                                               :name      (str id)
+                                               :on-change #(let [f (if (.. % -target -checked)
+                                                                     conj disj)]
+                                                             (swap! card-selection-atom update :ids f id))})
+                                   :label   (:name c)}])))]]]]))
 
 (defn base-filtering [props]
   (let [{:keys [selected-value on-change card-selection-atom]} props

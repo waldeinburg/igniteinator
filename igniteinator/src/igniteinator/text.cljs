@@ -5,6 +5,7 @@
   {
    :back                      {:en "Back"}
    :select-all                {:en "Select all"}
+   :search                    {:en "Search"}
    :clear-selection           {:en "Clear selection"}
    :data-load-error           {:en "Error loading data"}
    :show-combos               {:en "Show known combos"}

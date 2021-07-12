@@ -14,7 +14,8 @@
                      :filters        []
                      :sortings       [{:key :name, :order :asc}]
                      :card-selection {:dialog-open? false
-                                      :ids          #{}}}
+                                      :ids          #{}
+                                      :search-str   ""}}
      :combos-page   {:card-id  nil
                      :sortings [{:key :name, :order :asc}]}
      }))
