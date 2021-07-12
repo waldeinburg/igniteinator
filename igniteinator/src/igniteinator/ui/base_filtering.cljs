@@ -5,6 +5,7 @@
             [igniteinator.ui.tooltip :refer [tooltip]]
             [igniteinator.ui.search-bar :refer [search-bar]]
             [reagent.core :as r]
+            [reagent-material-ui.styles :as styles]
             [reagent-material-ui.core.dialog :refer [dialog]]
             [reagent-material-ui.core.dialog-title :refer [dialog-title]]
             [reagent-material-ui.core.dialog-content :refer [dialog-content]]
@@ -29,9 +30,14 @@
     [{:key :name-contains, :args [search-str]}]
     [{:key :name, :order :asc}]))
 
+;; Dialog will resize when filtering by name. Fix dialog at the top instead of center.
+;; https://stackoverflow.com/a/61094451
+(def dialog-at-top
+  ((styles/with-styles {:scroll-paper {:align-items :baseline}}) dialog))
+
 (defn select-cards-dialog [card-selection-atom on-close]
   (let [search-str (r/cursor card-selection-atom [:search-str])]
-    [dialog {:open (:dialog-open? @card-selection-atom) :on-close on-close}
+    [dialog-at-top {:open (:dialog-open? @card-selection-atom) :on-close on-close}
      [dialog-title (txt :select-cards-dialog-title)]
      [dialog-content
       [toolbar {:disable-gutters true}
