@@ -65,9 +65,8 @@
                                                              (swap! card-selection-atom update :ids f id))})
                                    :label   (:name c)}])))]]]]))
 
-(defn base-filtering [props]
-  (let [{:keys [selected-value on-change card-selection-atom]} props
-        set-dialog-open! #(assoc-a! card-selection-atom :dialog-open? %)]
+(defn base-filtering [{:keys [selected-value on-change card-selection-atom]}]
+  (let [set-dialog-open! #(assoc-a! card-selection-atom :dialog-open? %)]
     [:<>
      [toggle-button-group {:value     selected-value, :exclusive true,
                            :on-change #(on-change (keyword %2))

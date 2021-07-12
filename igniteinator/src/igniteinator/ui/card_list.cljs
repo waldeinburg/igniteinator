@@ -2,7 +2,7 @@
   (:require [igniteinator.state :refer [state language]]
             [igniteinator.constants :refer [img-base-path img-ext]]
             [igniteinator.constants :as constants]
-            [igniteinator.ui.tooltip :refer [tooltip]]
+            [igniteinator.ui.tooltip :refer [tooltip] :rename {tooltip mui-tooltip}]
             [reagent.core :as r]
             [reagent-material-ui.util :refer [adapt-react-class]]
             [reagent-material-ui.core.box :refer [box]]
@@ -14,7 +14,7 @@
 (defn card-image
   ([card]
    (card-image {} card))
-  ([props card]
+  ([{:keys [on-click tooltip]} card]
    (let [src     (str img-base-path "/" (name @language) "/" (:id card) img-ext)
          name    (:name card)
          ;; A little local state is ok here. Render a visibility-sensor until visible, then load
@@ -27,10 +27,10 @@
      (fn []
        (if @loaded?
          (let [img [:img {:src      src, :alt name
-                          :class    ["card-img" (when (:on-click props) "MuiLink-button")]
-                          :on-click (:on-click props)}]]
-           (if-let [t (:tooltip props)]
-             [tooltip t img]
+                          :class    ["card-img" (when on-click "MuiLink-button")]
+                          :on-click on-click}]]
+           (if tooltip
+             [mui-tooltip tooltip img]
              img))
          [visibility-sensor {:partial-visibility true
                              :on-change          #(when % (reset! loaded? true))} ; %: visible?
@@ -56,14 +56,18 @@
 (defn card-list
   ([cards]
    (card-list {} cards))
-  ([props cards]
+  ([{on-click-prop    :on-click
+     on-click-fn-prop :on-click-fn
+     tooltip-prop     :tooltip
+     tooltip-fn-prop  :tooltip-fn}
+    cards]
    (let [on-click-fn (cond
-                       (:on-click props) #(:on-click props)
-                       (:on-click-fn props) (:on-click-fn props)
+                       on-click-prop (fn [_] on-click-prop)
+                       on-click-fn-prop on-click-fn-prop
                        :else (constantly nil))
          tooltip-fn  (cond
-                       (:tooltip props) #(:tooltip props)
-                       (:tooltip-fn props) (:tooltip-fn props)
+                       tooltip-prop (fn [_] tooltip-prop)
+                       tooltip-fn-prop tooltip-fn-prop
                        :else (constantly nil))]
      (if (empty? cards)
        [empty-card-list]
