@@ -11,6 +11,8 @@
             [reagent-material-ui.core.dialog-content :refer [dialog-content]]
             [reagent-material-ui.core.dialog-actions :refer [dialog-actions]]
             [reagent-material-ui.core.toolbar :refer [toolbar]]
+            [reagent-material-ui.core.box :refer [box]]
+            [reagent-material-ui.core.button-group :refer [button-group]]
             [reagent-material-ui.core.icon-button :refer [icon-button]]
             [reagent-material-ui.icons.check-box :refer [check-box] :rename {check-box check-box-icon}]
             [reagent-material-ui.icons.check-box-outline-blank :refer [check-box-outline-blank]]
@@ -41,16 +43,16 @@
      [dialog-title (txt-c :select-cards-dialog-title)]
      [dialog-content
       [toolbar {:disable-gutters true}
-       [tooltip (txt-c :select-all)
-        [icon-button {:on-click #(assoc-a! card-selection-atom
-                                   :ids (set (get-all-card-ids)))}
-         [check-box-icon]]]
-       [tooltip (txt-c :clear-selection)
-        [icon-button {:on-click #(assoc-a! card-selection-atom :ids #{})}
-         [check-box-outline-blank]]]
-       [search-bar
-        search-str
-        {:placeholder (str (txt-c :search) " …")}]]
+       [box {:mr 1}
+        [button-group
+         [tooltip (txt-c :select-all)
+          [icon-button {:on-click #(assoc-a! card-selection-atom
+                                     :ids (set (get-all-card-ids)))}
+           [check-box-icon]]]
+         [tooltip (txt-c :clear-selection)
+          [icon-button {:on-click #(assoc-a! card-selection-atom :ids #{})}
+           [check-box-outline-blank]]]]]
+       [search-bar search-str]]
       [form-control {:component "fieldset"}
        [form-group
         (doall

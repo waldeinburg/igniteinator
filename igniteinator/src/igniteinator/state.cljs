@@ -13,6 +13,7 @@
      :cards-page    {:base           :all
                      :filters        []
                      :sortings       [{:key :name, :order :asc}]
+                     :search-str     ""
                      :card-selection {:dialog-open? false
                                       :ids          #{}
                                       :search-str   ""}}

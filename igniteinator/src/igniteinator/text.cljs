@@ -6,6 +6,7 @@
   {
    :subtitle                  {:en "an unoffical app for the board game"}
    :back                      {:en "back"}
+   :empty-list                {:en "empty list"}
    :select-all                {:en "select all"}
    :search                    {:en "search"}
    :using                     {:en "using"}

@@ -2,6 +2,7 @@
   (:require [igniteinator.state :refer [state language]]
             [igniteinator.constants :refer [img-base-path img-ext]]
             [igniteinator.constants :as constants]
+            [igniteinator.text :refer [txt-c]]
             [igniteinator.ui.tooltip :refer [tooltip] :rename {tooltip mui-tooltip}]
             [reagent.core :as r]
             [reagent-material-ui.util :refer [adapt-react-class]]
@@ -51,7 +52,7 @@
       [card-container props card]])))
 
 (defn empty-card-list []
-  [:p "Empty list."])
+  [:p (str (txt-c :empty-list) ".")])
 
 (defn card-list
   ([cards]

@@ -27,7 +27,8 @@
 
 (defn search-bar [_ _]
   (let [input-ref (r/atom nil)]
-    (fn [search-str-atom {:keys [placeholder on-change] :or {on-change #()}}]
+    (fn [search-str-atom {:keys [placeholder on-change]
+                          :or   {placeholder (str (txt-c :search) " …"), on-change #()}}]
       (let [re? (and
                   (re-find #"[.*+?{}()\[\]^$\|\\]" @search-str-atom)
                   (ss/re-pattern-no-error @search-str-atom))]
