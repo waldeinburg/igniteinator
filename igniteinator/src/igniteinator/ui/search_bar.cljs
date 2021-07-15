@@ -11,13 +11,16 @@
             [reagent-material-ui.icons.search :refer [search] :rename {search search-icon}]
             [reagent-material-ui.icons.clear :refer [clear] :rename {clear clear-icon}]))
 
+(defn clear-search-bar [input-ref search-str-atom]
+  (set! (.-value @input-ref))
+  (reset! search-str-atom ""))
+
 (defn search-and-clear-icon [input-ref search-str-atom]
   (r/as-element
     [input-adornment {:position :end}
      (if (empty? @search-str-atom)
        [icon-button {:disabled true} [search-icon]]
-       [icon-button {:on-click #(do (set! (.-value @input-ref))
-                                    (reset! search-str-atom ""))}
+       [icon-button {:on-click #(clear-search-bar input-ref search-str-atom)}
         [clear-icon]])]))
 
 (def regular-expressions-helper-text-elem
@@ -35,6 +38,11 @@
         [text-field {:input-ref     #(reset! input-ref %)
                      :default-value @search-str-atom        ; not :value (will cause rerendering on input)
                      :placeholder   placeholder
+                     :on-key-down   #(when (= "Escape" (.-key %))
+                                       (do
+                                         (clear-search-bar input-ref search-str-atom)
+                                         ;; Prevent dialogs from closing on escape.
+                                         (.stopPropagation %)))
                      :on-change     (fn [ev]
                                       (let [v (event/value ev)]
                                         (reset! search-str-atom v)
