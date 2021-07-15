@@ -1,0 +1,13 @@
+{
+  "name": "Igniteinator",
+  "short_name": "Igniteinator",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "An unoffical app for the board game Ignite",
+  "icons": [{
+    "src": "https://clojurescript.org/images/cljs-logo-icon-32.png",
+    "sizes": "32x32",
+    "type": "image/png"
+  }]
+}
