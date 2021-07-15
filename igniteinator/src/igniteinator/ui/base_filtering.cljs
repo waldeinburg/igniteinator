@@ -29,7 +29,9 @@
 
 (defn get-dialog-cards [search-str]
   (get-cards :all
-    [{:key :name-contains, :args [search-str]}]
+    (if (empty? search-str)
+      []
+      [{:key :name-contains, :args [search-str]}])
     [{:key :name, :order :asc}]))
 
 ;; Dialog will resize when filtering by name. Fix dialog at the top instead of center.
