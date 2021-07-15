@@ -14,6 +14,7 @@
             [reagent-material-ui.core.box :refer [box]]
             [reagent-material-ui.core.button-group :refer [button-group]]
             [reagent-material-ui.core.icon-button :refer [icon-button]]
+            [reagent-material-ui.core.button :refer [button]]
             [reagent-material-ui.icons.check-box :refer [check-box] :rename {check-box check-box-icon}]
             [reagent-material-ui.icons.check-box-outline-blank :refer [check-box-outline-blank]]
             [reagent-material-ui.core.form-control :refer [form-control]]
@@ -67,7 +68,9 @@
                                                :on-change #(let [f (if (.. % -target -checked)
                                                                      conj disj)]
                                                              (swap! card-selection-atom update :ids f id))})
-                                   :label   (:name c)}])))]]]]))
+                                   :label   (:name c)}])))]]]
+     [dialog-actions
+      [button {:on-click on-close} (txt-c :ok)]]]))
 
 (defn base-filtering [{:keys [selected-value on-change card-selection-atom]}]
   (let [set-dialog-open! #(assoc-a! card-selection-atom :dialog-open? %)]

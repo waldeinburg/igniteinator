@@ -5,6 +5,7 @@
 (defonce strings
   {
    :subtitle                  {:en "an unoffical app for the board game"}
+   :ok                        {:en "ok"}
    :back                      {:en "back"}
    :empty-list                {:en "empty list"}
    :select-all                {:en "select all"}
