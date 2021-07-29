@@ -14,3 +14,7 @@ pom.xml
 /node_modules
 /resources/public/cljs-out
 /resources/public/generated
+# Private data for deployment.
+/private.inc.sh
+# Symlink
+/remote_sync.sh

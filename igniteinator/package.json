@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@cljs-oss/module-deps": "^1.1.1",
     "webpack": "^5.27.1",
     "webpack-cli": "^4.5.0"
   },

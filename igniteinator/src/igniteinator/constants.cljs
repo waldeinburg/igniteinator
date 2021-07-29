@@ -1,5 +1,6 @@
 (ns igniteinator.constants)
 
+(defonce version "0.1.0")
 (defonce page-url "https://igniteinator.waldeinburg.dk")
 (defonce data-file-path "/generated/data.json")
 (defonce img-base-path "/generated/img")
