@@ -16,9 +16,8 @@
   :source-paths ["src"]
 
   :aliases {"fig"       ["trampoline" "run" "-m" "figwheel.main"]
-            "fig:build" ["trampoline" "run" "-m" "figwheel.main" "--optimizations" "none" "--build-once" "dev"]
-            "fig:dev"   ["trampoline" "run" "-m" "figwheel.main" "-b" "dev" "-r"]
-            "fig:min"   ["run" "-m" "figwheel.main" "-O" "advanced" "-bo" "dev"]
+            "fig:dev"   ["trampoline" "run" "-m" "figwheel.main" "-b" "main" "-r"]
+            "fig:build" ["run" "-m" "figwheel.main" "--optimizations" "advanced" "--build-once" "main"]
             "fig:test"  ["run" "-m" "figwheel.main" "-co" "test.cljs.edn" "-m" "igniteinator.test-runner"]}
 
   :profiles {:dev {:dependencies   [[com.bhauman/figwheel-main "0.2.13" :exclusions [org.clojure/clojurescript]]
