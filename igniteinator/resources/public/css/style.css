@@ -1,4 +1,15 @@
-/* some style */
+@keyframes loading {
+    0% {color: #a0a0a0;}
+    25% {color: #000000;}
+    100% {color: #a0a0a0;}
+}
+
+.app-loading {
+    text-align: center;
+    animation-name: loading;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
 
 .subtitle {
     font-size: smaller;
