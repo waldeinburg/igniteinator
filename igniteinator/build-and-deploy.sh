@@ -104,6 +104,7 @@ function build() {
 }
 
 function deploy() {
+  # Using https://github.com/waldeinburg/poor-mans-rsync
   ./remote_sync.sh "${DEPLOY_ARGS[@]}" "$SRC_DIR" "$REMOTE_HOST" "$REMOTE_DIR"
 }
 

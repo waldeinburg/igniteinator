@@ -16,5 +16,5 @@ pom.xml
 /resources/public/generated
 # Private data for deployment.
 /private.inc.sh
-# Symlink
+# Symlink (https://github.com/waldeinburg/poor-mans-rsync)
 /remote_sync.sh
