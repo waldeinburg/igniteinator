@@ -2,6 +2,7 @@
 
 (defonce version "0.1.1")
 (defonce page-url "https://igniteinator.waldeinburg.dk")
+(defonce github-url "https://github.com/waldeinburg/igniteinator")
 (defonce data-file-path "/generated/data.json")
 (defonce img-base-path "/generated/img")
 (defonce img-ext ".png")

@@ -1,37 +1,50 @@
-# igniteinator
+# Igniteinator
 
-FIXME: Write a one-line description of your library/project.
+An unoffical app for the board game [Ignite](http://gingersnapgaming.com).
 
 ## Overview
 
-FIXME: Write a paragraph about the library/project and highlight its goals.
+The Igniteinator is a fan-made app for Ignite, a deck builder board game. The code could be
+abstracted and made into a library (which I shall call Deckbuildinator) but for now it's all about
+Ignite.
+
+The aim of the project is to implement all features of the official app, just better, and to add a
+deck randomizer mechanism.
 
 ## Development
 
-To get an interactive development environment run:
+To download images and generate data files:
 
-    lein fig:build
+    cd gen-data && ./run-complete-generate-data.sh
 
-This will auto compile and send all changes to the browser without the
-need to reload. After the compilation process is complete, you will
-get a Browser Connected REPL. An easy way to try it is:
+The following applies to the `igniteinator` folder:
 
-    (js/alert "Am I connected?")
+To get an interactive development environment with [Figwheel](https://figwheel.org):
 
-and you should see an alert in the browser window.
+    lein fig:dev
 
 To clean all compiled files:
 
 	lein clean
 
-To create a production build run:
+To test out doing a production build:
 
-	lein clean
-	lein fig:min
+	./build-and-deploy.sh --no-tag --no-deploy
 
+## Licenses
 
-## License
+### Data and images
 
-Copyright © 2018 FIXME
+All data and images are Copyright © 2021, [Ginger Snap Gaming](http://gingersnapgaming.com). Used in
+the [Igniteinator](https://igniteinator.waldeinburg.dk) by permission.
 
-Distributed under the Eclipse Public License either version 1.0 or (at your option) any later version.
+Thus, even though the scripts in the code fetches data and images, forking the project does not give
+you permission to publish another version of the app. You will need to get permission
+from [Ginger Snap Gaming](http://gingersnapgaming.com).
+
+### Source code
+
+Copyright © 2021 Daniel Lundsgaard Skovenborg
+
+Distributed under the Eclipse Public License either version 1.0 or (at your option) any later
+version.

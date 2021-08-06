@@ -1,6 +1,6 @@
 (defproject igniteinator "0.1.0-SNAPSHOT"
-  :description "FIXME: write this!"
-  :url "http://example.com/FIXME"
+  :description "An unoffical app for the board game Ignite"
+  :url "https://igniteinator.waldeinburg.dk"
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
 
