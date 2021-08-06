@@ -1,6 +1,7 @@
 # Igniteinator
 
-An unoffical app for the board game [Ignite](http://gingersnapgaming.com).
+Source code for the [Igniteinator](https://igniteinator.waldeinburg.dk) – an unoffical app for the
+board game [Ignite](http://gingersnapgaming.com).
 
 ## Overview
 
