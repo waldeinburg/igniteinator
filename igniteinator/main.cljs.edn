@@ -1,5 +1,9 @@
-^{:watch-dirs ["test" "src"]
-  :css-dirs ["resources/public/css"]
+^{:watch-dirs   ["test" "src"]
+  :css-dirs     ["resources/public/css"]
   :auto-testing true
-  :auto-bundle :webpack }
+  :auto-bundle  :webpack
+  ;; Must not go into the figwheel-main.edn because it alters the
+  ;; :ring-server-options in a way that is not overridden in sw.cljs.edn
+  ;; (if we get the watching to work).
+  :use-ssl      true}
 {:main igniteinator.core}

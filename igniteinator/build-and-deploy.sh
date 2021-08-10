@@ -5,6 +5,7 @@ set -e
 SRC_DIR=target/final
 SCRIPT_SUBDIR=cljs-out/main
 SCRIPT_SRC="target/public/$SCRIPT_SUBDIR/main_bundle.js"
+SW_SRC="target/public/sw.js"
 SCRIPT_DIR="$SRC_DIR/$SCRIPT_SUBDIR"
 
 CLEAN=1
@@ -99,9 +100,11 @@ function clean() {
 
 function build() {
   lein fig:build
+  lein fig:build-sw
   # With advanced optimizations we can leave out all the other files.
   mkdir -p "$SCRIPT_DIR"
   mv "$SCRIPT_SRC" "$SCRIPT_DIR"
+  mv "$SW_SRC" "$SRC_DIR"
   # dotglob in subshell.
   (
   shopt -s dotglob

@@ -9,12 +9,21 @@
 (defn get-app-element []
   (gdom/getElement "app"))
 
+(defn reg-sw []
+  (if js/navigator.serviceWorker
+    (->
+      (.register js/navigator.serviceWorker "/sw.js")
+      (.then #(js/console.log "Service worker installed"))
+      (.catch #(js/console.error "Failed to load service worker:" %)))
+    (js/console.log "navigator.serviceWorker not available")))
+
 (defn mount [el]
   (rdom/render [main] el))
 
 (defn mount-app-element []
   (when-let [el (get-app-element)]
     (load-data)
+    (reg-sw)
     (mount el)))
 
 ;; conditionally start your application based on the presence of an "app" element

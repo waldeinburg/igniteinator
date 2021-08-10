@@ -1,0 +1,14 @@
+^{;; Compile hangs anyway when watching src and running a server and when not
+  ;; running a server (:build-once) compile does not hang but webpack fails to execute.
+  ;;:watch-dirs      ["src"]
+  :auto-bundle     :webpack
+  :final-output-to "target/public/sw.js"
+  :mode            :build-once
+  ;;:ring-server-options {:port 9501}
+  ;;:open-url            false
+  }
+{:main       igniteinator.service-worker
+ ;; Could theoretically make build work without advanced optimizations;
+ ;; sw.js must be in root. But the resulting file doesn't work.
+ ;;:output-dir "target/public"
+ }
