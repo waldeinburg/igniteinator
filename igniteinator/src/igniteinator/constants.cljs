@@ -1,6 +1,6 @@
 (ns igniteinator.constants)
 
-(defonce version "0.1.3")
+(defonce version "0.1.4")
 (defonce page-url "https://igniteinator.waldeinburg.dk")
 (defonce github-url "https://github.com/waldeinburg/igniteinator")
 (defonce data-file-path "/generated/data.json")
