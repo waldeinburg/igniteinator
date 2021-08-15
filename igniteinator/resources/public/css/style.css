@@ -21,13 +21,8 @@ ol.card-list {
     list-style: none;
 }
 
-.card-not-loaded {
-    background: #a0a0a0;
-    /* Aspect ratio like a poker sized card. */
-    padding-top: 140%;
-}
-
 .card-img {
+    /* Not auto, will result in full image width, not parent width. */
     width: 100%;
     /* Avoid scaling over 100%. */
     max-width: 430px;
