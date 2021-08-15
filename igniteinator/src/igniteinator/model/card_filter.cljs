@@ -4,7 +4,7 @@
 
 
 
-(defonce filters
+(def filters
   {
    ;; Regular expressions; not in the way for those who just type in characters, cool for those who
    ;; discover the feature and understand it.

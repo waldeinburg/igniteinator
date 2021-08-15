@@ -10,10 +10,10 @@
             [reagent-material-ui.core.box :refer [box]]
             [reagent-material-ui.core.toolbar :refer [toolbar]]))
 
-(defonce current-page (r/cursor state [:current-page]))
-(defonce page-state (r/cursor state [:cards-page]))
-(defonce card-selection-cursor (r/cursor page-state [:card-selection]))
-(defonce search-str (r/cursor page-state [:search-str]))
+(def current-page (r/cursor state [:current-page]))
+(def page-state (r/cursor state [:cards-page]))
+(def card-selection-cursor (r/cursor page-state [:card-selection]))
+(def search-str (r/cursor page-state [:search-str]))
 
 (defn show-combos [card]
   (set-in-state!

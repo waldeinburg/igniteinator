@@ -9,7 +9,7 @@
             [reagent-material-ui.core.container :refer [container]]
             [reagent-material-ui.core.modal :refer [modal]]))
 
-(defonce page-state (r/cursor state [:combos-page]))
+(def page-state (r/cursor state [:combos-page]))
 
 (defn combos-list [card]
   (let [cards (get-cards (:combos card) [] (:sortings @page-state))]

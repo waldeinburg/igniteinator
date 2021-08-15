@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]))
 
 ;; State object. Nil values are just for documentation.
-(defonce state
+(def state
   (r/atom
     {
      :language       :en
@@ -24,10 +24,10 @@
 
 ;; Data object is stored in a separate atom to limit the amount of data to serialize each time state
 ;; is updated. The data object is static as soon as the app is fully loaded.
-(defonce data (r/atom {}))
+(def data (r/atom {}))
 
 ;; Easy access to language cursor.
-(defonce language (r/cursor state [:language]))
+(def language (r/cursor state [:language]))
 
 (defn assoc-a! [a & kvs]
   (swap! a #(apply assoc % kvs)))

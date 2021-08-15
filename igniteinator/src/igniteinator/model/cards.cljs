@@ -6,7 +6,7 @@
             [igniteinator.model.card-sort :refer [sortings]]
             [reagent.core :as r]))
 
-(defonce cards (r/cursor data [:cards]))
+(def cards (r/cursor data [:cards]))
 
 (defn- filter-specs->preds [filter-specs]
   (map (fn [spec]

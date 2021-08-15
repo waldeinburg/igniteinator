@@ -13,7 +13,7 @@
       (and ny? (not nx?)) 1
       :else (compare cx cy))))
 
-(defonce sortings
+(def sortings
   {
    :name   (keyfn-comparator :name)
    :cost   cost-comparator
