@@ -42,7 +42,7 @@
 
 (defn select-cards-dialog [card-selection-atom on-close]
   (let [search-str (r/cursor card-selection-atom [:search-str])]
-    [dialog-at-top {:open (:dialog-open? @card-selection-atom) :on-close on-close}
+    [dialog-at-top {:open (:dialog-open? @card-selection-atom), :on-close on-close}
      [dialog-title (txt-c :select-cards-dialog-title)]
      [dialog-content
       [toolbar {:disable-gutters true}

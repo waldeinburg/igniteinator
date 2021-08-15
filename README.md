@@ -12,11 +12,36 @@ Ignite.
 The aim of the project is to implement all features of the official app, just better, and to add a
 deck randomizer mechanism.
 
-## Development
+## Development setup
+
+### Remote sync script
+
+If deploying: Symlink in `igniteinator` folder to `remote_sync.sh` from
+[Poor mans rsync](https://github.com/waldeinburg/poor-mans-rsync).
+
+### Development certificate
+
+Run:
+
+    lein run -m certifiable.main
+
+Then, in `igniteinator` folder, symlink to the generated file referenced in `main.cljs.edn`:
+
+    ln -s /home/.../_certifiable_certs/.../dev-server.jks dev-keystore.jks
+
+In Chrome: Go to [Settings - Manage certificates](chrome://settings/certificates), choose
+`Authorities`, then click `Import` and
+choose `/home/.../_certifiable_certs/.../dev-root-trust-this.pem`.
+
+Forget adding the certificate in Android; it doesn't work.
+
+### Generate data
 
 To download images and generate data files:
 
     cd gen-data && ./run-complete-generate-data.sh
+
+## Development
 
 The following applies to the `igniteinator` folder:
 

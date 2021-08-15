@@ -3,11 +3,19 @@
   "short_name": "Igniteinator",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#fff",
+  "theme_color": "#303030",
+  "background_color": "#a0a0a0",
   "description": "An unoffical app for the board game Ignite",
-  "icons": [{
-    "src": "https://clojurescript.org/images/cljs-logo-icon-32.png",
-    "sizes": "32x32",
-    "type": "image/png"
+  "icons": [
+    {
+        "src": "/icons/maskable-192.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "any maskable"
+    },
+    {
+        "src": "/icons/splash.png",
+        "sizes": "512x512",
+        "type": "image/png"
   }]
 }

@@ -3,6 +3,7 @@
     [goog.dom :as gdom]
     [reagent.dom :as rdom]
     [igniteinator.ui.main :refer [main]]
+    [igniteinator.ui.install-button :refer [reg-beforeinstallprompt-event]]
     [igniteinator.data-load :refer [load-data]]
     [igniteinator.state :refer [state]]))
 
@@ -24,6 +25,7 @@
   (when-let [el (get-app-element)]
     (load-data)
     (reg-sw)
+    (reg-beforeinstallprompt-event)
     (mount el)))
 
 ;; conditionally start your application based on the presence of an "app" element

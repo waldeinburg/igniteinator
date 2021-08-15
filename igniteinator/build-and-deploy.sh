@@ -9,14 +9,15 @@ SW_SRC="target/public/sw.js"
 SCRIPT_DIR="$SRC_DIR/$SCRIPT_SUBDIR"
 
 CLEAN=1
-BUILD=1
+BUILD_CODE=1
+BUILD_STATIC=1
 DEPLOY=1
 REQUIRE_TAG=1
 DEPLOY_ARGS=()
 
 function usage_and_exit() {
-    echo "Usage: $0 [--no-tag] [--no-clean] [--no-build] [--no-deploy] [--dry-deploy] [--deploy-overwrite-all]"
-    echo "--no-build implies --no-clean."
+    echo "Usage: $0 [--no-tag] [--no-clean] [--no-build] [--build-static-only] [--no-deploy] [--dry-deploy] [--deploy-overwrite-all]"
+    echo "--no-build and --static-only implies --no-clean."
   exit "${1:-1}"
 }
 
@@ -24,7 +25,7 @@ function append_deploy_arg() {
     DEPLOY_ARGS[${#DEPLOY_ARGS[@]}]=$1
 }
 
-TEMP=$(getopt -o '' -l 'no-tag,no-clean,no-build,no-deploy,dry-deploy,deploy-overwrite-all' -- "$@") || usage_and_exit 99
+TEMP=$(getopt -o '' -l 'no-tag,no-clean,no-build,build-static-only,no-deploy,dry-deploy,deploy-overwrite-all' -- "$@") || usage_and_exit 99
 eval set -- "$TEMP"
 unset TEMP
 while :; do
@@ -39,7 +40,13 @@ while :; do
     ;;
   --no-build)
     CLEAN=
-    BUILD=
+    BUILD_CODE=
+    BUILD_STATIC=
+    shift
+    ;;
+  --build-static-only)
+    CLEAN=
+    BUILD_CODE=
     shift
     ;;
   --no-deploy)
@@ -98,13 +105,16 @@ function clean() {
   lein clean
 }
 
-function build() {
+function build_code() {
   lein fig:build
   lein fig:build-sw
   # With advanced optimizations we can leave out all the other files.
   mkdir -p "$SCRIPT_DIR"
   mv "$SCRIPT_SRC" "$SCRIPT_DIR"
   mv "$SW_SRC" "$SRC_DIR"
+}
+
+function build_static() {
   # dotglob in subshell.
   (
   shopt -s dotglob
@@ -125,9 +135,13 @@ if [[ "$CLEAN" ]]; then
   echo "Cleaning ..."
   clean
 fi
-if [[ "$BUILD" ]]; then
-  echo "Building ..."
-  build
+if [[ "$BUILD_CODE" ]]; then
+  echo "Building code ..."
+  build_code
+fi
+if [[ "$BUILD_STATIC" ]]; then
+  echo "Building static ..."
+  build_static
 fi
 if [[ "$DEPLOY" ]]; then
   echo "Deploying ..."

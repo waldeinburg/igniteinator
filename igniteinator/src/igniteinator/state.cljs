@@ -5,20 +5,21 @@
 (defonce state
   (r/atom
     {
-     :language      :en
-     :mode          :init
-     :current-page  :cards
-     :previous-page nil
-     :card-size     :normal
-     :cards-page    {:base           :all
-                     :filters        []
-                     :sortings       [{:key :name, :order :asc}]
-                     :search-str     ""
-                     :card-selection {:dialog-open? false
-                                      :ids          #{}
-                                      :search-str   ""}}
-     :combos-page   {:card-id  nil
-                     :sortings [{:key :name, :order :asc}]}
+     :language       :en
+     :mode           :init
+     :current-page   :cards
+     :previous-page  nil
+     :card-size      :normal
+     :install-dialog {:open? false}
+     :cards-page     {:base           :all
+                      :filters        []
+                      :sortings       [{:key :name, :order :asc}]
+                      :search-str     ""
+                      :card-selection {:dialog-open? false
+                                       :ids          #{}
+                                       :search-str   ""}}
+     :combos-page    {:card-id  nil
+                      :sortings [{:key :name, :order :asc}]}
      }))
 
 ;; Data object is stored in a separate atom to limit the amount of data to serialize each time state

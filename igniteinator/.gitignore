@@ -14,7 +14,9 @@ pom.xml
 /node_modules
 /resources/public/cljs-out
 /resources/public/generated
+/resources/public/icons
 # Private data for deployment.
 /private.inc.sh
-# Symlink (https://github.com/waldeinburg/poor-mans-rsync)
+# Symlinks
 /remote_sync.sh
+/dev-keystore.jks
