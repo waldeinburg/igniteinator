@@ -47,7 +47,9 @@
          ;; initially, then suddenly smaller, then back to the correct size). The image is loading
          ;; over the placeholder.
          @loading?
-         [:<> placeholder-img [box {:position :absolute} img]]
+         [:div {:class :dyn-height-block}
+          [:div {:class :dyn-height-background} placeholder-img]
+          [:div {:class :dyn-height-foreground} img]]
          ;; The image is not visible on screen. Avoid fetching until necessary.
          :else
          [visibility-sensor {:partial-visibility true

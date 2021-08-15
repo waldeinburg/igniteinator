@@ -21,6 +21,21 @@ ol.card-list {
     list-style: none;
 }
 
+/* https://stackoverflow.com/a/48877138 */
+.dyn-height-block {
+    display: flex;
+    flex-flow: row nowrap;
+}
+.dyn-height-block .dyn-height-background,
+.dyn-height-block .dyn-height-foreground {
+    box-sizing: border-box;
+    width: 100%;
+    flex: none;
+}
+.dyn-height-block .dyn-height-foreground {
+    margin-left: -100%;
+}
+
 .card-img {
     /* Not auto, will result in full image width, not parent width. */
     width: 100%;
