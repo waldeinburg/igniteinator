@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
-DATA_DIR=data
+BASE_DATA_FILE=base-data.json
 DOWNLOAD_DIR=download
 IMG_DOWNLOAD_DIR="$DOWNLOAD_DIR/images"
 CARDS_FILE="$DOWNLOAD_DIR/cards.json"

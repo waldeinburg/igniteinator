@@ -22,17 +22,6 @@ function warn_on_diff() {
   test_diff "$1" "$2" || return 0 # set -e is active
 }
 
-echo "Verify that Poison Blade is still missing"
-if [[ "$(jq '.cards[] | select(.name == "Poison Blade")' "$CARDS_FILE")" ]]; then
-  echo "Poison Blade found! Please remove the adding of this card from the data generation script."
-  exit 1
-fi
-echo "Verify that the intended id for added Poison Blade card is not taken"
-if [[ "$(jq '.cards[] | select(.id == 999)' "$CARDS_FILE")" ]]; then
-  echo "Id 999 is taken! Please change the id of Poison Blade from the data generation script."
-  exit 1
-fi
-
 echo "Verify that name and image does not contain suspect stuff"
 if jq '.cards[] | [.name, .image]' "$CARDS_FILE" | grep -C10 '@'; then
   echo "@ in name or image found! This would break image download script"
@@ -107,3 +96,9 @@ basic_and_combos_query='{"id":.id, "name":.name, "combos":.combos}'
 allcombocards=$(jq "[.allcombocards[] | $basic_and_combos_query] | $SORT_QUERY" "$CARDS_FILE")
 cards_with_combos=$(jq "[.cards[] | select(.combos!=null) | $basic_and_combos_query] | $SORT_QUERY" "$CARDS_FILE")
 assert_no_diff "$allcombocards" "$cards_with_combos"
+
+echo "Verify that data set is not different from base data set"
+# This also verifies that Poison Blade is still missing.
+cards_names=$(jq '(.cards + [{"name":"Poison Blade"}]) | sort_by(.name) | map(.name)' "$CARDS_FILE")
+base_data_names=$(jq '.cards | map(.name)' "$BASE_DATA_FILE")
+assert_no_diff "$cards_names" "$base_data_names"
