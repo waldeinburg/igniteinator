@@ -14,9 +14,15 @@ deck randomizer mechanism.
 
 ## Development setup
 
+### Install npm packages
+
+Run once to install npm packages:
+
+    npm install
+
 ### Remote sync script
 
-If deploying: Symlink in `igniteinator` folder to `remote_sync.sh` from
+If deploying: Symlink to `remote_sync.sh` from
 [Poor mans rsync](https://github.com/waldeinburg/poor-mans-rsync).
 
 ### Development certificate
@@ -25,7 +31,7 @@ Run:
 
     lein run -m certifiable.main
 
-Then, in `igniteinator` folder, symlink to the generated file referenced in `main.cljs.edn`:
+Then symlink to the generated file referenced in `main.cljs.edn`:
 
     ln -s /home/.../_certifiable_certs/.../dev-server.jks dev-keystore.jks
 
@@ -39,11 +45,9 @@ Forget adding the certificate in Android; it doesn't work.
 
 To download images and generate data files:
 
-    cd gen-data && ./run-complete-generate-data.sh
+    ./gen-data/run-complete-generate-data.sh
 
 ## Development
-
-The following applies to the `igniteinator` folder:
 
 To get an interactive development environment with [Figwheel](https://figwheel.org):
 

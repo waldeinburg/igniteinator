@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+cd "${0%/*}"
 
 function heading() {
     echo -e "\033[0;30m\033[47m$1\033[0m"
