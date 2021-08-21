@@ -7,7 +7,7 @@
   ;;:ring-server-options {:port 9501}
   ;;:open-url            false
   }
-{:main       igniteinator.service-worker
+{:main igniteinator.service-worker
  ;; Could theoretically make build work without advanced optimizations;
  ;; sw.js must be in root. But the resulting file doesn't work.
  ;;:output-dir "target/public"
