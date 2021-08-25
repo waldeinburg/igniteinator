@@ -2,6 +2,7 @@
   (:require [igniteinator.state :refer [state language]]
             [igniteinator.constants :as constants]
             [igniteinator.text :refer [txt-c]]
+            [igniteinator.util.image-path :refer [image-path]]
             [igniteinator.ui.tooltip :refer [tooltip] :rename {tooltip mui-tooltip}]
             [reagent.core :as r]
             [reagent-material-ui.util :refer [adapt-react-class]]
@@ -16,7 +17,7 @@
   ([card]
    (card-image {} card))
   ([{:keys [on-click tooltip]} card]
-   (let [src             (str constants/gen-img-base-path "/" (name @language) "/" (:id card) constants/gen-img-ext)
+   (let [src             (image-path @language card)
          name            (:name card)
          ;; The placeholder has the exact scale of the images.
          placeholder-img [:img {:src   placeholder-img-src, :alt name

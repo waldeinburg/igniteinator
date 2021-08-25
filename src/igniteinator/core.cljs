@@ -3,20 +3,13 @@
     [goog.dom :as gdom]
     [reagent.dom :as rdom]
     [igniteinator.ui.main :refer [main]]
+    [igniteinator.service-worker-client :refer [reg-sw]]
     [igniteinator.ui.install-button :refer [reg-beforeinstallprompt-event]]
     [igniteinator.data-load :refer [load-data]]
     [igniteinator.state :refer [state]]))
 
 (defn get-app-element []
   (gdom/getElement "app"))
-
-(defn reg-sw []
-  (if js/navigator.serviceWorker
-    (->
-      (.register js/navigator.serviceWorker "/sw.js")
-      (.then #(js/console.log "Service worker installed"))
-      (.catch #(js/console.error "Failed to load service worker:" %)))
-    (js/console.log "navigator.serviceWorker not available")))
 
 (defn mount [el]
   (rdom/render [main] el))

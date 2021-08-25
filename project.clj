@@ -16,13 +16,24 @@
   :source-paths ["src"]
 
   :aliases {"fig"          ["trampoline" "run" "-m" "figwheel.main"]
-            "fig:dev"      ["trampoline" "run" "-m" "figwheel.main" "-b" "main" "-r"]
+            "fig:dev"      ["trampoline" "run" "-m" "figwheel.main"
+                            "--build" "main" "--repl"]
             ;; Cf. sw.cljs.edn for the problems.
             ;; And without advanced optimizations it does not seem to compile properly anyway.
             ;;"fig:dev-sw"   ["trampoline" "run" "-m" "figwheel.main" "-b" "sw" "-r"]
-            "fig:build"    ["run" "-m" "figwheel.main" "--optimizations" "advanced" "--build-once" "main"]
-            "fig:build-sw" ["run" "-m" "figwheel.main" "--optimizations" "advanced" "--build-once" "sw"]
-            "fig:test"     ["run" "-m" "figwheel.main" "-co" "test.cljs.edn" "-m" "igniteinator.test-runner"]}
+            "fig:build"    ["run" "-m" "figwheel.main"
+                            "--optimizations" "advanced"
+                            "--build-once" "main"]
+            "fig:build-sw" ["run" "-m" "figwheel.main"
+                            "--optimizations" "advanced"
+                            "--build-once" "sw"]
+            "fig:debug-sw" ["run" "-m" "figwheel.main"
+                            "--compile-opts" {:debug? true}
+                            "--optimizations" "advanced"
+                            "--build-once" "sw"]
+            "fig:test"     ["run" "-m" "figwheel.main"
+                            "--compile-opts" "test.cljs.edn"
+                            "-m" "igniteinator.test-runner"]}
 
   :profiles {:dev {:dependencies   [[com.bhauman/figwheel-main "0.2.13" :exclusions [org.clojure/clojurescript]]
                                     [com.bhauman/rebel-readline-cljs "0.1.4"]

@@ -1,11 +1,12 @@
 (ns igniteinator.state
-  (:require [reagent.core :as r]))
+  (:require [igniteinator.constants :as constants]
+            [reagent.core :as r]))
 
 ;; State object. Nil values are just for documentation.
 (def state
   (r/atom
     {
-     :language       :en
+     :language       constants/default-language
      :mode           :init
      :current-page   :cards
      :previous-page  nil

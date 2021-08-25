@@ -107,7 +107,7 @@ function clean() {
 
 function build_code() {
   lein fig:build
-  ./compile-sw.sh
+  lein fig:build-sw
   # With advanced optimizations we can leave out all the other files.
   mkdir -p "$SCRIPT_DIR"
   mv "$SCRIPT_SRC" "$SCRIPT_DIR"
