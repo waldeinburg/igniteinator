@@ -1,8 +1,8 @@
 (ns igniteinator.util.debug)
-;; Macros must not be in a CLJS file.
-;; WARNING: Merely setting debug? compiler option will not work.
-;; You have to do a lein clean or touch the affected file first because the
-;; compiler will see that it has not changed and not recompile.
+;; Macros must be in a CLJ file. Due to the use of cljs.env/*compiler*, compilation as CLJS (which also happens with
+;; CLJC ending) will fail.
+;; WARNING: Merely setting debug? compiler option will not work. You have to do a lein clean or touch the affected file
+;; first because the compiler will see that it has not changed and not recompile.
 
 (defn debug? []
   (and cljs.env/*compiler*

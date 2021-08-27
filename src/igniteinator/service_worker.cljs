@@ -2,8 +2,8 @@
   (:require [igniteinator.constants :as constants]
             [igniteinator.util.image-path :refer [image-path]]
             [clojure.string :as str]
-            [clojure.string :as str]
-            [goog.Uri :as uri])
+            [promesa.core :as p]
+            [cljs-http.client :refer [parse-url]])
   (:require-macros [igniteinator.util.debug :refer [dbg when-debug]]))
 ;; Cf. https://github.com/gja/pwa-clojure/blob/master/src-svc/pwa_clojure/service_worker.cljs
 ;; and the following and related articles.
@@ -36,84 +36,78 @@
 (defn warn [& msg]
   (log-msg js/console.warn msg))
 
-(defn- add-to-cache [request response]
+(defn match-cache [request]
+  (.match js/caches request
+    ;; Without ignoreVary, requests from browser will miss images cached by URL string.
+    (clj->js {"ignoreVary" true})))
+
+(defn add-to-cache [request response]
   (let [url            (if (string? request)
                          request
                          (.-url request))
-        ;; Don't use cljs-http.client/parse-url. The library will result in a "...=window;" statement in the compiled
-        ;; service worker, but there's no window object in this context.
-        path           (-> url uri/parse .getPath)
+        path           (-> url parse-url :uri)
         image?         (str/starts-with? path (str constants/gen-img-base-path "/"))
         response-clone (.clone response)]
     (dbg "Caching" request)
-    (->
-      js/caches
-      (.open (if image? image-cache-name app-cache-name))
-      (.then (fn [cache]
-               (.put cache request response-clone))))))
+    (p/let [cache (.open js/caches
+                    (if image? image-cache-name app-cache-name))]
+      (.put cache request response-clone))))
 
-(defn- fetch-and-cache [request]
+(defn fetch-and-cache [request]
   (dbg "Fetch" request "for caching")
-  (->
-    (js/fetch request)
-    (.then (fn [response]
-             (if (.-ok response)
-               (add-to-cache request response)
-               (warn "Error response! Not caching." request response))
-             response))))
+  (p/let [response (js/fetch request)]
+    (if (.-ok response)
+      (add-to-cache request response)
+      (warn "Error response! Not caching." request response))
+    response))
 
-(defn- fetch-request [request]
+(defn fetch-request [request]
   (dbg "Fetch" request)
-  (->
-    js/caches
-    (.match request
-      ;; Without ignoreVary, requests from browser will miss images cached by URL string.
-      (clj->js {"ignoreVary" true}))
-    (.then (fn [response]
-             (dbg "Cache" (if response "hit" "miss") request)
-             (or response (fetch-and-cache request))))))
+  (p/let [response (match-cache request)]
+    (dbg "Cache" (if response "hit" "miss") request)
+    (or response (fetch-and-cache request))))
 
-(defn- cache-image-list-from-json-data [language data]
-  (dbg "Data ready. Caching images.")
-  (let [data (js->clj data :keywordize-keys true)]
-    ;; Do not use Cache.addAll. The function will trigger on each page load, not just service worker installation.
-    (doseq [card (:cards data)]
-      (fetch-request (image-path language card)))))
+(defn get-data-and-cache-image-list [language]
+  (p/let [response        (fetch-request constants/data-file-path)
+          data            (p/let [json (.json response)]
+                            (js->clj json :keywordize-keys true))
+          ;; We cannot use filter because match-cache returns a Promise, not a boolean.
+          uncached-paths! (reduce (fn [prev-promise card]
+                                    (let [request (image-path language card)]
+                                      (p/let [result prev-promise
+                                              match  (match-cache request)]
+                                        (if match
+                                          result
+                                          (conj! result request)))))
+                            (p/promise (transient []))
+                            (:cards data))]
+    ;; Chain the requests to fetch only one at a time. Let the user have the bandwidth for using the app, possibly
+    ;; hitting images that are not cached. Thus, fetch-request will once again check if the image is cached.
+    (let [uncached-paths (persistent! uncached-paths!)]
+      (reduce (fn [prev-promise request]
+                (p/then prev-promise #(fetch-request request)))
+        uncached-paths))))
 
-(defn- get-data-and-cache-image-list [language]
-  (->
-    ;; The data should be in the cache by now.
-    (fetch-request constants/data-file-path)
-    (.then (fn [response]
-             (->
-               (.json response)
-               (.then (partial cache-image-list-from-json-data language)))))))
-
-(defn- fetch-event [e]
+(defn fetch-event [e]
   (dbg "Fetch event" e)
   (fetch-request (.-request e)))
 
-(defn- purge-old-caches []
+(defn purge-old-caches []
   (info "Purging old caches")
-  (->
-    (.keys js/caches)
-    (.then (fn [keys]
-             (->> keys
-               (map #(when-not (#{app-cache-name image-cache-name} %)
-                       (.delete js/caches %)))
-               clj->js
-               js/Promise.all)))))
+  (p/let [keys (.keys js/caches)]
+    (->> keys
+      (map #(when-not (#{app-cache-name image-cache-name} %)
+              (.delete js/caches %)))
+      clj->js
+      p/all)))
 
-(defn- install-service-worker []
+(defn install-service-worker []
   (info "Installing service worker")
   (dbg "Debug messages are on!")
-  (->
-    js/caches
-    (.open app-cache-name)
-    (.then (fn [app-cache]
-             (.addAll app-cache (clj->js app-cache-files))))))
+  (p/let [cache (.open js/caches app-cache-name)]
+    (.addAll cache (clj->js app-cache-files))))
 
-(defn- handle-mode [mode]
+(defn handle-mode [mode]
   (when (= mode :standalone)
     (dbg "Standalone mode. Ensure images in cache.")
     ;; At installation we would want to cache the default language if in standalone mode. However, the service worker is
@@ -122,7 +116,7 @@
     ;; TODO: At language change, receive message with the current language.
     (get-data-and-cache-image-list constants/default-language)))
 
-(defn- handle-message [e]
+(defn handle-message [e]
   (let [msg      (js->clj (.-data e) :keywordize-keys true)
         msg-type (keyword (:type msg))]
     (info "Received message of type" (name msg-type))

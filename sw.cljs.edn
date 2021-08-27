@@ -1,14 +1,23 @@
 ^{;; Compile hangs anyway when watching src and running a server and when not
   ;; running a server (:build-once) compile does not hang but webpack fails to execute.
   ;;:watch-dirs      ["src"]
-  :auto-bundle     :webpack
   :final-output-to "target/public/sw.js"
   :mode            :build-once
   ;;:ring-server-options {:port 9501}
   ;;:open-url            false
   }
-{:main igniteinator.service-worker
- ;; Could theoretically make build work without advanced optimizations;
- ;; sw.js must be in root. But the resulting file doesn't work.
- ;;:output-dir "target/public"
+{:main            igniteinator.service-worker
+ ;; Service workers doesn't work without optimizations, because theres no document.write available.
+ ;; Like setting :auto-bundle :webpack, but avoid :clojure-defines {"cljs.core/*global*" "window"}
+ ;; It seems to be impossible to override it, even with :extra-closure-defines.
+ ;; Setting :closure-defines instead of :extra-closure-defines does not stop figwheel from adding other values.
+ :target          :bundle
+ :bundle-cmd      {:none    [:npx-cmd "webpack" "--mode=development" "--entry" :output-to
+                             "--output-path" :final-output-dir
+                             "--output-filename" :final-output-filename]
+                   :default [:npx-cmd "webpack" "--mode=production" "--entry" :output-to
+                             "--output-path" :final-output-dir
+                             "--output-filename" :final-output-filename]}
+ ;; Figwheel will issue a warning because we don't set it to "window".
+ :closure-defines {cljs.core/*global* "self"}
  }

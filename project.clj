@@ -9,6 +9,7 @@
   :dependencies [[org.clojure/clojure "1.10.3"]
                  [org.clojure/clojurescript "1.10.844"]
                  [org.clojure/core.async "1.3.618"]
+                 [funcool/promesa "6.0.2"]
                  [cljs-http "0.1.46"]
                  [arttuka/reagent-material-ui "4.11.3-2"
                   :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server arttuka/reagent-material-ui-js]]]
@@ -29,7 +30,7 @@
                             "--build-once" "sw"]
             "fig:debug-sw" ["run" "-m" "figwheel.main"
                             "--compile-opts" {:debug? true}
-                            "--optimizations" "advanced"
+                            "--optimizations" "simple"
                             "--build-once" "sw"]
             "fig:test"     ["run" "-m" "figwheel.main"
                             "--compile-opts" "test.cljs.edn"
