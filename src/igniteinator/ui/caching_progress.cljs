@@ -20,10 +20,6 @@
                                :border-radius 5}})
    linear-progress))
 
-(def large-snackbar
-  ((styles/with-styles {:root {:width "50%"}})
-   snackbar))
-
 (def large-alert ((styles/with-styles {:root    {:width "100%"}
                                        :message {:width "100%"}})
                   alert))
@@ -36,10 +32,12 @@
           c         (if (zero? count) 1 count)              ; avoid division by zero
           value     (* 100 (/ progress c))
           finished? (= 100 value)]
-      [large-snackbar {:anchor-origin      {:vertical :bottom, :horizontal :center}
-                       :open               open
-                       :auto-hide-duration (if finished? 1000)
-                       :on-close           #(swap! progress-state assoc :open false)}
+      [snackbar {:anchor-origin           {:vertical :bottom, :horizontal :center}
+                 :open                    open
+                 :auto-hide-duration      (if finished? 1000)
+                 :on-close                #(swap! progress-state assoc :open false)
+                 "ClickAwayListenerProps" {"mouseEvent" false
+                                           "touchEvent" false}}
        [large-alert {:severity (if finished? :success :info)
                      :variant  (if finished? :filled :standard)
                      :icon     false}

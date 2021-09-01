@@ -29,8 +29,8 @@
 (defn main []
   [:<>
    [css-baseline]
+   [caching-progress]
    [container
-    [caching-progress]
     [header]
     [content]
     [footer]]])
