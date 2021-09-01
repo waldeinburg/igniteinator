@@ -11,7 +11,7 @@
 ;; Link to a site that gives a quick overview of regexp. This one looks nice.
 (def regular-expressions-site "https://cheatography.com/davechild/cheat-sheets/regular-expressions/")
 ;; This might change.
-(def ignite-link "http://gingersnapgaming.com")
+(def ignite-link "https://gingersnapgaming.com")
 
 (def card-sizes {
                  :small  {:xs 4, :sm 3, :md 2, :lg 1}

@@ -8,7 +8,7 @@
    ;; No translation of this text.
    [:p
     "All data and images are Copyright © 2021, "
-    [external-link "http://gingersnapgaming.com" "Ginger Snap Gaming"]
+    [external-link "https://gingersnapgaming.com" "Ginger Snap Gaming"]
     ". Used in the " [link {:href page-url} "Igniteinator"] " by permission."]
    [:p "Source code available on " [external-link github-url "GitHub"] "."]
    [:p "Version " version "."]])
