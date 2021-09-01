@@ -1,6 +1,7 @@
 (ns igniteinator.service-worker
   (:require [igniteinator.constants :as constants]
             [igniteinator.util.image-path :refer [image-path]]
+            [igniteinator.util.message :as msg]
             [clojure.string :as str]
             [promesa.core :as p]
             [cljs-http.client :refer [parse-url]])
@@ -36,6 +37,14 @@
 (defn warn [& msg]
   (log-msg js/console.warn msg))
 
+(defn post-msg [client-id msg-type msg-data]
+  (dbg "Getting client to post message")
+  (p/let [client (->
+                   (.-clients js/self)
+                   (.get client-id))]
+    (dbg "Post message" (name msg-type) (clj->js msg-data))
+    (msg/post client msg-type msg-data)))
+
 (defn match-cache [request]
   (.match js/caches request
     ;; Without ignoreVary, requests from browser will miss images cached by URL string.
@@ -67,7 +76,7 @@
     (dbg "Cache" (if response "hit" "miss") request)
     (or response (fetch-and-cache request))))
 
-(defn get-data-and-cache-image-list [language]
+(defn get-data-and-cache-image-list [language client-id]
   (p/let [response        (fetch-request constants/data-file-path)
           data            (p/let [json (.json response)]
                             (js->clj json :keywordize-keys true))
@@ -83,10 +92,23 @@
                             (:cards data))]
     ;; Chain the requests to fetch only one at a time. Let the user have the bandwidth for using the app, possibly
     ;; hitting images that are not cached. Thus, fetch-request will once again check if the image is cached.
-    (let [uncached-paths (persistent! uncached-paths!)]
-      (reduce (fn [prev-promise request]
-                (p/then prev-promise #(fetch-request request)))
-        uncached-paths))))
+    (if-let [uncached-paths (not-empty (persistent! uncached-paths!))]
+      (let [cnt (count uncached-paths)]
+        ;; Let the stated message post before starting, but then don't care about the message sync.
+        ;; There will be no simultaneous downloads anyway.
+        (reduce (fn [prev-promise request]
+                  (p/let [prev-result prev-promise]
+                    ;; The first item will get 0 from the initial noop promise. This will signal start of caching.
+                    ;; The last item will get the final message sent and ignore the request (nil).
+                    ;; Would a loop-recur have been prettier? Maybe.
+                    (post-msg client-id :img-caching-progress {:progress prev-result
+                                                               :count    cnt})
+                    (if request
+                      (p/then (fetch-request request)
+                        #(inc prev-result)))))
+          (p/resolved 0)
+          ;; Add nil at the end to ensure sending the last message.
+          (conj uncached-paths nil))))))
 
 (defn fetch-event [e]
   (dbg "Fetch event" e)
@@ -101,28 +123,33 @@
       clj->js
       p/all)))
 
+(defn clear-app-cache []
+  (info "Clearing app cache")
+  (.delete js/caches app-cache-name))
+
 (defn install-service-worker []
   (info "Installing service worker")
   (dbg "Debug messages are on!")
   (p/let [cache (.open js/caches app-cache-name)]
     (.addAll cache (clj->js app-cache-files))))
 
-(defn handle-mode [mode]
+(defn handle-mode [mode client-id]
+  (info "Mode is" (name mode))
   (when (= mode :standalone)
     (dbg "Standalone mode. Ensure images in cache.")
     ;; At installation we would want to cache the default language if in standalone mode. However, the service worker is
     ;; already installed at the first visit. Instead, the client messages the service worker and the worker ensures that
     ;; the images are in the cache.
     ;; TODO: At language change, receive message with the current language.
-    (get-data-and-cache-image-list constants/default-language)))
+    (get-data-and-cache-image-list constants/default-language client-id)))
 
-(defn handle-message [e]
-  (let [msg      (js->clj (.-data e) :keywordize-keys true)
-        msg-type (keyword (:type msg))]
-    (info "Received message of type" (name msg-type))
-    (condp = msg-type
-      :mode (handle-mode (keyword (:value msg)))
-      (warn "Invalid message" (.-data e)))))
+(def handle-message (msg/message-handler
+                      (fn [msg-type msg-data e]
+                        (let [client-id (.. e -source -id)]
+                          (condp = msg-type
+                            :mode (handle-mode (keyword msg-data) client-id)
+                            :cache-clear (clear-app-cache)
+                            (warn "Invalid message type" (name msg-type)))))))
 
 (.addEventListener js/self "install" #(.waitUntil % (install-service-worker)))
 (.addEventListener js/self "activate" #(.waitUntil % (purge-old-caches)))

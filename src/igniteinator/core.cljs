@@ -1,12 +1,13 @@
 (ns ^:figwheel-hooks igniteinator.core
   (:require
-    [goog.dom :as gdom]
-    [reagent.dom :as rdom]
     [igniteinator.ui.main :refer [main]]
+    [igniteinator.util.message :as msg]
     [igniteinator.service-worker-client :refer [reg-sw]]
     [igniteinator.ui.install-button :refer [reg-beforeinstallprompt-event]]
     [igniteinator.data-load :refer [load-data]]
-    [igniteinator.state :refer [state]]))
+    [igniteinator.state :refer [state]]
+    [goog.dom :as gdom]
+    [reagent.dom :as rdom]))
 
 (defn get-app-element []
   (gdom/getElement "app"))
@@ -25,10 +26,10 @@
 ;; this is particularly helpful for testing this ns without launching the app
 (mount-app-element)
 
-;; specify reload hook with ^;after-load metadata
+(defn ^:before-load my-before-reload-callback []
+  ;; Tell the service worker, if any, to clear app cache before Figwheel reload.
+  (if-let [ctrl (.-controller js/navigator.serviceWorker)]
+    (msg/post ctrl :cache-clear)))
+
 (defn ^:after-load on-reload []
-  (mount-app-element)
-  ;; optionally touch your app-state to force rerendering depending on
-  ;; your application
-  ;; (swap! app-state update-in [:__figwheel_counter] inc)
-  )
+  (mount-app-element))

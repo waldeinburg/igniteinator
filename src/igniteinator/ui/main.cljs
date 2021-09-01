@@ -3,6 +3,7 @@
             [igniteinator.ui.cards-page :refer [cards-page]]
             [igniteinator.ui.header :refer [header]]
             [igniteinator.ui.footer :refer [footer]]
+            [igniteinator.ui.caching-progress :refer [caching-progress]]
             [igniteinator.ui.combos :refer [combos-page]]
             [reagent.core :as r]
             [reagent-material-ui.core.css-baseline :refer [css-baseline]]
@@ -29,6 +30,7 @@
   [:<>
    [css-baseline]
    [container
+    [caching-progress]
     [header]
     [content]
     [footer]]])

@@ -23,6 +23,7 @@
    :select-all-button         {:en "all"}
    :select-some-button        {:en "select cards"}
    :select-cards-dialog-title {:en "select cards"}
+   :caching-progress-title    {:en "Downloading images"}
    :install-app               {:en "Install app"}
    :add-to-home-screen        {:en "Add to Home screen"}
    :a2hs-instructions-title   {:en "Add to Home screen: Instructions"}
