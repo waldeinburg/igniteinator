@@ -11,6 +11,8 @@
                  [org.clojure/core.async "1.3.618"]
                  [funcool/promesa "6.0.2"]
                  [cljs-http "0.1.46"]
+                 [re-frame "1.2.0"]
+                 [day8.re-frame/http-fx "0.2.3"]
                  [arttuka/reagent-material-ui "4.11.3-2"
                   :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server arttuka/reagent-material-ui-js]]]
 
@@ -38,7 +40,8 @@
 
   :profiles {:dev {:dependencies   [[com.bhauman/figwheel-main "0.2.13" :exclusions [org.clojure/clojurescript]]
                                     [com.bhauman/rebel-readline-cljs "0.1.4"]
-                                    [org.clojure/math.combinatorics "0.1.6"]]
+                                    [org.clojure/math.combinatorics "0.1.6"]
+                                    [day8.re-frame/re-frame-10x "1.1.13"]]
                    :resource-paths ["target"]
                    ;; need to add the compiled assets to the :clean-targets
                    :clean-targets  ^{:protect false} ["target"]}})

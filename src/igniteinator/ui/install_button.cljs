@@ -1,7 +1,7 @@
 (ns igniteinator.ui.install-button
-  (:require [igniteinator.text :refer [txt]]
+  (:require [igniteinator.util.re-frame :refer [<sub >evt]]
+            [igniteinator.text :refer [txt]]
             [igniteinator.ui.tooltip :refer [tooltip]]
-            [igniteinator.state :refer [state set-in-state!]]
             [igniteinator.util.user-agent :refer [user-agent]]
             [reagent.core :as r]
             [reagent-material-ui.core.box :refer [box]]
@@ -37,18 +37,18 @@
     [add-to-home-screen {:color color}]]])
 
 (defn on-install-dialog-close []
-  (set-in-state! [:install-dialog :open?] false))
+  (>evt :install-dialog/set-open? false))
 
-(let [open? (r/cursor state [:install-dialog :open?])]
-  (defn add-to-home-screen-dialog []
-    [dialog {:open @open?, :on-close on-install-dialog-close}
-     [dialog-title (txt :a2hs-instructions-title)]
-     [dialog-content
-      [:p (txt (condp = (user-agent)
-                 :ios :a2hs-instructions-ios
-                 nil))]
-      [dialog-actions
-       [button {:variant :contained, :on-click on-install-dialog-close} (txt :got-it)]]]]))
+(defn add-to-home-screen-dialog []
+  [dialog {:open     (<sub :install-dialog/open?)
+           :on-close on-install-dialog-close}
+   [dialog-title (txt :a2hs-instructions-title)]
+   [dialog-content
+    [:p (txt (condp = (user-agent)
+               :ios :a2hs-instructions-ios
+               nil))]
+    [dialog-actions
+     [button {:variant :contained, :on-click on-install-dialog-close} (txt :got-it)]]]])
 
 (defn install-button []
   [:<>
@@ -61,4 +61,4 @@
              (not (.. js/self -navigator -standalone))
              ;; Just one known for now
              (#{:ios} (user-agent)))
-       [install-button-fn #(set-in-state! [:install-dialog :open?] true) :inherit]))])
+       [install-button-fn #(>evt :install-dialog/set-open? true) :inherit]))])

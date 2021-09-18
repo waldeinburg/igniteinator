@@ -1,5 +1,5 @@
 (ns igniteinator.ui.card-list
-  (:require [igniteinator.state :refer [state language]]
+  (:require [igniteinator.util.re-frame :refer [<sub]]
             [igniteinator.constants :as constants]
             [igniteinator.text :refer [txt-c]]
             [igniteinator.util.image-path :refer [image-path]]
@@ -17,7 +17,8 @@
   ([card]
    (card-image {} card))
   ([{:keys [on-click tooltip]} card]
-   (let [src             (image-path @language card)
+   (let [lang            (<sub :language)
+         src             (image-path lang card)
          name            (:name card)
          ;; The placeholder has the exact scale of the images.
          placeholder-img [:img {:src   placeholder-img-src, :alt name
@@ -63,12 +64,12 @@
   ([props card]
    [card-image props card]))
 
-(let [size (r/cursor state [:card-size])]
-  (defn card-grid
-    ([card]
-     (card {} card))
-    ([props card]
-     [grid (into {:component "li", :item true} (get constants/card-sizes @size))
+(defn card-grid
+  ([card]
+   (card {} card))
+  ([props card]
+   (let [size (<sub :card-size)]
+     [grid (into {:component "li", :item true} (get constants/card-sizes size))
       [card-container props card]])))
 
 (defn empty-card-list []

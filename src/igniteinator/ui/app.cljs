@@ -1,32 +1,31 @@
-(ns igniteinator.ui.main
-  (:require [igniteinator.state :refer [state]]
+(ns igniteinator.ui.app
+  (:require [igniteinator.util.re-frame :refer [<sub]]
             [igniteinator.ui.cards-page :refer [cards-page]]
             [igniteinator.ui.header :refer [header]]
             [igniteinator.ui.footer :refer [footer]]
             [igniteinator.ui.caching-progress :refer [caching-progress]]
-            [igniteinator.ui.combos :refer [combos-page]]
-            [reagent.core :as r]
+            [igniteinator.ui.card-details :refer [card-details-page]]
             [reagent-material-ui.core.css-baseline :refer [css-baseline]]
             [reagent-material-ui.core.container :refer [container]]
             [reagent-material-ui.core.circular-progress :refer [circular-progress]]))
 
 (defn pages []
   ;; TODO: add router here?
-  [:<>
-   [cards-page]
-   [combos-page]])
+  (let [page (<sub :current-page)]
+    (case page
+      :cards [cards-page]
+      :card-details [card-details-page])))
 
 (defn content []
-  (let [mode (r/cursor state [:mode])]
-    (fn []
-      (case @mode
-        :init [:div "The monkeys are listening ..."]
-        :loading [circular-progress]
-        :ready [pages]
-        :fatal-error [:div (:fatal-message @state)]
-        [:div (str "No such mode: " @mode)]))))
+  (let [mode (<sub :mode)]
+    (case mode
+      :init [:div "The monkeys are listening ..."]
+      :loading [circular-progress]
+      :ready [pages]
+      :fatal-error [:div (<sub :fatal-message)]
+      [:div (str "No such mode: " mode)])))
 
-(defn main []
+(defn app []
   [:<>
    [css-baseline]
    [caching-progress]

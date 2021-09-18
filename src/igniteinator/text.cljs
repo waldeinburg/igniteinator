@@ -1,5 +1,5 @@
 (ns igniteinator.text
-  (:require [igniteinator.state :refer [language]]
+  (:require [igniteinator.util.re-frame :refer [<sub]]
             [clojure.string :as s]))
 
 (def strings
@@ -34,8 +34,15 @@
    :a2hs-instructions-ios     {:en "Click the \"Share\" icon, then find \"Add to Home Screen\"."}
    })
 
-(defn txt [s]
-  (get-in strings [s @language]))
+;; Convenience functions to minimize the boilerplate retrieving strings.
+(defn txt
+  ([s]
+   (<sub :txt s))
+  ([lang s]
+   (get-in strings [s lang])))
 
-(defn txt-c [s]
-  (s/capitalize (txt s)))
+(defn txt-c
+  ([s]
+   (<sub :txt-c s))
+  ([lang s]
+   (-> (txt lang s) s/capitalize)))
