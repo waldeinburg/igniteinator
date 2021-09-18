@@ -3,7 +3,7 @@
             [igniteinator.ui.card-list :refer [card-list]]
             [igniteinator.ui.page :refer [page]]
             [igniteinator.ui.search-bar :refer [search-bar]]
-            [igniteinator.text :refer [txt-c]]
+            [igniteinator.text :refer [txt]]
             [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
             [reagent-material-ui.core.box :refer [box]]
             [reagent-material-ui.core.toolbar :refer [toolbar]]))
@@ -32,12 +32,12 @@
                      #(>evt :show-card-details card))
       :tooltip-fn  (fn [card]
                      (if (not-empty (:combos card))
-                       (txt-c :show-combos)
-                       (txt-c :no-combos)))}
+                       (txt :card-tooltip-combos)
+                       (txt :card-tooltip-no-combos)))}
      cards]))
 
 (defn cards-page []
-  [page (txt-c :cards-page-title)
+  [page (txt :cards-page-title)
    [toolbar {:disable-gutters true}
     [box {:mr 2}
      [page-base-filtering]]

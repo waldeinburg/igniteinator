@@ -115,4 +115,11 @@
 (reg-sub-db :card-details-page/card-id)
 (reg-sub-db :card-details-page/sortings)
 
+(reg-sub-raw
+  :card-details-page/card
+  (fn [_ _]
+    (ra/reaction
+      (let [card-id (<sub :card-details-page/card-id)]
+        (<sub :card card-id)))))
+
 (reg-sub-db :install-dialog/open?)

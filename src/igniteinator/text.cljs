@@ -4,37 +4,41 @@
 
 (def strings
   {
-   :subtitle                  {:en "an unoffical app for the board game"}
-   :ok                        {:en "ok"}
-   :back                      {:en "back"}
-   :empty-list                {:en "empty list"}
-   :select-all                {:en "select all"}
-   :search                    {:en "search"}
-   :using                     {:en "using"}
-   :regular-expressions       {:en "regular expressions"}
-   :clear-selection           {:en "clear selection"}
-   :data-load-error           {:en "error loading data"}
-   :show-combos               {:en "show known combos"}
-   :no-combos                 {:en "no known combos for this card"}
-   :no-more-combos            {:en "no more known combos for this card"}
-   :cards-page-title          {:en "cards"}
-   :combos-page-title         {:en "combos for"}
-   :card-selection            {:en "card selection"}
-   :select-all-button         {:en "all"}
-   :select-some-button        {:en "select cards"}
-   :select-cards-dialog-title {:en "select cards"}
-   :caching-progress-title    {:en "Downloading images"}
-   :install-app               {:en "Install app"}
-   :add-to-home-screen        {:en "Add to Home screen"}
-   :a2hs-instructions-title   {:en "Add to Home screen: Instructions"}
-   :got-it                    {:en "Got it!"}
+   :subtitle                    {:en "an unoffical app for the board game"}
+   :ok                          {:en "ok"}
+   :back                        {:en "back"}
+   :empty-list                  {:en "empty list"}
+   :select-all                  {:en "select all"}
+   :search                      {:en "search"}
+   :using                       {:en "using"}
+   :regular-expressions         {:en "regular expressions"}
+   :clear-selection             {:en "clear selection"}
+   :data-load-error             {:en "error loading data"}
+   :card-tooltip-combos         {:en "Show card and known combos"}
+   :card-tooltip-no-combos      {:en "Show card (no known combos for this card)"}
+   :card-tooltip-no-more-combos {:en "Show card (no more known combos for this card)"}
+   :no-combos                   {:en "no known combos for this card"}
+   :cards-page-title            {:en "Cards"}
+   :card-details-page-title     {:en ""}
+   :combos-title                {:en "Combos"}
+   :card-selection              {:en "card selection"}
+   :select-all-button           {:en "all"}
+   :select-some-button          {:en "select cards"}
+   :select-cards-dialog-title   {:en "select cards"}
+   :caching-progress-title      {:en "Downloading images"}
+   :install-app                 {:en "Install app"}
+   :add-to-home-screen          {:en "Add to Home screen"}
+   :a2hs-instructions-title     {:en "Add to Home screen: Instructions"}
+   :got-it                      {:en "Got it!"}
    ;; A2HS Instructions for iPhone. Cf. https://www.netguru.com/blog/pwa-ios.
    ;; We cannot show the icon because of Apple copyright.
    ;; (https://developer.apple.com/design/human-interface-guidelines/sf-symbols/overview/)
-   :a2hs-instructions-ios     {:en "Click the \"Share\" icon, then find \"Add to Home Screen\"."}
+   :a2hs-instructions-ios       {:en "Click the \"Share\" icon, then find \"Add to Home Screen\"."}
    })
 
 ;; Convenience functions to minimize the boilerplate retrieving strings.
+;; Use txt-c when the key does not instruct it's specific context and capitalizing is intended.
+
 (defn txt
   ([s]
    (<sub :txt s))

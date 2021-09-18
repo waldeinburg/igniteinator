@@ -2,8 +2,8 @@
   (:require [igniteinator.util.re-frame :refer [<sub >evt]]
             [igniteinator.ui.page :refer [page]]
             [igniteinator.ui.back-button :refer [back-button]]
-            [igniteinator.ui.card-list :refer [card-list]]
-            [igniteinator.text :refer [txt-c]]
+            [igniteinator.ui.card-list :refer [card-list card-container]]
+            [igniteinator.text :refer [txt txt-c]]
             [reagent-material-ui.core.container :refer [container]]
             [reagent-material-ui.core.modal :refer [modal]]))
 
@@ -15,18 +15,22 @@
                      #(>evt :card-details-page/set-card-id (:id c)))
       :tooltip-fn  (fn [c]
                      (case (:combos c)
-                       [] (txt-c :no-combos)
-                       [(:id card)] (txt-c :no-more-combos)
-                       (txt-c :show-combos)))}
+                       [] (txt :card-tooltip-no-combos)
+                       [(:id card)] (txt :card-tooltip-no-more-combos)
+                       (txt :card-tooltip-combos)))}
      cards]))
 
+(defn combos-section [card]
+  [:<>
+   [:h3 (txt :combos-title)]
+   [combos-list card]])
+
 (defn card-details-page []
-  (when (= :card-details (<sub :current-page))
-    (let [card-id (<sub :card-details-page/card-id)
-          c       (<sub :card card-id)]
-      [page (str (txt-c :combos-page-title) " " (:name c))
-       [back-button]
-       ;; Show main card in a card-list instead of a card-container to make size the same as the
-       ;; cards in the list.
-       [card-list [c]]
-       [combos-list c]])))
+  (let [card (<sub :card-details-page/card)]
+    [page (str (txt :card-details-page-title) " " (:name card))
+     [back-button]
+     ;; Just show in full size.
+     [card-container card]
+     (if (empty? (:combos card))
+       [:p (txt-c :no-combos)]
+       [combos-section card])]))
