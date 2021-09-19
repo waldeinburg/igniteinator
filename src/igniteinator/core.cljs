@@ -3,6 +3,7 @@
     ;; Re-frame registrations BEGIN
     [igniteinator.events]
     [igniteinator.subs]
+    [igniteinator.fx]
     [day8.re-frame.http-fx]
     ;; Re-frame registrations END
     [igniteinator.ui.app :refer [app]]

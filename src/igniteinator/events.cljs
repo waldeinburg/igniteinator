@@ -64,20 +64,31 @@
                :count    count
                :progress progress})))
 
-(reg-event-db
+(reg-event-fx
   :page/push
-  (fn [db [_ key]]
-    (assoc db
-      :current-page key
-      :previous-page (:current-page db))))
+  (fn [{:keys [db]} [_ key]]
+    {:db (assoc db
+           :current-page key
+           :previous-page (:current-page db))
+     :fx [[:scroll-to-top]]}))
 
-(reg-event-db
+(reg-event-fx
   :page/pop
-  (fn [db _]
-    (if-let [prev (:previous-page db)]
-      (assoc db :current-page prev
-                :previous-page nil)
-      db)))
+  (fn [{:keys [db]} _]
+    {:db (if-let [prev (:previous-page db)]
+           (assoc db :current-page prev
+                     :previous-page nil)
+           db)
+     :fx [[:scroll-to-top]]}))
+
+(reg-event-db-assoc
+  :card-details-page/set-card-id)
+
+(reg-event-fx
+  :card-details-page/switch-card
+  (fn [_ [_ card]]
+    {:fx [[:dispatch [:card-details-page/set-card-id (:id card)]]
+          [:scroll-to-top]]}))
 
 (reg-event-fx
   :show-card-details
@@ -113,9 +124,6 @@
 
 (reg-event-db-assoc
   :cards-page/set-search-str)
-
-(reg-event-db-assoc
-  :card-details-page/set-card-id)
 
 (reg-event-db-assoc
   :install-dialog/set-open?)
