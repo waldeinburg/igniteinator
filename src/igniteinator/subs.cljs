@@ -1,5 +1,6 @@
 (ns igniteinator.subs
   (:require [igniteinator.text :refer [txt]]
+            [igniteinator.constants :as constants]
             [igniteinator.util.re-frame :refer [reg-sub-db <sub]]
             [igniteinator.model.cards :as cards]
             [igniteinator.util.sort :as sort-util]
@@ -34,7 +35,26 @@
   (fn [str _]
     (s/capitalize str)))
 
-(reg-sub-db :card-size)
+(reg-sub-db :size)
+
+(reg-sub
+  :size+1
+  :<- [:size]
+  (fn [size _]
+    (min
+      (inc size)
+      (dec (count constants/grid-breakpoints)))))
+
+(reg-sub :grid-breakpoints
+  :<- [:size]
+  (fn [size _]
+    (constants/grid-breakpoints size)))
+
+(reg-sub
+  :grid-breakpoints+1
+  :<- [:size+1]
+  (fn [size _]
+    (constants/grid-breakpoints size)))
 
 (reg-sub-db :cards-page/search-str)
 (reg-sub-db :cards-page/base)

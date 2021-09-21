@@ -1,5 +1,5 @@
 (ns igniteinator.ui.card-list
-  (:require [igniteinator.util.re-frame :refer [<sub]]
+  (:require [igniteinator.util.re-frame :refer [<sub <sub-ref]]
             [igniteinator.constants :as constants]
             [igniteinator.text :refer [txt-c]]
             [igniteinator.util.image-path :refer [image-path]]
@@ -64,13 +64,15 @@
   ([props card]
    [card-image props card]))
 
-(defn card-grid
-  ([card]
-   (card {} card))
-  ([props card]
-   (let [size (<sub :card-size)]
-     [grid (into {:component "li", :item true} (get constants/card-sizes size))
-      [card-container props card]])))
+(defn card-grid [{:keys [grid-breakpoints-ref component]
+                  :or {grid-breakpoints-ref (<sub-ref :grid-breakpoints)
+                       component "li"}
+                  :as props}
+                 card]
+  (let [grid-breakpoints @grid-breakpoints-ref
+        grid-props (into {:component component, :item true} grid-breakpoints)]
+    [grid grid-props
+     [card-container props card]]))
 
 (defn empty-card-list []
   [:p (str (txt-c :empty-list) ".")])

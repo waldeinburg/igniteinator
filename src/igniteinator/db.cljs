@@ -9,7 +9,7 @@
    :caching-progress  nil
    :current-page      :cards
    :previous-page     nil
-   :card-size         :normal
+   :size              1
    :install-dialog    {:open? false}
    :cards-page        {:base           :all
                        :filters        []

@@ -1,10 +1,10 @@
 (ns igniteinator.ui.card-details
-  (:require [igniteinator.util.re-frame :refer [<sub >evt]]
+  (:require [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
             [igniteinator.ui.page :refer [page]]
             [igniteinator.ui.back-button :refer [back-button]]
-            [igniteinator.ui.card-list :refer [card-list card-container]]
+            [igniteinator.ui.card-list :refer [card-list card-grid]]
             [igniteinator.text :refer [txt txt-c]]
-            [reagent-material-ui.core.container :refer [container]]
+            [reagent-material-ui.core.grid :refer [grid]]
             [reagent-material-ui.core.modal :refer [modal]]))
 
 (defn combos-list [card]
@@ -30,7 +30,10 @@
     [page (str (txt :card-details-page-title) " " (:name card))
      [back-button]
      ;; Just show in full size.
-     [card-container card]
+     [grid {:container true}
+      [card-grid {:component            "div"
+                  :grid-breakpoints-ref (<sub-ref :grid-breakpoints+1)}
+       card]]
      (if (empty? (:combos card))
        [:p (txt-c :no-combos)]
        [combos-section card])]))
