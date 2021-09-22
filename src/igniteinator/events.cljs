@@ -98,6 +98,8 @@
 
 (reg-event-db-assoc
   :cards-page.card-selection/set-dialog-open?)
+(reg-event-db-assoc
+  :select-cards-dialog/set-search-str)
 
 (reg-event-db
   :cards-page.card-selection/set-selection

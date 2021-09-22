@@ -64,6 +64,18 @@
 (reg-sub-db :cards-page.card-selection/selection
   [:cards-page :card-selection :ids])
 
+(reg-sub-db :select-cards-dialog/search-str)
+(reg-sub
+  :select-cards-dialog/cards
+  (fn [_ _]
+    (ra/reaction
+      (let [search-str (<sub :select-cards-dialog/search-str)
+            filters    (if (empty? search-str)
+                         []
+                         [{:key :name-contains, :args [search-str]}])
+            sortings   [{:key :name, :order :asc}]]
+        (<sub :cards :all filters sortings)))))
+
 (reg-sub
   :cards-page.card-selection/item-selected?
   :<- [:cards-page.card-selection/selection]
