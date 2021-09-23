@@ -3,20 +3,23 @@
 set -e
 
 SRC_DIR=target/final
-SCRIPT_SUBDIR=cljs-out/main
-SCRIPT_SRC="target/public/$SCRIPT_SUBDIR/main_bundle.js"
+SCRIPT_FILENAME="main.js"
+SCRIPT_SRC="target/public/cljs-out/prod/main_bundle.js"
 SW_SRC="target/public/sw.js"
-SCRIPT_DIR="$SRC_DIR/$SCRIPT_SUBDIR"
+SCRIPT_DIR="$SRC_DIR"
+DEV_SCRIPT_PATH="/cljs-out/main/main_bundle.js"
+FINAL_SCRIPT_PATH="/$SCRIPT_FILENAME"
 
 CLEAN=1
 BUILD_CODE=1
+BUILD_SW=1
 BUILD_STATIC=1
 DEPLOY=1
 REQUIRE_TAG=1
 DEPLOY_ARGS=()
 
 function usage_and_exit() {
-    echo "Usage: $0 [--no-tag] [--no-clean] [--no-build] [--build-static-only] [--no-deploy] [--dry-deploy] [--deploy-overwrite-all]"
+    echo "Usage: $0 [--no-tag] [--no-clean] [--no-build] [--no-build-sw] [--build-static-only] [--no-deploy] [--dry-deploy] [--deploy-overwrite-all]"
     echo "--no-build and --static-only implies --no-clean."
   exit "${1:-1}"
 }
@@ -25,7 +28,7 @@ function append_deploy_arg() {
     DEPLOY_ARGS[${#DEPLOY_ARGS[@]}]=$1
 }
 
-TEMP=$(getopt -o '' -l 'no-tag,no-clean,no-build,build-static-only,no-deploy,dry-deploy,deploy-overwrite-all' -- "$@") || usage_and_exit 99
+TEMP=$(getopt -o '' -l 'no-tag,no-clean,no-build,no-build-sw,build-static-only,no-deploy,dry-deploy,deploy-overwrite-all' -- "$@") || usage_and_exit 99
 eval set -- "$TEMP"
 unset TEMP
 while :; do
@@ -42,6 +45,10 @@ while :; do
     CLEAN=
     BUILD_CODE=
     BUILD_STATIC=
+    shift
+    ;;
+  --no-build-sw)
+    BUILD_SW=
     shift
     ;;
   --build-static-only)
@@ -107,11 +114,13 @@ function clean() {
 
 function build_code() {
   lein fig:build
-  lein fig:build-sw
   # With advanced optimizations we can leave out all the other files.
   mkdir -p "$SCRIPT_DIR"
-  mv "$SCRIPT_SRC" "$SCRIPT_DIR"
-  mv "$SW_SRC" "$SRC_DIR"
+  mv "$SCRIPT_SRC" "$SCRIPT_DIR/$SCRIPT_FILENAME"
+  if [[ "$BUILD_SW" ]]; then
+    lein fig:build-sw
+    mv "$SW_SRC" "$SRC_DIR"
+  fi
 }
 
 function build_static() {
@@ -119,6 +128,7 @@ function build_static() {
   (
   shopt -s dotglob
   cp -ra resources/public/* "$SRC_DIR"
+  sed -i "s%$DEV_SCRIPT_PATH%$FINAL_SCRIPT_PATH%" "$SRC_DIR/index.html"
   )
 }
 

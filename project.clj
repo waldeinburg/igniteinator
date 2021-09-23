@@ -26,7 +26,7 @@
             ;;"fig:dev-sw"   ["trampoline" "run" "-m" "figwheel.main" "-b" "sw" "-r"]
             "fig:build"    ["run" "-m" "figwheel.main"
                             "--optimizations" "advanced"
-                            "--build-once" "main"]
+                            "--build-once" "prod"]
             "fig:build-sw" ["run" "-m" "figwheel.main"
                             "--optimizations" "advanced"
                             "--build-once" "sw"]

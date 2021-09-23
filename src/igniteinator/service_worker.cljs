@@ -18,7 +18,7 @@
   [;; Avoid the boilerplate and just cache index twice; it's small anyway.
    "/"
    "/index.html"
-   "/cljs-out/main/main_bundle.js"
+   "/main.js"
    "/manifest.webmanifest"
    "/img/placeholder.png"
    "/css/style.css"
