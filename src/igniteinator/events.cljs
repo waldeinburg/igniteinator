@@ -4,7 +4,7 @@
             [igniteinator.constants :as constants]
             [igniteinator.util.re-frame :refer [reg-event-db-assoc assoc-ins]]
             [clojure.string :as s]
-            [re-frame.core :refer [reg-event-fx reg-event-db]]
+            [re-frame.core :refer [reg-event-fx reg-event-db inject-cofx]]
             [ajax.core :as ajax]))
 
 (reg-event-db
@@ -65,21 +65,27 @@
                :progress progress})))
 
 (reg-event-fx
+  :scroll-to
+  (fn [_ [_ n]]
+    {:fx [[:scroll-to n]]}))
+
+(reg-event-fx
   :page/push
-  (fn [{:keys [db]} [_ key]]
-    {:db (assoc db
-           :current-page key
-           :previous-page (:current-page db))
+  [(inject-cofx :scroll-top)]
+  (fn [{:keys [db scroll-top]} [_ key]]
+    {:db (assoc db :current-page key
+                   :previous-page {:page       (:current-page db)
+                                   :scroll-top scroll-top})
      :fx [[:scroll-to-top]]}))
 
 (reg-event-fx
   :page/pop
   (fn [{:keys [db]} _]
-    {:db (if-let [prev (:previous-page db)]
-           (assoc db :current-page prev
-                     :previous-page nil)
-           db)
-     :fx [[:scroll-to-top]]}))
+    (if-let [{:keys [page scroll-top]} (:previous-page db)]
+      {:db       (assoc db :current-page page
+                           :previous-page nil)
+       ;; Don't use the fx directly but dispatch an event. This will let React rerendering before scrolling.
+       :dispatch [:scroll-to scroll-top]})))
 
 (reg-event-db-assoc
   :card-details-page/set-card-id)

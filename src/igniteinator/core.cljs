@@ -4,6 +4,7 @@
     [igniteinator.events]
     [igniteinator.subs]
     [igniteinator.fx]
+    [igniteinator.cofx]
     [day8.re-frame.http-fx]
     ;; Re-frame registrations END
     [igniteinator.ui.app :refer [app]]
