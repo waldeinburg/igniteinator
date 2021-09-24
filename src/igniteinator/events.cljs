@@ -82,10 +82,18 @@
   :page/pop
   (fn [{:keys [db]} _]
     (if-let [{:keys [page scroll-top]} (:previous-page db)]
-      {:db       (assoc db :current-page page
-                           :previous-page nil)
-       ;; Don't use the fx directly but dispatch an event. This will let React rerendering before scrolling.
-       :dispatch [:scroll-to scroll-top]})))
+      {:db             (assoc db :current-page page
+                                 :previous-page nil)
+       ;; Don't use the fx directly but dispatch an event after a delay to let React rerender before scrolling.
+       ;; TODO: Create a non-race-condition method for this.
+       :dispatch-later {:ms 100 :dispatch [:scroll-to scroll-top]}})))
+
+(reg-event-db
+  :set-card-load-state
+  (fn [db [_ card state]]
+    (let [lang (:language db)
+          id   (:id card)]
+      (assoc-in db [:card-load-state lang id] state))))
 
 (reg-event-db-assoc
   :card-details-page/set-card-id)

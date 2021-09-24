@@ -1,6 +1,7 @@
 (ns igniteinator.subs
   (:require [igniteinator.text :refer [txt]]
             [igniteinator.constants :as constants]
+            [igniteinator.util.image-path :refer [image-path]]
             [igniteinator.util.re-frame :refer [reg-sub-db <sub]]
             [igniteinator.model.cards :as cards]
             [igniteinator.util.sort :as sort-util]
@@ -55,6 +56,19 @@
   :<- [:size+1]
   (fn [size _]
     (constants/grid-breakpoints size)))
+
+(reg-sub
+  :image-path
+  :<- [:language]
+  (fn [lang [_ card]]
+    (image-path lang card)))
+
+(reg-sub
+  :card-load-state
+  (fn [db [_ card]]
+    (let [lang (:language db)
+          id   (:id card)]
+      (get-in db [:card-load-state lang id]))))
 
 (reg-sub-db :cards-page/search-str)
 (reg-sub-db :cards-page/base)
