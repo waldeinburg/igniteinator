@@ -11,7 +11,8 @@
                  [org.clojure/core.async "1.3.618"]
                  [funcool/promesa "6.0.2"]
                  [cljs-http "0.1.46"]
-                 [re-frame "1.2.0"]
+                 [re-frame "1.2.0"
+                  :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server]]
                  [day8.re-frame/http-fx "0.2.3"]
                  [arttuka/reagent-material-ui "4.11.3-2"
                   :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server arttuka/reagent-material-ui-js]]]
