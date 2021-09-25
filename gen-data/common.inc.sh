@@ -12,7 +12,7 @@ CAT1_FILE="$DOWNLOAD_DIR/categories-1.json"
 CAT2_FILE="$DOWNLOAD_DIR/categories-2.json"
 BASE_URL=http://ec2-54-219-252-233.us-west-1.compute.amazonaws.com
 OUTPUT_DIR=../resources/public/generated
-JSON_OUTPUT_FILE="$JSON_OUTPUT_DIR/data.json"
+JSON_OUTPUT_FILE="$OUTPUT_DIR/data.json"
 IMG_OUTPUT_DIR="$OUTPUT_DIR/img"
 IMG_OUTPUT_DIR_ENGLISH="$IMG_OUTPUT_DIR/en"
 

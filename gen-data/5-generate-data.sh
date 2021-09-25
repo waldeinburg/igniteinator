@@ -28,7 +28,14 @@ jq --slurp --compact-output --sort-keys '
     # Then map combo ids to real id.
     map(.combos = (.combos | map(. as $id |
       ($tmp_combo_cards[] | select(.orgId == $id)).id
-    )))
+    ))) as $combo_cards_base |
+    $combo_cards_base |
+    # But the combos should go both ways which they do not. Calculate now instead of in app.
+    map(.id as $id | .combos += [
+      $combo_cards_base[] | select(.combos | any(. == $id)) | .id
+    ]) |
+    # Ensure unique (and sorted) ids
+    map(.combos |= unique)
   ) as $combo_cards |
   # Merge combos.
   .[0] |
