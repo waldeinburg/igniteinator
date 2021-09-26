@@ -7,12 +7,14 @@ jq --slurp --compact-output --sort-keys '
   .[0].cards as $cards |
   # Map id and combos on downloaded set. We only use combos from the original set.
   (
-    (.[1].cards +
-    # Add Poison Blade or the card will be lost in the final mapping.
-    [{
-      "id": -42, # Just a temporary id; avoid clash
-      "name": "Poison Blade"
-    }]) |
+    (
+      .[1].cards +
+      # Add Poison Blade or the card will be lost in the final mapping.
+      [{
+        "id": -42, # Just a temporary id; avoid clash
+        "name": "Poison Blade"
+      }]
+    ) |
     # First map id an split combos into number array.
     map(.name as $name | {
       "id": ($cards[] | select(.name == $name) | .id),
@@ -28,7 +30,9 @@ jq --slurp --compact-output --sort-keys '
     # Then map combo ids to real id.
     map(.combos = (.combos | map(. as $id |
       ($tmp_combo_cards[] | select(.orgId == $id)).id
-    ))) as $combo_cards_base |
+    )))
+  ) as $combo_cards_base |
+  (
     $combo_cards_base |
     # But the combos should go both ways which they do not. Calculate now instead of in app.
     map(.id as $id | .combos += [
@@ -54,12 +58,32 @@ jq --slurp --compact-output --sort-keys '
         .ids += [$c.id]
       end
     ) | .ids
-  ) as $combos_set |
+  ) as $minimal_combos_set |
+  # But this means that some cards will be multiple layers down. Be less aggressive.
+  (
+    $combo_cards | sort_by(.combos | length) | reverse |
+    reduce .[] as $c ({"ids_seen": [], "ids": []};
+      # Instead, only skip if combos would not add anything.
+      (.ids_seen + $c.combos | unique) as $new_ids_seen |
+      if $new_ids_seen == .ids_seen then
+        .
+      else
+        . |
+        .ids_seen = $new_ids_seen |
+        .ids += [$c.id]
+      end
+    ) | .ids
+  ) as $medium_combos_set |
+  # That gets weird too. Catapult and Ballista has 9 combos but they are the same. So Catapult is in the list but not
+  # Ballista (because Ballista comes before Catapult and the list is reversed). Instead, just go with the official list.
+  (
+    [$combo_cards_base[] | select(.combos != [])] | map(.id)
+  ) as $official_combos_set |
   # Merge combos.
   .[0] |
   .cards = (.cards | map(.id as $id | .combos =
     ($combo_cards[] | select(.id == $id)).combos)) |
-  .combos = $combos_set
+  .combos = $official_combos_set
 ' "$BASE_DATA_FILE" "$CARDS_FILE" > "$JSON_OUTPUT_FILE"
 
 cards_in_data=$(jq '.cards | length' "$BASE_DATA_FILE")
