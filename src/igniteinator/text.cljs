@@ -11,6 +11,7 @@
    :select-all                  {:en "select all"}
    :search                      {:en "search"}
    :using                       {:en "using"}
+   :combos                      {:en "combos"}
    :regular-expressions         {:en "regular expressions"}
    :clear-selection             {:en "clear selection"}
    :data-load-error             {:en "error loading data"}

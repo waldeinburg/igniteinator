@@ -35,7 +35,8 @@
     (assoc db
       :mode :ready
       :boxes (:boxes result)
-      :cards (data->cards result))))
+      :cards (data->cards result)
+      :combos-set (:combos result))))
 
 (reg-event-fx
   :load-data-failure
@@ -135,7 +136,8 @@
   (fn [db [_ key]]
     (let [val (case key
                 :all :all
-                :selection (get-in db [:cards-page :card-selection :ids]))]
+                :combos :combos
+                :some (get-in db [:cards-page :card-selection :ids]))]
       (assoc-in db [:cards-page :base] val))))
 
 (reg-event-db-assoc

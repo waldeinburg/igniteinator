@@ -76,7 +76,7 @@
 (defn base-filtering [options]
   (fn [{:keys [dialog-open?-ref
                on-dialog-change-open
-               selected-value
+               get-selected-value
                <sub-dialog-item-selected?-ref
                on-dialog-item-selected-change
                on-dialog-selection-set
@@ -84,10 +84,11 @@
     (let [search-str-ref       (<sub-ref :select-cards-dialog/search-str)
           on-search-str-change #(>evt :select-cards-dialog/set-search-str %)]
       [:<>
-       [toggle-button-group {:value     selected-value, :exclusive true,
+       [toggle-button-group {:value     (get-selected-value), :exclusive true,
                              :on-change #(on-change (keyword %2))
                              :size      :small}
         [toggle-button {:value :all} (txt-c :select-all-button)]
+        [toggle-button {:value :combos} (txt-c :combos)]
         [toggle-button {:value    :some
                         :on-click (fn []
                                     ;; Reset search-str here to avoid resetting during the close animation.

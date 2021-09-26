@@ -100,6 +100,13 @@
   :cards-map
   [:cards])
 
+(reg-sub-db :combos-set)
+(reg-sub
+  :combos-set-cards
+  :<- [:combos-set]
+  (fn [combos-set _]
+    (<sub :cards-by-ids combos-set)))
+
 (reg-sub
   :all-card-ids
   :<- [:cards-map]
@@ -137,6 +144,7 @@
     (ra/reaction
       (let [base  (case base-spec
                     :all (<sub :all-cards)
+                    :combos (<sub :combos-set-cards)
                     (<sub :cards-by-ids base-spec))
             preds (cards/filter-specs->preds filter-specs)
             comps (cards/sorting-specs->comparators sorting-specs)]
