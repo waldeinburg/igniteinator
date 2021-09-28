@@ -42,7 +42,8 @@
   :profiles {:dev {:dependencies   [[com.bhauman/figwheel-main "0.2.13" :exclusions [org.clojure/clojurescript]]
                                     [com.bhauman/rebel-readline-cljs "0.1.4"]
                                     [org.clojure/math.combinatorics "0.1.6"]
-                                    [day8.re-frame/re-frame-10x "1.1.13"]]
+                                    [day8.re-frame/re-frame-10x "1.1.13"]
+                                    [binaryage/devtools "1.0.3"]]
                    :resource-paths ["target"]
                    ;; need to add the compiled assets to the :clean-targets
                    :clean-targets  ^{:protect false} ["target"]}})
