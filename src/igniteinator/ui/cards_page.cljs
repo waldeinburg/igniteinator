@@ -10,13 +10,17 @@
 
 (defn page-base-filtering []
   [base-filtering
-   {:dialog-open?-ref               (<sub-ref :cards-page.card-selection/dialog-open?)
+   {:select-dialog-open?-ref        (<sub-ref :cards-page.card-selection/dialog-open?)
+    :combos-dialog-open?-ref        (<sub-ref :cards-page.combos/dialog-open?)
     :<sub-dialog-item-selected?-ref #(<sub-ref :cards-page.card-selection/item-selected? %)
+    :combos-value-ref               (<sub-ref :cards-page.combos/value)
     :get-selected-value             #(let [base (<sub :cards-page/base)]
                                        (if (keyword? base)
                                          base
                                          :some))
-    :on-dialog-change-open          #(>evt :cards-page.card-selection/set-dialog-open? %)
+    :on-select-dialog-change-open   #(>evt :cards-page.card-selection/set-dialog-open? %)
+    :on-combos-dialog-change-open   #(>evt :cards-page.combos/set-dialog-open? %)
+    :on-combos-change               #(>evt :cards-page.combos/set-value %)
     :on-dialog-item-selected-change (fn [id set?]
                                       (>evt :cards-page.card-selection/set-item-selected? id set?))
     :on-dialog-selection-set        #(>evt :cards-page.card-selection/set-selection %)

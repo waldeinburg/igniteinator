@@ -24,18 +24,16 @@
        [icon-button {:on-click #(clear-search-bar input-ref on-change)}
         [clear-icon]])]))
 
-(def regular-expressions-helper-text-elem
-  (r/as-element
-    ;; Wrap in fn to avoid subscription to :txt-c before it exists.
-    (fn []
-      [:<> (txt-c :using) " "
-       [external-link const/regular-expressions-site (txt :regular-expressions)]])))
+(defn regular-expressions-helper-text-elem []
+  [:<> (txt-c :using) " "
+   [external-link const/regular-expressions-site (txt :regular-expressions)]])
 
 (defn search-bar [search-str-ref on-change options]
   (let [input-ref (r/atom nil)]
     (fn [search-str-ref on-change {:keys [placeholder]
                                    :or   {placeholder (str (txt-c :search) " …")}}]
-      (let [search-str @search-str-ref
+      (let [re-help    (regular-expressions-helper-text-elem)
+            search-str @search-str-ref
             re?        (and
                          (re-find #"[.*+?{}()\[\]^$\|\\]" search-str)
                          (ss/re-pattern-no-error search-str))]
@@ -43,11 +41,10 @@
                      :default-value search-str              ; not :value (will cause rerendering on input)
                      :placeholder   placeholder
                      :on-key-down   #(when (= "Escape" (.-key %))
-                                       (do
-                                         (clear-search-bar input-ref on-change)
-                                         ;; Prevent dialogs from closing on escape.
-                                         (.stopPropagation %)))
+                                       (clear-search-bar input-ref on-change)
+                                       ;; Prevent dialogs from closing on escape.
+                                       (.stopPropagation %))
                      :on-change     (fn [ev]
                                       (-> ev event/value on-change))
-                     :helper-text   (when re? regular-expressions-helper-text-elem)
+                     :helper-text   (if re? (r/as-element re-help))
                      :InputProps    {:end-adornment (search-and-clear-icon input-ref search-str-ref on-change)}}]))))

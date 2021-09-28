@@ -25,7 +25,11 @@
    :card-selection              {:en "card selection"}
    :select-all-button           {:en "all"}
    :select-some-button          {:en "select cards"}
-   :select-cards-dialog-title   {:en "select cards"}
+   :select-cards-dialog-title   {:en "Select cards"}
+   :combos-dialog-title         {:en "Cards with known combos"}
+   :combos-dialog-official-help {:en "Other combos are calculated from this set."}
+   :combos-dialog-official-item {:en "Official combos list"}
+   :combos-dialog-all-item      {:en "All cards with known combos"}
    :caching-progress-title      {:en "Downloading images"}
    :install-app                 {:en "Install app"}
    :add-to-home-screen          {:en "Add to Home screen"}

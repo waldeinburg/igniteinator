@@ -16,6 +16,8 @@
                          :filters        []
                          :sortings       [{:key :name, :order :asc}]
                          :search-str     ""
+                         :combos         {:dialog-open? false
+                                          :value        :official}
                          :card-selection {:dialog-open? false
                                           :ids          #{}}}
    :card-details-page   {:card-id  nil

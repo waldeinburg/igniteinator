@@ -74,6 +74,8 @@
 (reg-sub-db :cards-page/base)
 (reg-sub-db :cards-page/filters)
 (reg-sub-db :cards-page/sortings)
+(reg-sub-db :cards-page.combos/dialog-open?)
+(reg-sub-db :cards-page.combos/value)
 (reg-sub-db :cards-page.card-selection/dialog-open?)
 (reg-sub-db :cards-page.card-selection/selection
   [:cards-page :card-selection :ids])
@@ -81,14 +83,13 @@
 (reg-sub-db :select-cards-dialog/search-str)
 (reg-sub
   :select-cards-dialog/cards
-  (fn [_ _]
-    (ra/reaction
-      (let [search-str (<sub :select-cards-dialog/search-str)
-            filters    (if (empty? search-str)
-                         []
-                         [{:key :name-contains, :args [search-str]}])
-            sortings   [{:key :name, :order :asc}]]
-        (<sub :cards :all filters sortings)))))
+  :<- [:select-cards-dialog/search-str]
+  (fn [search-str _]
+    (let [filters  (if (empty? search-str)
+                     []
+                     [{:key :name-contains, :args [search-str]}])
+          sortings [{:key :name, :order :asc}]]
+      (<sub :cards :all filters sortings))))
 
 (reg-sub
   :cards-page.card-selection/item-selected?
@@ -153,27 +154,30 @@
           (filter-util/filter-multi preds)
           (sort-util/sort-by-hierarchy comps))))))
 
-(reg-sub-raw
+(reg-sub
   :cards-page/cards
-  (fn [_ _]
-    (ra/reaction
-      (let [base         (<sub :cards-page/base)
-            base-filters (<sub :cards-page/filters)
-            s-str        (<sub :cards-page/search-str)
-            sortings     (<sub :cards-page/sortings)
-            filters      (if (empty? s-str)
-                           base-filters
-                           (conj base-filters {:key :name-contains, :args [s-str]}))]
-        (<sub :cards base filters sortings)))))
+  :<- [:cards-page/base]
+  :<- [:cards-page.combos/value]
+  :<- [:cards-page/filters]
+  :<- [:cards-page/search-str]
+  :<- [:cards-page/sortings]
+  (fn [[base combos-value page-filters search-str sortings] _]
+    (let [combos-base-filter (if (and (= :combos base) (= :all combos-value))
+                               [{:key :has-combos}])
+          base-spec          (if combos-base-filter :all base)
+          base-filters       (into page-filters combos-base-filter)
+          filters            (if (empty? search-str)
+                               base-filters
+                               (conj base-filters {:key :name-contains, :args [search-str]}))]
+      (<sub :cards base-spec filters sortings))))
 
 (reg-sub-db :card-details-page/card-id)
 (reg-sub-db :card-details-page/sortings)
 
-(reg-sub-raw
+(reg-sub
   :card-details-page/card
-  (fn [_ _]
-    (ra/reaction
-      (let [card-id (<sub :card-details-page/card-id)]
-        (<sub :card card-id)))))
+  :<- [:card-details-page/card-id]
+  (fn [card-id _]
+    (<sub :card card-id)))
 
 (reg-sub-db :install-dialog/open?)
