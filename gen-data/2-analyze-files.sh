@@ -102,3 +102,27 @@ echo "Verify that data set is not different from base data set"
 cards_names=$(jq '(.cards + [{"name":"Poison Blade"}]) | sort_by(.name) | map(.name)' "$CARDS_FILE")
 base_data_names=$(jq '.cards | map(.name)' "$BASE_DATA_FILE")
 assert_no_diff "$cards_names" "$base_data_names"
+
+echo "Verify that categories 1 do not contain setups not found in categories 2 (by name)"
+function cat_names() {
+  # Setups are duplicated.
+  jq '.data | unique_by(.name)[] | .name' "$1"
+}
+cat1_names=$(cat_names "$CAT1_FILE")
+cat2_names=$(cat_names "$CAT2_FILE")
+cat_duplicates=$(cat <(echo "$cat1_names") <(echo "$cat2_names") | sort | uniq -d)
+assert_no_diff "$cat1_names" "$cat_duplicates"
+
+echo "Verify that requires_status/requires is either 1/\"Base\" or 2/\"Base & Freeze\""
+req_result=$(jq '.data[] |
+  select(
+    .requires_status == 1 and .requires != "Base" or
+    .requires_status == 2 and .requires != "Base & Freeze" or
+    .requires_status != 1 and .requires_status != 2
+  )
+' "$CAT2_FILE")
+if [[ "$req_result" ]]; then
+  echo "Found illegal item:"
+  echo "$req_result"
+  exit 1
+fi

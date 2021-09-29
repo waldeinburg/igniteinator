@@ -5,6 +5,7 @@ source common.inc.sh
 echo "Writing output to $(readlink -f "$JSON_OUTPUT_FILE") ..."
 jq --slurp --compact-output --sort-keys '
   .[0].cards as $cards |
+
   # Map id and combos on downloaded set. We only use combos from the original set.
   (
     (
@@ -32,6 +33,7 @@ jq --slurp --compact-output --sort-keys '
       ($tmp_combo_cards[] | select(.orgId == $id)).id
     )))
   ) as $combo_cards_base |
+
   (
     $combo_cards_base |
     # But the combos should go both ways which they do not. Calculate now instead of in app.
@@ -41,6 +43,7 @@ jq --slurp --compact-output --sort-keys '
     # Ensure unique (and sorted) ids
     map(.combos |= unique)
   ) as $combo_cards |
+
   # Calculate combos base set.
   (
     # This will calculate the minimal set of cards to access all known combos.
@@ -59,6 +62,7 @@ jq --slurp --compact-output --sort-keys '
       end
     ) | .ids
   ) as $minimal_combos_set |
+
   # But this means that some cards will be multiple layers down. Be less aggressive.
   (
     $combo_cards | sort_by(.combos | length) | reverse |
@@ -74,17 +78,37 @@ jq --slurp --compact-output --sort-keys '
       end
     ) | .ids
   ) as $medium_combos_set |
+
   # That gets weird too. Catapult and Ballista has 9 combos but they are the same. So Catapult is in the list but not
   # Ballista (because Ballista comes before Catapult and the list is reversed). Instead, just go with the official list.
   (
     [$combo_cards_base[] | select(.combos != [])] | map(.id)
   ) as $official_combos_set |
-  # Merge combos.
+
+  # Map setups
+  (
+    # Only map setups from categories 2. Everything in categories 1 is contained herein.
+    .[2].data |
+    # For some reason all entries are duplicated.
+    unique_by(.name) |
+    # Generate a shorter id for optimization.
+    to_entries |
+    map({
+      "id": (.key + 1),
+      "name": .value.name,
+      "requires": (if .value.requires_status == 1 then [1] else [1,2] end),
+      "cards": (.value.cards |
+        map(.name as $name | ($cards[] | select(.name == $name) | .id)))
+    })
+  ) as $setups |
+
+  # Merge data.
   .[0] |
-  .cards = (.cards | map(.id as $id | .combos =
+  .cards |= (map(.id as $id | .combos =
     ($combo_cards[] | select(.id == $id)).combos)) |
-  .combos = $official_combos_set
-' "$BASE_DATA_FILE" "$CARDS_FILE" > "$JSON_OUTPUT_FILE"
+  .combos = $official_combos_set |
+  .setups = $setups
+' "$BASE_DATA_FILE" "$CARDS_FILE" "$CAT2_FILE" > "$JSON_OUTPUT_FILE"
 
 cards_in_data=$(jq '.cards | length' "$BASE_DATA_FILE")
 cards_in_output=$(jq '.cards | length' "$JSON_OUTPUT_FILE")
