@@ -98,7 +98,7 @@ jq --slurp --compact-output --sort-keys '
       "name": .value.name,
       "requires": (if .value.requires_status == 1 then [1] else [1,2] end),
       "cards": (.value.cards |
-        map(.name as $name | ($cards[] | select(.name == $name) | .id)))
+        map(.name as $name | ($cards[] | select(.name == $name) | .id)) | sort)
     })
   ) as $setups |
 
@@ -107,7 +107,7 @@ jq --slurp --compact-output --sort-keys '
   .cards |= (map(.id as $id | .combos =
     ($combo_cards[] | select(.id == $id)).combos)) |
   .combos = $official_combos_set |
-  .setups = $setups
+  .setups += $setups
 ' "$BASE_DATA_FILE" "$CARDS_FILE" "$CAT2_FILE" > "$JSON_OUTPUT_FILE"
 
 cards_in_data=$(jq '.cards | length' "$BASE_DATA_FILE")
