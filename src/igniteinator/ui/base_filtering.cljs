@@ -115,7 +115,7 @@
          :on-change on-combos-change}]
        [select-cards-dialog
         {:search-str-ref                 search-str-ref
-         :on-search-str-change           on-select-dialog-change-open
+         :on-search-str-change           on-search-str-change
          :open?-ref                      select-dialog-open?-ref
          :<sub-dialog-item-selected?-ref <sub-dialog-item-selected?-ref
          :on-dialog-item-selected-change on-dialog-item-selected-change
