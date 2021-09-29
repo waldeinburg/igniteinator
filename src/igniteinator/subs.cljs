@@ -180,4 +180,42 @@
   (fn [card-id _]
     (<sub :card card-id)))
 
+(reg-sub-db
+  :setups-map
+  [:setups])
+(reg-sub
+  :setups
+  :<- [:setups-map]
+  (fn [setups-map _]
+    (vals setups-map)))
+(reg-sub
+  :setups-sorted
+  :<- [:setups]
+  (fn [setups _]
+    (sort (fn [x y]
+            (cond
+              ;; Special id 0, Recommened starter set, on top.
+              (zero? (:id x)) -1
+              (zero? (:id y)) 1
+              :else (compare (:name x) (:name y))))
+      setups)))
+(reg-sub-db
+  :setup/id)
+(reg-sub
+  :current-setup
+  :<- [:setups-map]
+  :<- [:setup/id]
+  (fn [[setups-map id] _]
+    (get setups-map id)))
+(reg-sub
+  :current-setup/name
+  :<- [:current-setup]
+  (fn [setup _]
+    (:name setup)))
+(reg-sub
+  :current-setup/cards
+  :<- [:current-setup]
+  (fn [setup _]
+    (<sub :cards-by-ids (:cards setup))))
+
 (reg-sub-db :install-dialog/open?)

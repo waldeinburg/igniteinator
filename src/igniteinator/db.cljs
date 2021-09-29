@@ -22,6 +22,7 @@
                                           :ids          #{}}}
    :card-details-page   {:card-id  nil
                          :sortings [{:key :name, :order :asc}]}
+   :setup               {:id nil}
    :card-load-state     {:en nil}
    :cards               nil
    :combos-set          nil})

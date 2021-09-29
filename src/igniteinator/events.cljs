@@ -22,12 +22,12 @@
                   :on-success      [:load-data-success]
                   :on-failure      [:load-data-failure]}}))
 
-(defn- data->cards [data]
+(defn- id-map [coll]
   (reduce
     (fn [c v]
       (assoc c (:id v) v))
     {}
-    (:cards data)))
+    coll))
 
 (reg-event-db
   :load-data-success
@@ -35,8 +35,9 @@
     (assoc db
       :mode :ready
       :boxes (:boxes result)
-      :cards (data->cards result)
-      :combos-set (:combos result))))
+      :cards (id-map (:cards result))
+      :combos-set (:combos result)
+      :setups (id-map (:setups result)))))
 
 (reg-event-fx
   :load-data-failure
@@ -146,6 +147,12 @@
 
 (reg-event-db-assoc
   :cards-page/set-search-str)
+
+(reg-event-fx
+  :display-setup
+  (fn [{:keys [db]} [_ id]]
+    {:db       (assoc-in db [:setup :id] id)
+     :dispatch [:page/push :display-setup]}))
 
 (reg-event-db-assoc
   :install-dialog/set-open?)

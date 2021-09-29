@@ -30,6 +30,7 @@
    :combos-dialog-official-help {:en "Other combos are calculated from this set."}
    :combos-dialog-official-item {:en "Official combos list"}
    :combos-dialog-all-item      {:en "All cards with known combos"}
+   :setups-title                {:en "Suggested setups"}
    :caching-progress-title      {:en "Downloading images"}
    :install-app                 {:en "Install app"}
    :add-to-home-screen          {:en "Add to Home screen"}
