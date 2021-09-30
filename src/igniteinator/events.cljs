@@ -34,7 +34,7 @@
   (fn [db [_ result]]
     (assoc db
       :mode :ready
-      :boxes (:boxes result)
+      :boxes (id-map (:boxes result))
       :cards (id-map (:cards result))
       :combos-set (:combos result)
       :setups (id-map (:setups result)))))

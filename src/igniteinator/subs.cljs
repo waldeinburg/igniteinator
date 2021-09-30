@@ -154,6 +154,15 @@
           (filter-util/filter-multi preds)
           (sort-util/sort-by-hierarchy comps))))))
 
+(reg-sub-db
+  :boxes-map
+  [:boxes])
+(reg-sub
+  :boxes-by-ids
+  :<- [:boxes-map]
+  (fn [boxes-map [_ ids]]
+    (vals (select-keys boxes-map ids))))
+
 (reg-sub
   :cards-page/cards
   :<- [:cards-page/base]
@@ -217,5 +226,14 @@
   :<- [:current-setup]
   (fn [setup _]
     (<sub :cards-by-ids (:cards setup))))
-
+(reg-sub
+  :current-setup/required-boxes
+  :<- [:current-setup]
+  (fn [setup _]
+    (<sub :boxes-by-ids (:requires setup))))
+(reg-sub
+  :current-setup/required-boxes-string
+  :<- [:current-setup/required-boxes]
+  (fn [boxes _]
+    (s/join ", " (map :name boxes))))
 (reg-sub-db :install-dialog/open?)
