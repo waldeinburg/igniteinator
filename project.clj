@@ -31,6 +31,10 @@
             "fig:build-sw" ["run" "-m" "figwheel.main"
                             "--optimizations" "advanced"
                             "--build-once" "sw"]
+            "fig:dev-sw"   ["run" "-m" "figwheel.main"
+                            "--compile-opts" {:dev? true}
+                            "--optimizations" "simple"
+                            "--build-once" "sw"]
             "fig:debug-sw" ["run" "-m" "figwheel.main"
                             "--compile-opts" {:debug? true}
                             "--optimizations" "simple"

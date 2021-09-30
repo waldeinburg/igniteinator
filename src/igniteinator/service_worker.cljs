@@ -5,7 +5,7 @@
             [clojure.string :as str]
             [promesa.core :as p]
             [cljs-http.client :refer [parse-url]])
-  (:require-macros [igniteinator.util.debug :refer [dbg when-debug]]))
+  (:require-macros [igniteinator.util.debug :refer [dbg when-debug when-dev if-dev]]))
 ;; Cf. https://github.com/gja/pwa-clojure/blob/master/src-svc/pwa_clojure/service_worker.cljs
 ;; and the following and related articles.
 ;; https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Offline_Service_workers
@@ -57,10 +57,13 @@
         path           (-> url parse-url :uri)
         image?         (str/starts-with? path (str constants/gen-img-base-path "/"))
         response-clone (.clone response)]
-    (dbg "Caching" request)
-    (p/let [cache (.open js/caches
-                    (if image? image-cache-name app-cache-name))]
-      (.put cache request response-clone))))
+    (if-dev
+      (dbg "Ignore caching" path)
+      (do
+        (dbg "Caching" request)
+        (p/let [cache (.open js/caches
+                        (if image? image-cache-name app-cache-name))]
+          (.put cache request response-clone))))))
 
 (defn fetch-and-cache [request]
   (dbg "Fetch" request "for caching")
@@ -130,8 +133,10 @@
 (defn install-service-worker []
   (info "Installing service worker")
   (dbg "Debug messages are on!")
-  (p/let [cache (.open js/caches app-cache-name)]
-    (.addAll cache (clj->js app-cache-files))))
+  (if-dev
+    (dbg "No caching")
+    (p/let [cache (.open js/caches app-cache-name)]
+      (.addAll cache (clj->js app-cache-files)))))
 
 (defn handle-mode [mode client-id]
   (info "Mode is" (name mode))
@@ -159,3 +164,6 @@
 ;; Thus, image caching depends on user engagement.
 (.addEventListener js/self "fetch" #(.respondWith % (fetch-event %)))
 (.addEventListener js/self "message" handle-message)
+
+(when-dev
+  (info "Dev mode"))

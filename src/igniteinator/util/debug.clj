@@ -4,10 +4,16 @@
 ;; WARNING: Merely setting debug? compiler option will not work. You have to do a lein clean or touch the affected file
 ;; first because the compiler will see that it has not changed and not recompile.
 
-(defn debug? []
+(defn compiler-option? [k]
   (and cljs.env/*compiler*
     (when-let [{:keys [options]} @cljs.env/*compiler*]
-      (:debug? options))))
+      (get options k))))
+
+(defn dev? []
+  (compiler-option? :dev?))
+
+(defn debug? []
+  (compiler-option? :debug?))
 
 (defmacro dbg [& msg]
   "Writing a message to console if debug? compiler option is true."
@@ -17,4 +23,15 @@
 (defmacro when-debug [& body]
   "Evaluate code if debug? compiler option is true."
   (if (debug?)
+    `(do ~@body)))
+
+(defmacro if-dev [then else]
+  "Evaluate then or else depending on if dev? compiler option is true."
+  (if (dev?)
+    then
+    else))
+
+(defmacro when-dev [& body]
+  "Evaluate code if dev? compiler option is true."
+  (if (dev?)
     `(do ~@body)))
