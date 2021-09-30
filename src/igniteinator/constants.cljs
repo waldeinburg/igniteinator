@@ -1,6 +1,6 @@
 (ns igniteinator.constants)
 
-(def version "0.2.2")
+(def version "0.3.0")
 (def page-url "https://igniteinator.waldeinburg.dk")
 (def github-url "https://github.com/waldeinburg/igniteinator")
 (def img-base-path "/img")
