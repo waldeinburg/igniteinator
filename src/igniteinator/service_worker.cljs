@@ -132,6 +132,8 @@
 
 (defn install-service-worker []
   (info "Installing service worker")
+  ;; The activate event is not always fired when a new service worker is installed and the old cache is not cleared.
+  (purge-old-caches)
   (dbg "Debug messages are on!")
   (if-dev
     (dbg "No caching")
