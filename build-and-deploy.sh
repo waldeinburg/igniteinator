@@ -3,12 +3,6 @@
 set -e
 
 SRC_DIR=target/final
-SCRIPT_FILENAME="main.js"
-SCRIPT_SRC="target/public/cljs-out/prod/main_bundle.js"
-SW_SRC="target/public/sw.js"
-SCRIPT_DIR="$SRC_DIR"
-DEV_SCRIPT_PATH="/cljs-out/main/main_bundle.js"
-FINAL_SCRIPT_PATH="/$SCRIPT_FILENAME"
 
 CLEAN=1
 BUILD_CODE=1
@@ -114,12 +108,8 @@ function clean() {
 
 function build_code() {
   lein fig:build
-  # With advanced optimizations we can leave out all the other files.
-  mkdir -p "$SCRIPT_DIR"
-  mv "$SCRIPT_SRC" "$SCRIPT_DIR/$SCRIPT_FILENAME"
   if [[ "$BUILD_SW" ]]; then
     lein fig:build-sw
-    mv "$SW_SRC" "$SRC_DIR"
   fi
 }
 
@@ -128,7 +118,6 @@ function build_static() {
   (
   shopt -s dotglob
   cp -ra resources/public/* "$SRC_DIR"
-  sed -i "s%$DEV_SCRIPT_PATH%$FINAL_SCRIPT_PATH%" "$SRC_DIR/index.html"
   )
 }
 

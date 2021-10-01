@@ -2,6 +2,7 @@
   :css-dirs            ["resources/public/css"]
   :auto-testing        true
   :auto-bundle         :webpack
+  :final-output-to     "target/public/main.js"
   ;; Must not go into the figwheel-main.edn because it alters the
   ;; :ring-server-options in a way that is not overridden in sw.cljs.edn
   ;; (if we get the watching to work).

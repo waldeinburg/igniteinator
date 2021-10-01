@@ -22,21 +22,22 @@
   :aliases {"fig"          ["trampoline" "run" "-m" "figwheel.main"]
             "fig:dev"      ["trampoline" "run" "-m" "figwheel.main"
                             "--build" "main" "--repl"]
-            ;; Cf. sw.cljs.edn for the problems.
-            ;; And without advanced optimizations it does not seem to compile properly anyway.
-            ;;"fig:dev-sw"   ["trampoline" "run" "-m" "figwheel.main" "-b" "sw" "-r"]
             "fig:build"    ["run" "-m" "figwheel.main"
                             "--optimizations" "advanced"
                             "--build-once" "prod"]
+            ;; No sw build without optimizations (cf. sw.cljs.edn).
             "fig:build-sw" ["run" "-m" "figwheel.main"
                             "--optimizations" "advanced"
+                            "--fw-opts" {:final-output-to "target/final/sw.js"}
                             "--build-once" "sw"]
             "fig:dev-sw"   ["run" "-m" "figwheel.main"
                             "--compile-opts" {:dev? true}
+                            "--fw-opts" {:final-output-to "target/public/sw.js"}
                             "--optimizations" "simple"
                             "--build-once" "sw"]
             "fig:debug-sw" ["run" "-m" "figwheel.main"
                             "--compile-opts" {:debug? true}
+                            "--fw-opts" {:final-output-to "target/public/sw.js"}
                             "--optimizations" "simple"
                             "--build-once" "sw"]
             "fig:test"     ["run" "-m" "figwheel.main"
