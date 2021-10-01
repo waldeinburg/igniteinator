@@ -2,8 +2,16 @@
 
 set -e
 
+cd "${0%/*}"
+
+source common.inc.sh
+# Sets REMOTE_HOST, REMOTE_DIR, and REMOTE_TEST_DIR.
+source private.inc.sh
+
 SRC_DIR=target/final
 
+TEST=
+CLEAR_TEST=
 CLEAN=1
 BUILD_CODE=1
 BUILD_SW=1
@@ -13,7 +21,7 @@ REQUIRE_TAG=1
 DEPLOY_ARGS=()
 
 function usage_and_exit() {
-    echo "Usage: $0 [--no-tag] [--no-clean] [--no-build] [--no-build-sw] [--build-static-only] [--no-deploy] [--dry-deploy] [--deploy-overwrite-all]"
+    echo "Usage: $0 [--no-tag] [--test] [--clear-test] [--no-clean] [--no-build] [--no-build-sw] [--build-static-only] [--no-deploy] [--dry-deploy] [--deploy-overwrite-all]"
     echo "--no-build and --static-only implies --no-clean."
   exit "${1:-1}"
 }
@@ -22,13 +30,28 @@ function append_deploy_arg() {
     DEPLOY_ARGS[${#DEPLOY_ARGS[@]}]=$1
 }
 
-TEMP=$(getopt -o '' -l 'no-tag,no-clean,no-build,no-build-sw,build-static-only,no-deploy,dry-deploy,deploy-overwrite-all' -- "$@") || usage_and_exit 99
+TEMP=$(getopt -o '' -l 'no-tag,test,clear-test,no-clean,no-build,no-build-sw,build-static-only,no-deploy,dry-deploy,deploy-overwrite-all' -- "$@") || usage_and_exit 99
 eval set -- "$TEMP"
 unset TEMP
 while :; do
   case "$1" in
   --no-tag)
     REQUIRE_TAG=
+    shift
+    ;;
+  --test)
+    TEST=1
+    REQUIRE_TAG=
+    REMOTE_DIR=$REMOTE_TEST_DIR
+    shift
+    ;;
+  --clear-test)
+    CLEAR_TEST=1
+    REMOTE_DIR=$REMOTE_TEST_DIR
+    REQUIRE_TAG=
+    CLEAN=
+    BUILD_CODE=
+    BUILD_STATIC=
     shift
     ;;
   --no-clean)
@@ -74,12 +97,6 @@ while :; do
 done
 [[ $# -eq 0 ]] || usage_and_exit
 
-cd "${0%/*}"
-
-source common.inc.sh
-# Sets REMOTE_HOST and REMOTE_DIR
-source private.inc.sh
-
 function tag_error() {
   local msg=$1
   echo "Error: $msg! Use --no-tag to ignore." >&2
@@ -121,6 +138,13 @@ function build_static() {
   )
 }
 
+function clear_test() {
+  # Not with lein clean; support clearing while doing development.
+  rm -rf "$SRC_DIR"
+  mkdir -p "$SRC_DIR"
+  echo "Nothing to see here." > "$SRC_DIR/index.html"
+}
+
 function deploy() {
   # Using https://github.com/waldeinburg/poor-mans-rsync
   ./remote_sync.sh "${DEPLOY_ARGS[@]}" "$SRC_DIR" "$REMOTE_HOST" "$REMOTE_DIR"
@@ -142,7 +166,15 @@ if [[ "$BUILD_STATIC" ]]; then
   echo "Building static ..."
   build_static
 fi
+if [[ "$CLEAR_TEST" ]]; then
+  echo "Building test clearing ..."
+  clear_test
+fi
 if [[ "$DEPLOY" ]]; then
-  echo "Deploying ..."
+  if [[ "$TEST" ]]; then
+    echo "Deploying to test"
+  else
+    echo "Deploying ..."
+  fi
   deploy
 fi
