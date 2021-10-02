@@ -132,13 +132,22 @@
 
 (defn install-service-worker []
   (info "Installing service worker")
-  ;; The activate event is not always fired when a new service worker is installed and the old cache is not cleared.
-  (purge-old-caches)
   (dbg "Debug messages are on!")
   (if-dev
     (dbg "No caching")
-    (p/let [cache (.open js/caches app-cache-name)]
-      (.addAll cache (clj->js app-cache-files)))))
+    ;; Add cache busting query parameter to avoid fetching from some other cache.
+    ;; https://github.com/GoogleChrome/samples/blob/gh-pages/service-worker/prefetch/service-worker.js
+    (let [now                  (. js/Date now)
+          add-cache-bust-param (fn [url]
+                                 ;; We don't prefetch anything with query parameters so just use a naive implementation.
+                                 (str url "?cache-bust=" now))]
+      (p/let [cache (.open js/caches app-cache-name)]
+        (doseq [path app-cache-files]
+          (p/let [response (js/fetch (add-cache-bust-param path))]
+            (if (.-ok response)
+              ;; Add without the caching bust parameter.
+              (.put cache path response)
+              (warn "Error response! Not caching." path response))))))))
 
 (defn handle-mode [mode client-id]
   (info "Mode is" (name mode))
