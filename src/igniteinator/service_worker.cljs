@@ -156,7 +156,9 @@
                           (condp = msg-type
                             :mode (handle-mode (keyword msg-data) client-id)
                             :cache-clear (clear-app-cache)
-                            (warn "Invalid message type" (name msg-type)))))))
+                            (warn "Invalid message type" (if (keyword? msg-type)
+                                                           (name msg-type)
+                                                           msg-type)))))))
 
 (.addEventListener js/self "install" #(.waitUntil % (install-service-worker)))
 (.addEventListener js/self "activate" #(.waitUntil % (purge-old-caches)))

@@ -12,7 +12,9 @@
                       (fn [msg-type msg-data _]
                         (condp = msg-type
                           :img-caching-progress (handle-img-cache-message msg-data)
-                          (js/console.warn "Invalid message type" (name msg-type))))))
+                          (js/console.warn "Invalid message type" (if (keyword? msg-type)
+                                                                    (name msg-type)
+                                                                    msg-type))))))
 
 (defn setup-sw [sw-cnt]
   (->
