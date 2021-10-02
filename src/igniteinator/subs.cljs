@@ -15,6 +15,8 @@
 (reg-sub-db :fatal-message)
 (reg-sub-db :current-page)
 
+(reg-sub-db :main-menu-mobile/open?)
+
 (reg-sub
   :caching-progress/initiated?
   (fn [db _]

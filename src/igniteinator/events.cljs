@@ -57,6 +57,8 @@
       :mode :fatal-error
       :fatal-message message)))
 
+(reg-event-db-assoc :main-menu-mobile/set-open?)
+
 (reg-event-db-assoc :caching-progress/set-open?)
 (reg-event-db
   :caching-progress/set-progress
