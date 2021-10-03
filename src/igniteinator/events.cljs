@@ -73,24 +73,45 @@
   (fn [_ [_ n]]
     {:fx [[:scroll-to n]]}))
 
+;; Push page onto history stack.
 (reg-event-fx
   :page/push
   [(inject-cofx :scroll-top)]
   (fn [{:keys [db scroll-top]} [_ key]]
-    {:db (assoc db :current-page key
-                   :previous-page {:page       (:current-page db)
-                                   :scroll-top scroll-top})
+    {:db (-> db
+           (assoc :current-page key)
+           (update :page-history conj {:page       (:current-page db)
+                                       :scroll-top scroll-top}))
      :fx [[:scroll-to-top]]}))
 
+;; Replace current page, not changing the history stack.
+(reg-event-fx
+  :page/replace
+  [(inject-cofx :scroll-top)]
+  (fn [{:keys [db]} [_ key]]
+    {:db (assoc db :current-page key)
+     :fx [[:scroll-to-top]]}))
+
+;; Set current page, clearing the history stack.
+(reg-event-fx
+  :page/set
+  [(inject-cofx :scroll-top)]
+  (fn [{:keys [db]} [_ key]]
+    {:db (assoc db :current-page key
+                   :page-history [])
+     :fx [[:scroll-to-top]]}))
+
+;; Pop page from history stack.
 (reg-event-fx
   :page/pop
   (fn [{:keys [db]} _]
-    (if-let [{:keys [page scroll-top]} (:previous-page db)]
-      {:db             (assoc db :current-page page
-                                 :previous-page nil)
-       ;; Don't use the fx directly but dispatch an event after a delay to let React rerender before scrolling.
-       ;; TODO: Create a non-race-condition method for this.
-       :dispatch-later {:ms 100 :dispatch [:scroll-to scroll-top]}})))
+    (let [hist (:page-history db)]
+      (if-let [{:keys [page scroll-top]} (first hist)]
+        {:db             (assoc db :current-page page
+                                   :page-history (rest hist))
+         ;; Don't use the fx directly but dispatch an event after a delay to let React rerender before scrolling.
+         ;; TODO: Create a non-race-condition method for this.
+         :dispatch-later {:ms 100 :dispatch [:scroll-to scroll-top]}}))))
 
 (reg-event-db
   :set-card-load-state
@@ -103,16 +124,10 @@
   :card-details-page/set-card-id)
 
 (reg-event-fx
-  :card-details-page/switch-card
-  (fn [_ [_ card]]
-    {:fx [[:dispatch [:card-details-page/set-card-id (:id card)]]
-          [:scroll-to-top]]}))
-
-(reg-event-fx
   :show-card-details
-  (fn [_ [_ card]]
+  (fn [_ [_ card navigate-event]]
     {:fx [[:dispatch [:card-details-page/set-card-id (:id card)]]
-          [:dispatch [:page/push :card-details]]]}))
+          [:dispatch [navigate-event :card-details]]]}))
 
 (reg-event-db-assoc
   :cards-page.combos/set-dialog-open?)

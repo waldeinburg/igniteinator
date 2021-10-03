@@ -9,7 +9,7 @@
    :main-menu-mobile    {:open? false}
    :caching-progress    nil
    :current-page        :cards
-   :previous-page       nil
+   :page-history        []
    :size                1
    :install-dialog      {:open? false}
    :select-cards-dialog {:search-str ""}

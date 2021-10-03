@@ -1,7 +1,7 @@
 (ns igniteinator.ui.card-list
   (:require [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
             [igniteinator.constants :as constants]
-            [igniteinator.text :refer [txt-c]]
+            [igniteinator.text :refer [txt txt-c]]
             [igniteinator.ui.tooltip :refer [tooltip] :rename {tooltip mui-tooltip}]
             [reagent.core :as r]
             [reagent-material-ui.util :refer [adapt-react-class]]
@@ -82,14 +82,19 @@
      tooltip-prop     :tooltip
      tooltip-fn-prop  :tooltip-fn}
     cards]
+   ;; Default tooltip and on-click is to show card details.
    (let [on-click-fn (cond
                        on-click-prop (fn [_] on-click-prop)
                        on-click-fn-prop on-click-fn-prop
-                       :else (constantly nil))
+                       :else (fn [card]
+                               #(>evt :show-card-details card :page/push)))
          tooltip-fn  (cond
                        tooltip-prop (fn [_] tooltip-prop)
                        tooltip-fn-prop tooltip-fn-prop
-                       :else (constantly nil))]
+                       :else (fn [card]
+                               (if (not-empty (:combos card))
+                                 (txt :card-tooltip-combos)
+                                 (txt :card-tooltip-no-combos))))]
      (if (empty? cards)
        [empty-card-list]
        [grid {:component "ol", :container true, :class "card-list"}

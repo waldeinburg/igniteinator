@@ -30,14 +30,7 @@
 
 (defn page-card-list []
   (let [cards (<sub :cards-page/cards)]
-    [card-list
-     {:on-click-fn (fn [card]
-                     #(>evt :show-card-details card))
-      :tooltip-fn  (fn [card]
-                     (if (not-empty (:combos card))
-                       (txt :card-tooltip-combos)
-                       (txt :card-tooltip-no-combos)))}
-     cards]))
+    [card-list cards]))
 
 (defn cards-page []
   [page (txt :cards-page-title)

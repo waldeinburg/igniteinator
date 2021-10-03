@@ -20,6 +20,9 @@
 (def main-menu-list [[:cards :cards-page-title]
                      [:setups :setups-page-title]])
 
+(defn navigate [page-key]
+  (>evt :page/set page-key))
+
 (defn desktop-menu?-hook []
   (use-media-query "(min-width:650px)"))
 
@@ -68,7 +71,7 @@
                                     on-close
                                     (fn []
                                       (on-close)
-                                      (>evt :page/push page-key)))}
+                                      (navigate page-key)))}
              title])))]]))
 
 (defn main-menu-desktop []
@@ -82,7 +85,7 @@
                                 :secondary
                                 :primary)
                     :on-click (if (not active?)
-                                #(>evt :page/push page-key))}
+                                #(navigate page-key))}
             title])))]))
 
 (defn header []

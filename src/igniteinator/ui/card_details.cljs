@@ -12,7 +12,7 @@
         cards    (<sub :cards (:combos card) [] sortings)]
     [card-list
      {:on-click-fn (fn [c]
-                     #(>evt :card-details-page/switch-card c))
+                     #(>evt :show-card-details c :page/replace))
       :tooltip-fn  (fn [c]
                      (case (:combos c)
                        [] (txt :card-tooltip-no-combos)

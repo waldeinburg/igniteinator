@@ -15,6 +15,10 @@
 (reg-sub-db :fatal-message)
 (reg-sub-db :current-page)
 
+(reg-sub :page-history-not-empty?
+  (fn [db _]
+    (not-empty (:page-history db))))
+
 (reg-sub-db :main-menu-mobile/open?)
 
 (reg-sub
