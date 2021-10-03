@@ -145,7 +145,7 @@
       (case val
         :all (-> db :cards keys set)
         :none #{}
-        val))))
+        (set val)))))
 
 (reg-event-db
   :cards-page.card-selection/set-item-selected?
