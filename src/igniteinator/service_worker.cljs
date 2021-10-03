@@ -37,6 +37,12 @@
 (defn warn [& msg]
   (log-msg js/console.warn msg))
 
+(defn get-add-cache-bust-param []
+  (let [now (. js/Date now)]
+    (fn [url]
+      ;; We don't prefetch anything with query parameters so just use a naive implementation.
+      (str url "?cache-bust=" now))))
+
 (defn post-msg [client-id msg-type msg-data]
   (dbg "Getting client to post message")
   (p/let [client (->
@@ -65,21 +71,26 @@
                         (if image? image-cache-name app-cache-name))]
           (.put cache request response-clone))))))
 
-(defn fetch-and-cache [request]
-  (dbg "Fetch" request "for caching")
-  (p/let [response (js/fetch request)]
-    (if (.-ok response)
-      (add-to-cache request response)
-      (warn "Error response! Not caching." request response))
-    response))
+(defn fetch-and-cache [request cache-url]
+  (let [cu (or cache-url request)]
+    (dbg "Fetch" request "for caching as" cu)
+    (p/let [response (js/fetch request)]
+      (if (.-ok response)
+        (add-to-cache cu response)
+        (warn "Error response! Not caching." request response))
+      response)))
 
-(defn fetch-request [request]
-  (dbg "Fetch" request)
-  (p/let [response (match-cache request)]
-    (dbg "Cache" (if response "hit" "miss") request)
-    (or response (fetch-and-cache request))))
+(defn fetch-request
+  ([request]
+   (fetch-request request nil))
+  ([request cache-key]
+   (dbg "Fetch" request)
+   (p/let [response (match-cache request)]
+     (dbg "Cache" (if response "hit" "miss") request)
+     (or response (fetch-and-cache request cache-key)))))
 
 (defn get-data-and-cache-image-list [language client-id]
+  "Cache all un-cached images"
   (p/let [response        (fetch-request constants/data-file-path)
           data            (p/let [json (.json response)]
                             (js->clj json :keywordize-keys true))
@@ -96,18 +107,19 @@
     ;; Chain the requests to fetch only one at a time. Let the user have the bandwidth for using the app, possibly
     ;; hitting images that are not cached. Thus, fetch-request will once again check if the image is cached.
     (if-let [uncached-paths (not-empty (persistent! uncached-paths!))]
-      (let [cnt (count uncached-paths)]
+      (let [add-cache-bust-param (get-add-cache-bust-param)
+            cnt                  (count uncached-paths)]
         ;; Let the stated message post before starting, but then don't care about the message sync.
         ;; There will be no simultaneous downloads anyway.
-        (reduce (fn [prev-promise request]
+        (reduce (fn [prev-promise path]
                   (p/let [prev-result prev-promise]
                     ;; The first item will get 0 from the initial noop promise. This will signal start of caching.
                     ;; The last item will get the final message sent and ignore the request (nil).
                     ;; Would a loop-recur have been prettier? Maybe.
                     (post-msg client-id :img-caching-progress {:progress prev-result
                                                                :count    cnt})
-                    (if request
-                      (p/then (fetch-request request)
+                    (if path
+                      (p/then (fetch-request (add-cache-bust-param path) path)
                         #(inc prev-result)))))
           (p/resolved 0)
           ;; Add nil at the end to ensure sending the last message.
@@ -137,10 +149,7 @@
     (dbg "No caching")
     ;; Add cache busting query parameter to avoid fetching from some other cache.
     ;; https://github.com/GoogleChrome/samples/blob/gh-pages/service-worker/prefetch/service-worker.js
-    (let [now                  (. js/Date now)
-          add-cache-bust-param (fn [url]
-                                 ;; We don't prefetch anything with query parameters so just use a naive implementation.
-                                 (str url "?cache-bust=" now))]
+    (let [add-cache-bust-param (get-add-cache-bust-param)]
       (p/let [cache (.open js/caches app-cache-name)]
         (doseq [path app-cache-files]
           (p/let [response (js/fetch (add-cache-bust-param path))]
