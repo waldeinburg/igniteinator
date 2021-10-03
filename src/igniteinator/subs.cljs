@@ -214,6 +214,9 @@
               (zero? (:id y)) 1
               :else (compare (:name x) (:name y))))
       setups)))
+
+(reg-sub-db
+  :display-setup-page/sortings)
 (reg-sub-db
   :setup/id)
 (reg-sub
@@ -230,8 +233,9 @@
 (reg-sub
   :current-setup/cards
   :<- [:current-setup]
-  (fn [setup _]
-    (<sub :cards-by-ids (:cards setup))))
+  :<- [:display-setup-page/sortings]
+  (fn [[setup sortings] _]
+    (<sub :cards (:cards setup) [] sortings)))
 (reg-sub
   :current-setup/required-boxes
   :<- [:current-setup]

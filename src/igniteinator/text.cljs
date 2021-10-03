@@ -32,6 +32,8 @@
    :combos-dialog-all-item      {:en "All cards with known combos"}
    :setups-page-title           {:en "Suggested setups"}
    :required-boxes              {:en "Required boxes"}
+   :copy-to-cards-page-tooltip  {:en "Copy setup to Cards page"}
+   :copy-to-cards-page-button   {:en "Cards page"}          ; preceded by icon
    :caching-progress-title      {:en "Downloading images"}
    :install-app                 {:en "Install app"}
    :add-to-home-screen          {:en "Add to Home screen"}

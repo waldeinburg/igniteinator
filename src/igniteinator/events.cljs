@@ -166,10 +166,26 @@
   :cards-page/set-search-str)
 
 (reg-event-fx
+  :cards-page/reset-filters
+  (fn [{:keys [db]} _]
+    {:db       (assoc-in db [:cards-page :filters] [])
+     :dispatch [:cards-page/set-search-str ""]}))
+
+(reg-event-fx
   :display-setup
   (fn [{:keys [db]} [_ id]]
     {:db       (assoc-in db [:setup :id] id)
      :dispatch [:page/push :display-setup]}))
+
+(reg-event-fx
+  :current-setup/copy-to-cards-page
+  (fn [{:keys [db]} _]
+    (let [current-setup-id (get-in db [:setup :id])]
+      {:fx [[:dispatch [:cards-page.card-selection/set-selection
+                        (get-in db [:setups current-setup-id :cards])]]
+            [:dispatch [:cards-page/set-base :some]]
+            [:dispatch [:cards-page/reset-filters]]
+            [:dispatch [:page/set :cards]]]})))
 
 (reg-event-db-assoc
   :install-dialog/set-open?)
