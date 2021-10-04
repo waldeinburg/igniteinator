@@ -3,6 +3,7 @@
             [igniteinator.ui.cards-page :refer [cards-page]]
             [igniteinator.ui.header :refer [header]]
             [igniteinator.ui.footer :refer [footer]]
+            [igniteinator.ui.reload-snackbar :refer [reload-snackbar]]
             [igniteinator.ui.caching-progress :refer [caching-progress]]
             [igniteinator.ui.card-details :refer [card-details-page]]
             [igniteinator.ui.setups-page :refer [setups-page]]
@@ -32,6 +33,7 @@
 (defn app []
   [:<>
    [css-baseline]
+   [reload-snackbar]
    [caching-progress]
    [container
     [header]

@@ -12,6 +12,7 @@
    :search                      {:en "search"}
    :using                       {:en "using"}
    :combos                      {:en "combos"}
+   :reload                      {:en "reload"}
    :regular-expressions         {:en "regular expressions"}
    :clear-selection             {:en "clear selection"}
    :data-load-error             {:en "error loading data"}
@@ -34,6 +35,7 @@
    :required-boxes              {:en "Required boxes"}
    :copy-to-cards-page-tooltip  {:en "Copy setup to Cards page"}
    :copy-to-cards-page-button   {:en "Cards page"}          ; preceded by icon
+   :app-updated-message         {:en "App was updated!"}
    :caching-progress-title      {:en "Downloading images"}
    :install-app                 {:en "Install app"}
    :add-to-home-screen          {:en "Add to Home screen"}

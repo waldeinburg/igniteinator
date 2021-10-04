@@ -57,7 +57,14 @@
       :mode :fatal-error
       :fatal-message message)))
 
+(reg-event-fx
+  :reload
+  (fn [_ _]
+    {:reload []}))
+
 (reg-event-db-assoc :main-menu-mobile/set-open?)
+
+(reg-event-db-assoc :reload-snackbar/set-open?)
 
 (reg-event-db-assoc :caching-progress/set-open?)
 (reg-event-db

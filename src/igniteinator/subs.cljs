@@ -21,6 +21,8 @@
 
 (reg-sub-db :main-menu-mobile/open?)
 
+(reg-sub-db :reload-snackbar/open?)
+
 (reg-sub
   :caching-progress/initiated?
   (fn [db _]

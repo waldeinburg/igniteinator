@@ -15,3 +15,8 @@
   :scroll-to-top
   (fn []
     (scroll-to 0)))
+
+(reg-fx
+  :reload
+  (fn []
+    (.. js/window -location reload)))
