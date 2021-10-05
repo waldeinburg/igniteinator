@@ -22,6 +22,7 @@
 (reg-sub-db :main-menu-mobile/open?)
 
 (reg-sub-db :reload-snackbar/open?)
+(reg-sub-db :reload-snackbar/version)
 
 (reg-sub
   :caching-progress/initiated?

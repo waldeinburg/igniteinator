@@ -1,10 +1,10 @@
 (ns igniteinator.util.event)
 
 (defn target [event]
-  (. event -target))
+  (.-target event))
 
 (defn value [event]
-  (. (target event) -value))
+  (.-value (target event)))
 
 (defn checked? [event]
-  (. (target event) -checked))
+  (.-checked (target event)))

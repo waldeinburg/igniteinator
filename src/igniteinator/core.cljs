@@ -30,11 +30,6 @@
     (reg-beforeinstallprompt-event)
     (mount el)))
 
-(defn ^:before-load before-reload []
-  ;; Tell the service worker, if any, to clear app cache before Figwheel reload.
-  (if-let [ctrl (.-controller js/navigator.serviceWorker)]
-    (msg/post ctrl :cache-clear)))
-
 (defn ^:after-load after-reload []
   (rf/clear-subscription-cache!)
   (mount-app-element))

@@ -25,8 +25,9 @@
     [cancel-icon]]])
 
 (defn reload-snackbar []
-  (let [open? (<sub :reload-snackbar/open?)]
+  (let [open?       (<sub :reload-snackbar/open?)
+        new-version (<sub :reload-snackbar/version)]
     [snackbar {:open     open?
                :on-close close-reload-snackbar
-               :message  (txt :app-updated-message)
+               :message  (str (txt :app-updated-message) " " new-version ".")
                :action   (r/as-element [refresh-button])}]))

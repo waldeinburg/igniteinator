@@ -37,6 +37,9 @@
 (defn warn [& msg]
   (log-msg js/console.warn msg))
 
+(defn clients []
+  (.-clients js/self))
+
 (defn get-add-cache-bust-param []
   (let [now (. js/Date now)]
     (fn [url]
@@ -45,9 +48,7 @@
 
 (defn post-msg [client-id msg-type msg-data]
   (dbg "Getting client to post message")
-  (p/let [client (->
-                   (.-clients js/self)
-                   (.get client-id))]
+  (p/let [client (.get (clients) client-id)]
     (dbg "Post message" (name msg-type) (clj->js msg-data))
     (msg/post client msg-type msg-data)))
 
@@ -138,19 +139,21 @@
       clj->js
       p/all)))
 
-(defn clear-app-cache []
-  (info "Clearing app cache")
-  (.delete js/caches app-cache-name))
+(defn activate-service-worker []
+  ;; Do not claim the client. We don't want to take up image cache space for users visiting only once.
+  (purge-old-caches))
 
 (defn install-service-worker []
   (info "Installing service worker")
   (dbg "Debug messages are on!")
-  (if-dev
-    (dbg "No caching")
-    ;; Add cache busting query parameter to avoid fetching from some other cache.
-    ;; https://github.com/GoogleChrome/samples/blob/gh-pages/service-worker/prefetch/service-worker.js
-    (let [add-cache-bust-param (get-add-cache-bust-param)]
-      (p/let [cache (.open js/caches app-cache-name)]
+  ;; Cache first (we don't want a reload where we get main.js without cache busting), then notify app.
+  ;; Add cache busting query parameter to avoid fetching from some other cache.
+  ;; https://github.com/GoogleChrome/samples/blob/gh-pages/service-worker/prefetch/service-worker.js
+  (let [add-cache-bust-param (get-add-cache-bust-param)]
+    (p/let [cache (.open js/caches app-cache-name)]
+      ;; Wrap in if-dev here to allow adding additional items in the promise chain.
+      (if-dev
+        (dbg "No caching")
         (doseq [path app-cache-files]
           (p/let [response (js/fetch (add-cache-bust-param path))]
             (if (.-ok response)
@@ -168,18 +171,23 @@
     ;; TODO: At language change, receive message with the current language.
     (get-data-and-cache-image-list constants/default-language client-id)))
 
+(defn handle-skip-waiting [client-id]
+  (info "Received skip-waiting")
+  (.skipWaiting js/self)
+  (post-msg client-id :update {:version constants/version}))
+
 (def handle-message (msg/message-handler
                       (fn [msg-type msg-data e]
                         (let [client-id (.. e -source -id)]
                           (condp = msg-type
                             :mode (handle-mode (keyword msg-data) client-id)
-                            :cache-clear (clear-app-cache)
+                            :skip-waiting (handle-skip-waiting client-id)
                             (warn "Invalid message type" (if (keyword? msg-type)
                                                            (name msg-type)
                                                            msg-type)))))))
 
 (.addEventListener js/self "install" #(.waitUntil % (install-service-worker)))
-(.addEventListener js/self "activate" #(.waitUntil % (purge-old-caches)))
+(.addEventListener js/self "activate" #(.waitUntil % (activate-service-worker)))
 ;; The fetch event handler is not working when the service worker is installed. We could probably fix this:
 ;; https://stackoverflow.com/a/34608364
 ;; However, that is probably for the best. It means that we don't cache images unless the user has visited us twice.

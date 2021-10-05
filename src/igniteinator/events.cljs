@@ -65,6 +65,11 @@
 (reg-event-db-assoc :main-menu-mobile/set-open?)
 
 (reg-event-db-assoc :reload-snackbar/set-open?)
+(reg-event-fx
+  :notify-update
+  (fn [{:keys [db]} [_ version]]
+    {:db (assoc-in db [:reload-snackbar :version] version)
+     :dispatch [:reload-snackbar/set-open? true]}))
 
 (reg-event-db-assoc :caching-progress/set-open?)
 (reg-event-db
