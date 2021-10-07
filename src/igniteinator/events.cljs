@@ -12,6 +12,9 @@
   (fn [_ _]
     default-db))
 
+(reg-event-db-assoc :set-mode)
+(reg-event-db-assoc :set-waiting?)
+
 (reg-event-fx
   :load-data
   (fn [{:keys [db]} _]
@@ -55,6 +58,7 @@
   (fn [db [_ message]]
     (assoc db
       :mode :fatal-error
+      :waiting? false
       :fatal-message message)))
 
 (reg-event-fx
@@ -66,10 +70,15 @@
 
 (reg-event-db-assoc :reload-snackbar/set-open?)
 (reg-event-fx
-  :notify-update
-  (fn [{:keys [db]} [_ version]]
-    {:db (assoc-in db [:reload-snackbar :version] version)
-     :dispatch [:reload-snackbar/set-open? true]}))
+  :update-available
+  (fn [{:keys [db]} [_ new-sw]]
+    {:db (update db :reload-snackbar merge {:open?  true
+                                            :new-sw new-sw})}))
+(reg-event-fx
+  :update-app
+  (fn [{:keys [db]}]
+    {:db         (assoc db :waiting? true)
+     :update-app (get-in db [:reload-snackbar :new-sw])}))
 
 (reg-event-db-assoc :caching-progress/set-open?)
 (reg-event-db

@@ -12,6 +12,7 @@
 
 (reg-sub-db :language)
 (reg-sub-db :mode)
+(reg-sub-db :waiting?)
 (reg-sub-db :fatal-message)
 (reg-sub-db :current-page)
 
@@ -22,7 +23,6 @@
 (reg-sub-db :main-menu-mobile/open?)
 
 (reg-sub-db :reload-snackbar/open?)
-(reg-sub-db :reload-snackbar/version)
 
 (reg-sub
   :caching-progress/initiated?

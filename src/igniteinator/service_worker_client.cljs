@@ -4,9 +4,6 @@
             [igniteinator.ui.caching-progress :refer [handle-img-cache-message]]
             [promesa.core :as p]))
 
-(defn notify-update-event [{:keys [version]}]
-  (>evt :notify-update version))
-
 (defn standalone-mode? []
   (or
     (.. js/self -navigator -standalone)
@@ -16,27 +13,28 @@
                       (fn [msg-type msg-data _]
                         (condp = msg-type
                           :img-caching-progress (handle-img-cache-message msg-data)
-                          :update (notify-update-event msg-data)
                           (js/console.warn "Invalid message type" (if (keyword? msg-type)
                                                                     (name msg-type)
                                                                     msg-type))))))
 
-(defn post-skip-waiting-if-waiting [sw-registration]
-  (if-let [sw (.-waiting sw-registration)]
-    (msg/post sw :skip-waiting nil)))
+(defn handle-service-worker-registered [sw-reg]
+  (js/console.log "Service worker registered")
+  ;; Register update event listener, but only if there's already a service worker. We don't want a notification the
+  ;; first time we visit the page.
+  (if (.-active sw-reg)
+    (.addEventListener sw-reg "updatefound"
+      (fn []
+        (let [new-sw (.-installing sw-reg)]
+          (.addEventListener new-sw "statechange"
+            (fn []
+              ;; Do not skip this step. If installation goes wrong we don't want to fire an update notification.
+              (if (= "installed" (.-state new-sw))
+                (>evt :update-available new-sw)))))))))
 
 (defn setup-sw [sw-cnt]
   (->
     (.register sw-cnt "/sw.js")
-    (p/then (fn [sw-reg]
-              (js/console.log "Service worker registered" sw-reg)
-              ;; Post to the waiting service worker that we want it to skip waiting. It will respond with a message
-              ;; telling the version and the handler will show an update notification.
-              (let [post-skip-w #(post-skip-waiting-if-waiting sw-reg)]
-                (.addEventListener js/self "waiting" post-skip-w)
-                (.addEventListener js/self "externalwaiting" post-skip-w)
-                ;; The waiting property will be null initially.
-                (post-skip-w))))
+    (p/then handle-service-worker-registered)
     (p/catch #(js/console.error "Failed to load service worker:" %)))
   (.addEventListener sw-cnt "message" handle-message)
   (p/let [sw-reg (.-ready sw-cnt)]

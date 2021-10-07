@@ -6,9 +6,10 @@
   {
    :language            constants/default-language
    :mode                :init
+   :waiting?            false
    :main-menu-mobile    {:open? false}
-   :reload-snackbar     {:open?   false
-                         :version nil}
+   :reload-snackbar     {:open?  false
+                         :new-sw nil}
    :caching-progress    nil
    :current-page        :cards
    :page-history        []

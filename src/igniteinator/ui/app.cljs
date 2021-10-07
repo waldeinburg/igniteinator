@@ -3,14 +3,15 @@
             [igniteinator.ui.cards-page :refer [cards-page]]
             [igniteinator.ui.header :refer [header]]
             [igniteinator.ui.footer :refer [footer]]
+            [igniteinator.ui.loading-progress :refer [loading-progress]]
+            [igniteinator.ui.wait-modal :refer [waiting-modal]]
             [igniteinator.ui.reload-snackbar :refer [reload-snackbar]]
             [igniteinator.ui.caching-progress :refer [caching-progress]]
             [igniteinator.ui.card-details :refer [card-details-page]]
             [igniteinator.ui.setups-page :refer [setups-page]]
             [igniteinator.ui.display-setup-page :refer [display-setup-page]]
             [reagent-material-ui.core.css-baseline :refer [css-baseline]]
-            [reagent-material-ui.core.container :refer [container]]
-            [reagent-material-ui.core.circular-progress :refer [circular-progress]]))
+            [reagent-material-ui.core.container :refer [container]]))
 
 (defn pages []
   ;; TODO: add router here?
@@ -25,7 +26,7 @@
   (let [mode (<sub :mode)]
     (case mode
       :init [:div "The monkeys are listening ..."]
-      :loading [circular-progress]
+      :loading [loading-progress]
       :ready [pages]
       :fatal-error [:div (<sub :fatal-message)]
       [:div (str "No such mode: " mode)])))
@@ -33,9 +34,10 @@
 (defn app []
   [:<>
    [css-baseline]
-   [reload-snackbar]
-   [caching-progress]
    [container
     [header]
     [content]
-    [footer]]])
+    [footer]]
+   [caching-progress]
+   [reload-snackbar]
+   [waiting-modal]])

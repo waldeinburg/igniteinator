@@ -1,10 +1,9 @@
 (ns igniteinator.ui.reload-snackbar
-  (:require [igniteinator.text :refer [txt txt-c]]
-    [igniteinator.util.re-frame :refer [<sub >evt]]
+  (:require [igniteinator.text :refer [txt]]
+            [igniteinator.util.re-frame :refer [<sub >evt]]
             [reagent.core :as r]
             [reagent-material-ui.core.snackbar :refer [snackbar]]
             [reagent-material-ui.core.button :refer [button]]
-            [reagent-material-ui.core.snackbar :refer [snackbar]]
             [reagent-material-ui.core.toolbar :refer [toolbar]]
             [reagent-material-ui.core.icon-button :refer [icon-button]]
             [reagent-material-ui.icons.cancel :refer [cancel] :rename {cancel cancel-icon}]))
@@ -14,20 +13,22 @@
     (>evt :reload-snackbar/set-open? false)))
 
 (defn refresh-button []
-  [toolbar
-   [button {:variant  :contained
-            :color    :primary
-            :on-click #(>evt :reload)}
-    (txt-c :reload)]
-   [icon-button {:color      :inherit
-                 :aria-label :close
-                 :on-click   close-reload-snackbar}
-    [cancel-icon]]])
+  (let [updating? (<sub :waiting?)]
+    [toolbar
+     [button {:variant  :contained
+              :disabled updating?
+              :color    :primary
+              :on-click #(>evt :update-app)}
+      (txt :app-update-button)]
+     [icon-button {:color      :inherit
+                   :disabled   updating?
+                   :aria-label :close
+                   :on-click   close-reload-snackbar}
+      [cancel-icon]]]))
 
 (defn reload-snackbar []
-  (let [open?       (<sub :reload-snackbar/open?)
-        new-version (<sub :reload-snackbar/version)]
+  (let [open? (<sub :reload-snackbar/open?)]
     [snackbar {:open     open?
                :on-close close-reload-snackbar
-               :message  (str (txt :app-updated-message) " " new-version ".")
+               :message  (txt :app-update-message)
                :action   (r/as-element [refresh-button])}]))

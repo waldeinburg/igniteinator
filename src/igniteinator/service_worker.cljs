@@ -171,17 +171,16 @@
     ;; TODO: At language change, receive message with the current language.
     (get-data-and-cache-image-list constants/default-language client-id)))
 
-(defn handle-skip-waiting [client-id]
+(defn handle-skip-waiting []
   (info "Received skip-waiting")
-  (.skipWaiting js/self)
-  (post-msg client-id :update {:version constants/version}))
+  (.skipWaiting js/self))
 
 (def handle-message (msg/message-handler
                       (fn [msg-type msg-data e]
                         (let [client-id (.. e -source -id)]
                           (condp = msg-type
                             :mode (handle-mode (keyword msg-data) client-id)
-                            :skip-waiting (handle-skip-waiting client-id)
+                            :skip-waiting (handle-skip-waiting)
                             (warn "Invalid message type" (if (keyword? msg-type)
                                                            (name msg-type)
                                                            msg-type)))))))

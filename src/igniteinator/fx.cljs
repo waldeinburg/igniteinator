@@ -1,5 +1,9 @@
 (ns igniteinator.fx
-  (:require [re-frame.core :refer [reg-fx]]))
+  (:require [igniteinator.util.message :as msg]
+            [re-frame.core :refer [reg-fx]]))
+
+(defn- reload []
+  (.. js/window -location reload))
 
 (defn- scroll-to [n]
   ;; Safari
@@ -18,5 +22,12 @@
 
 (reg-fx
   :reload
-  (fn []
-    (.. js/window -location reload)))
+  reload)
+
+(reg-fx
+  :update-app
+  (fn [new-sw]
+    ;; Reload when the new service worker is ready to take over.
+    (.addEventListener js/navigator.serviceWorker "controllerchange" reload)
+    ;; Tell the new service worker to activate immediately.
+    (msg/post new-sw :skip-waiting nil)))
