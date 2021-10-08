@@ -35,12 +35,15 @@
 (reg-event-db
   :load-data-success
   (fn [db [_ result]]
-    (assoc db
-      :mode :ready
-      :boxes (id-map (:boxes result))
-      :cards (id-map (:cards result))
-      :combos-set (:combos result)
-      :setups (id-map (:setups result)))))
+    (->
+      db
+      (assoc
+        :mode :ready
+        :boxes (id-map (:boxes result))
+        :cards (id-map (:cards result))
+        :combos-set (:combos result)
+        :setups (id-map (:setups result)))
+      (assoc-in [:setups-filter :selection] (set (map :id (:boxes result)))))))
 
 (reg-event-fx
   :load-data-failure
@@ -192,6 +195,12 @@
     {:db       (assoc-in db [:cards-page :filters] [])
      :dispatch [:cards-page/set-search-str ""]}))
 
+(reg-event-db-assoc :setups-filter/set-operator)
+(reg-event-db
+  :setups-filter/set-box-selected?
+  (fn [db [_ id set?]]
+    (let [f (if set? conj disj)]
+      (update-in db [:setups-filter :selection] f id))))
 (reg-event-fx
   :display-setup
   (fn [{:keys [db]} [_ id]]

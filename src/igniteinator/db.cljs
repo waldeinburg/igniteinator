@@ -26,6 +26,8 @@
                                           :ids          #{}}}
    :card-details-page   {:card-id  nil
                          :sortings [{:key :name, :order :asc}]}
+   :setups-filter       {:operator  :some
+                         :selection nil}                    ; filled when data is loaded
    :setup               {:id nil}
    :display-setup-page  {:sortings [{:key :name, :order :asc}]}
    :card-load-state     {:en nil}

@@ -7,6 +7,8 @@
    :subtitle                    {:en "an unoffical app for the board game"}
    :ok                          {:en "ok"}
    :back                        {:en "back"}
+   :some-of                     {:en "some of"}
+   :all-of                      {:en "all of"}
    :empty-list                  {:en "empty list"}
    :select-all                  {:en "select all"}
    :search                      {:en "search"}

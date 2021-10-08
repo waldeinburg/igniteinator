@@ -167,6 +167,11 @@
   :boxes-map
   [:boxes])
 (reg-sub
+  :all-boxes
+  :<- [:boxes-map]
+  (fn [boxes-map []]
+    (sort-by :id (vals boxes-map))))
+(reg-sub
   :boxes-by-ids
   :<- [:boxes-map]
   (fn [boxes-map [_ ids]]
@@ -217,6 +222,30 @@
               (zero? (:id y)) 1
               :else (compare (:name x) (:name y))))
       setups)))
+
+(reg-sub-db :setups-filter/operator)
+(reg-sub-db :setups-filter/selection)
+(reg-sub
+  :setups-filter/box-selected?
+  :<- [:setups-filter/selection]
+  (fn [selection [_ id]]
+    (contains? selection id)))
+(reg-sub
+  :setups-filtered-and-sorted
+  :<- [:setups-sorted]
+  :<- [:setups-filter/operator]
+  :<- [:setups-filter/selection]
+  (fn [[setups operator selection] _]
+    (filter
+      (case operator
+        :all #(= (set (:requires %)) selection)
+        :some #(every? selection (set (:requires %))))
+      setups)))
+(reg-sub
+  :setups-includes-recommended-starter-set?
+  :<- [:setups-filtered-and-sorted]
+  (fn [setups _]
+    (= (-> setups first :id) 0)))
 
 (reg-sub-db
   :display-setup-page/sortings)
