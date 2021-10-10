@@ -4,6 +4,7 @@
             [igniteinator.util.reagent :refer [add-children]]
             [igniteinator.ui.link :refer [external-link]]
             [igniteinator.constants :as const]
+            [igniteinator.ui.share-button :refer [share-button]]
             [igniteinator.ui.install-button :refer [install-button]]
             [goog.dom :as gdom]
             [reagent-material-ui.core.box :refer [box]]
@@ -96,4 +97,5 @@
      [title]
      [if-desktop-menu [main-menu-desktop]]
      [box {:ml "auto"}
+      [share-button]
       [install-button]]]]])

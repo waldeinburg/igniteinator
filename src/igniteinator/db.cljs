@@ -14,6 +14,8 @@
    :current-page        :cards
    :page-history        []
    :size                1
+   :share               {:dialog-open?   false
+                         :snackbar-open? false}
    :install-dialog      {:open? false}
    :select-cards-dialog {:search-str ""}
    :cards-page          {:base           :all

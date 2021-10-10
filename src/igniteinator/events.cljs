@@ -7,10 +7,20 @@
             [re-frame.core :refer [reg-event-fx reg-event-db inject-cofx]]
             [ajax.core :as ajax]))
 
-(reg-event-db
+(reg-event-fx
   :init-db
-  (fn [_ _]
-    default-db))
+  [(inject-cofx :query-params)]
+  (fn [{:keys [query-params]} _]
+    {:db (if (or
+               (empty? (:ids query-params))
+               (not (re-matches #"[1-9][0-9]*(,[1-9][0-9]*)*" (:ids query-params))))
+           default-db
+           (let [ids (map js/parseInt
+                       (s/split (:ids query-params) #","))]
+             (assoc-ins default-db
+               [:current-page] :cards
+               [:cards-page :base] ids
+               [:cards-page :card-selection :ids] (set ids))))}))
 
 (reg-event-db-assoc :set-mode)
 (reg-event-db-assoc :set-waiting?)
@@ -216,6 +226,9 @@
             [:dispatch [:cards-page/set-base :some]]
             [:dispatch [:cards-page/reset-filters]]
             [:dispatch [:page/set :cards]]]})))
+
+(reg-event-db-assoc :share/set-dialog-open?)
+(reg-event-db-assoc :share/set-snackbar-open?)
 
 (reg-event-db-assoc
   :install-dialog/set-open?)

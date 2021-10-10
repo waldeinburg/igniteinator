@@ -14,7 +14,9 @@
 (def dialog-at-top
   ((styles/with-styles {:scroll-paper {:align-items :baseline}}) mui-dialog))
 
-(defn dialog [{:keys [title open?-ref top? on-close] :or {top? false} :as props}
+(defn dialog [{:keys [title button-text open?-ref top? on-close]
+               :or {top? false, button-text (txt-c :ok)}
+               :as props}
               & children]
   (let [dialog-type  (if top? dialog-at-top mui-dialog)
         open?        @open?-ref
@@ -23,4 +25,4 @@
      [dialog-title title]
      [dialog-content (add-children children)]
      [dialog-actions
-      [button {:on-click on-close} (txt-c :ok)]]]))
+      [button {:on-click on-close} button-text]]]))

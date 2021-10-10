@@ -278,4 +278,18 @@
   :<- [:current-setup/required-boxes]
   (fn [boxes _]
     (s/join ", " (map :name boxes))))
+
+(reg-sub-db :share/dialog-open?)
+(reg-sub-db :share/snackbar-open?)
+
+(reg-sub
+  :share/url
+  :<- [:current-page]
+  :<- [:cards-page/cards]
+  (fn [[current-page cards-page-cards] _]
+    (if-let [cards (not-empty (case current-page
+                                :cards cards-page-cards
+                                nil))]
+      (str constants/page-url "?ids=" (s/join "," (sort (map :id cards)))))))
+
 (reg-sub-db :install-dialog/open?)

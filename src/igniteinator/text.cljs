@@ -4,11 +4,13 @@
 
 (def strings
   {
-   :subtitle                    {:en "an unoffical app for the board game"}
+   :subtitle                    {:en "an inator for"}
    :ok                          {:en "ok"}
+   :close                       {:en "close"}
    :back                        {:en "back"}
    :some-of                     {:en "some of"}
    :all-of                      {:en "all of"}
+   :copy                        {:en "copy"}
    :empty-list                  {:en "empty list"}
    :select-all                  {:en "select all"}
    :search                      {:en "search"}
@@ -40,6 +42,9 @@
    :app-update-message          {:en "New version available!"}
    :app-update-button           {:en "Use now"}
    :caching-progress-title      {:en "Downloading images"}
+   :share/dialog-title          {:en "Share card list"}
+   :share/dialog-text           {:en "Copy the following URL to share the currently listed cards."}
+   :share/snackbar-text         {:en "Link copied to clipboard!"}
    :install-app                 {:en "Install app"}
    :add-to-home-screen          {:en "Add to Home screen"}
    :a2hs-instructions-title     {:en "Add to Home screen: Instructions"}
