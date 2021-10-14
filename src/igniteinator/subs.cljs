@@ -1,5 +1,5 @@
 (ns igniteinator.subs
-  (:require [igniteinator.text :refer [txt]]
+  (:require [igniteinator.text :as text]
             [igniteinator.constants :as constants]
             [igniteinator.util.image-path :refer [image-path]]
             [igniteinator.util.re-frame :refer [reg-sub-db <sub]]
@@ -36,7 +36,7 @@
   :txt
   :<- [:language]
   (fn [lang [_ key]]
-    (txt lang key)))
+    (get-in text/strings [key lang])))
 
 (reg-sub
   :txt-c
@@ -281,15 +281,46 @@
 
 (reg-sub-db :share/dialog-open?)
 (reg-sub-db :share/snackbar-open?)
+(reg-sub-db :share/mode)
 
 (reg-sub
-  :share/url
+  :share/cards
   :<- [:current-page]
   :<- [:cards-page/cards]
   (fn [[current-page cards-page-cards] _]
-    (if-let [cards (not-empty (case current-page
-                                :cards cards-page-cards
-                                nil))]
+    (not-empty (case current-page
+                 :cards cards-page-cards
+                 nil))))
+(reg-sub
+  :share/url
+  :<- [:share/cards]
+  (fn [cards _]
+    (if cards
       (str constants/page-url "?ids=" (s/join "," (sort (map :id cards)))))))
+(reg-sub
+  :share/names
+  :<- [:share/cards]
+  (fn [cards _]
+    (if cards
+      (s/join ", " (map :name cards)))))
+(reg-sub
+  :share/value
+  :<- [:share/mode]
+  :<- [:share/url]
+  :<- [:share/names]
+  (fn [[mode url names] _]
+    (case mode
+      :url url
+      :names names)))
+(reg-sub
+  :share/snackbar-text-formatted
+  :<- [:share/mode]
+  :<- [:txt :link]
+  :<- [:txt :names]
+  (fn [[mode link names] _]
+    (text/txt :share/snackbar-text
+      {:value (s/capitalize (case mode
+                              :url link
+                              :names names))})))
 
 (reg-sub-db :install-dialog/open?)

@@ -19,7 +19,7 @@
 
 (defn setups-filter-operator []
   [select {:value     (<sub :setups-filter/operator)
-           :on-change #(>evt :setups-filter/set-operator (keyword (event/value %)))}
+           :on-change #(>evt :setups-filter/set-operator (event/value->keyword %))}
    [menu-item {:value :some} (txt-c :some-of)]
    [menu-item {:value :all} (txt-c :all-of)]])
 

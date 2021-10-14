@@ -27,10 +27,13 @@
 (defn radio-elem []
   (r/as-element [mui-radio]))
 
-(defn radio [value label]
+(defn combo-radio [value label on-dialog-close]
   (let [radio-elem (radio-elem)]
-    (fn [value label]
-      [form-control-label {:value value, :control radio-elem, :label label}])))
+    (fn [value label on-dialog-close]
+      [form-control-label {:value    value
+                           :control  radio-elem
+                           :label    label
+                           :on-click on-dialog-close}])))
 
 (defn combos-dialog [{:keys [open?-ref on-close value-ref on-change]}]
   [dialog {:title     (txt :combos-dialog-title)
@@ -38,10 +41,13 @@
            :on-close  on-close}
    [form-control {:component "fieldset"}
     [radio-group {:value     @value-ref
-                  :on-change #(on-change (keyword (event/value %)))}
-     [radio :official (r/as-element [:<> (txt :combos-dialog-official-item)
-                                     [form-helper-text (txt :combos-dialog-official-help)]])]
-     [radio :all (txt :combos-dialog-all-item)]]]])
+                  :on-change #(on-change (event/value->keyword %))}
+     [combo-radio
+      :official
+      (r/as-element [:<> (txt :combos-dialog-official-item)
+                     [form-helper-text (txt :combos-dialog-official-help)]])
+      on-close]
+     [combo-radio :all (txt :combos-dialog-all-item) on-close]]]])
 
 (defn dialog-card-item [card <sub-dialog-item-selected?-ref on-dialog-item-selected-change]
   (let [id    (:id card)

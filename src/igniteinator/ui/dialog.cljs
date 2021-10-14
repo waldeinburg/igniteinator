@@ -20,7 +20,7 @@
               & children]
   (let [dialog-type  (if top? dialog-at-top mui-dialog)
         open?        @open?-ref
-        dialog-props (into {:open open?} (dissoc props :open?-ref :top?))]
+        dialog-props (into {:open open?} (dissoc props :open?-ref :top? :button-text))]
     [dialog-type dialog-props
      [dialog-title title]
      [dialog-content (add-children children)]

@@ -1,5 +1,6 @@
 (ns igniteinator.text
   (:require [igniteinator.util.re-frame :refer [<sub]]
+            [igniteinator.util.string :as ss]
             [clojure.string :as s]))
 
 (def strings
@@ -11,6 +12,8 @@
    :some-of                     {:en "some of"}
    :all-of                      {:en "all of"}
    :copy                        {:en "copy"}
+   :link                        {:en "link"}
+   :names                       {:en "names"}
    :empty-list                  {:en "empty list"}
    :select-all                  {:en "select all"}
    :search                      {:en "search"}
@@ -43,8 +46,8 @@
    :app-update-button           {:en "Use now"}
    :caching-progress-title      {:en "Downloading images"}
    :share/dialog-title          {:en "Share card list"}
-   :share/dialog-text           {:en "Copy the following URL to share the currently listed cards."}
-   :share/snackbar-text         {:en "Link copied to clipboard!"}
+   :share/dialog-text           {:en "Copy the following URL or list of names to share the currently listed cards."}
+   :share/snackbar-text         {:en "{value} copied to clipboard!"}
    :install-app                 {:en "Install app"}
    :add-to-home-screen          {:en "Add to Home screen"}
    :a2hs-instructions-title     {:en "Add to Home screen: Instructions"}
@@ -61,11 +64,8 @@
 (defn txt
   ([s]
    (<sub :txt s))
-  ([lang s]
-   (get-in strings [s lang])))
+  ([s format-args]
+   (ss/format (txt s) format-args)))
 
-(defn txt-c
-  ([s]
-   (<sub :txt-c s))
-  ([lang s]
-   (-> (txt lang s) s/capitalize)))
+(defn txt-c [s]
+  (<sub :txt-c s))

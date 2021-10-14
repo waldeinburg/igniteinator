@@ -229,6 +229,7 @@
 
 (reg-event-db-assoc :share/set-dialog-open?)
 (reg-event-db-assoc :share/set-snackbar-open?)
+(reg-event-db-assoc :share/set-mode)
 
 (reg-event-db-assoc
   :install-dialog/set-open?)
