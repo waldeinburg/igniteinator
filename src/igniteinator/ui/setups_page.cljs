@@ -23,26 +23,23 @@
    [menu-item {:value :some} (txt-c :some-of)]
    [menu-item {:value :all} (txt-c :all-of)]])
 
-(defn setups-box-selection-item [box disabled?]
+(defn setups-box-selection-item [box]
   (let [id   (:id box)
         name (:name box)
         cb   [checkbox {:checked   (<sub :setups-filter/box-selected? id)
                         :on-change #(>evt :setups-filter/set-box-selected? id (event/checked? %))
                         :name      name
-                        :disabled  disabled?}]]
+                        :disabled  (:required-by-all? box)}]]
     [form-control-label {:control (r/as-element cb)
                          :label   name}]))
 
 (defn setups-filter-selection []
-  (let [boxes      (<sub :all-boxes)
-        base       (first boxes)
-        expansions (rest boxes)]
+  (let [boxes (<sub :boxes-with-setups)]
     [box
-     ^{:key (:id box)} [setups-box-selection-item base true]
      (doall
-       (for [b expansions]
+       (for [b boxes]
          ^{:key (:id b)}
-         [setups-box-selection-item b false]))]))
+         [setups-box-selection-item b]))]))
 
 (defn setups-filtering []
   [form-control {:component :fieldset}

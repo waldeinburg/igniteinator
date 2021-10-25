@@ -4,6 +4,7 @@
             [igniteinator.util.image-path :refer [image-path]]
             [igniteinator.util.re-frame :refer [reg-sub-db <sub]]
             [igniteinator.model.cards :as cards]
+            [igniteinator.model.setups :as setups]
             [igniteinator.util.sort :as sort-util]
             [igniteinator.util.filter :as filter-util]
             [re-frame.core :refer [reg-sub reg-sub-raw subscribe]]
@@ -222,6 +223,13 @@
               (zero? (:id y)) 1
               :else (compare (:name x) (:name y))))
       setups)))
+
+(reg-sub
+  :boxes-with-setups
+  :<- [:all-boxes]
+  :<- [:setups]
+  (fn [[boxes setups] _]
+    (setups/filter-boxes-with-setups boxes setups)))
 
 (reg-sub-db :setups-filter/operator)
 (reg-sub-db :setups-filter/selection)

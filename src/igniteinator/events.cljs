@@ -2,6 +2,7 @@
   (:require [igniteinator.db :refer [default-db]]
             [igniteinator.text :refer [txt]]
             [igniteinator.constants :as constants]
+            [igniteinator.model.setups :as setups]
             [igniteinator.util.re-frame :refer [reg-event-db-assoc assoc-ins]]
             [clojure.string :as s]
             [re-frame.core :refer [reg-event-fx reg-event-db inject-cofx]]
@@ -53,7 +54,10 @@
         :cards (id-map (:cards result))
         :combos-set (:combos result)
         :setups (id-map (:setups result)))
-      (assoc-in [:setups-filter :selection] (set (map :id (:boxes result)))))))
+      (assoc-in [:setups-filter :selection]
+        (set (map :id (setups/filter-boxes-with-setups
+                        (:boxes result)
+                        (:setups result))))))))
 
 (reg-event-fx
   :load-data-failure
