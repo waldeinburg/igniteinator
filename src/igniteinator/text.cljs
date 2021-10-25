@@ -26,7 +26,7 @@
    :card-tooltip-combos         {:en "Show card and known combos"}
    :card-tooltip-no-combos      {:en "Show card (no known combos for this card)"}
    :card-tooltip-no-more-combos {:en "Show card (no more known combos for this card)"}
-   :no-combos                   {:en "no known combos for this card"}
+   :no-combos                   {:en "No known combos for this card."}
    :cards-page-title            {:en "Cards"}
    :card-details-page-title     {:en ""}
    :combos-title                {:en "Combos"}

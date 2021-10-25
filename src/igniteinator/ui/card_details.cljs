@@ -35,5 +35,5 @@
                   :grid-breakpoints-ref (<sub-ref :grid-breakpoints+1)}
        card]]
      (if (empty? (:combos card))
-       [:p (txt-c :no-combos)]
+       [:p (txt :no-combos)]
        [combos-section card])]))
