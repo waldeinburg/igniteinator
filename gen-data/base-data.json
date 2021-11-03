@@ -91,10 +91,6 @@
       "name": "Charm"
     },
     {
-      "id": 18,
-      "name": "Cloak of Invisibility"
-    },
-    {
       "id": 19,
       "name": "Close Range Master"
     },
@@ -411,10 +407,6 @@
       "name": "Shaman Chieftain"
     },
     {
-      "id": 98,
-      "name": "Shield of Spells"
-    },
-    {
       "id": 99,
       "name": "Short Sword"
     },
@@ -457,10 +449,6 @@
     {
       "id": 109,
       "name": "Time Bend"
-    },
-    {
-      "id": 110,
-      "name": "Tonfa"
     },
     {
       "id": 111,
