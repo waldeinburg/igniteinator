@@ -48,6 +48,7 @@
    :share/dialog-title          {:en "Share card list"}
    :share/dialog-text           {:en "Copy the following URL or list of names to share the currently listed cards."}
    :share/snackbar-text         {:en "{value} copied to clipboard!"}
+   :language-button-tooltip     {:en "Language"}
    :install-app                 {:en "Install app"}
    :add-to-home-screen          {:en "Add to Home screen"}
    :a2hs-instructions-title     {:en "Add to Home screen: Instructions"}

@@ -6,6 +6,7 @@
             [igniteinator.constants :as const]
             [igniteinator.ui.share-button :refer [share-button]]
             [igniteinator.ui.install-button :refer [install-button]]
+            [igniteinator.ui.language-menu :refer [language-menu]]
             [goog.dom :as gdom]
             [reagent-material-ui.core.box :refer [box]]
             [reagent-material-ui.core.typography :refer [typography]]
@@ -98,4 +99,5 @@
      [if-desktop-menu [main-menu-desktop]]
      [box {:ml "auto"}
       [share-button]
+      [language-menu]
       [install-button]]]]])

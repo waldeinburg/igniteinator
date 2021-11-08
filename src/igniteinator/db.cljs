@@ -14,6 +14,7 @@
    :current-page        :cards
    :page-history        []
    :size                1
+   :language-menu-open? false
    :share               {:dialog-open?   false
                          :snackbar-open? false
                          :mode           :url}

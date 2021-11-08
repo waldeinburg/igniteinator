@@ -13,6 +13,15 @@
 ;; This might change.
 (def ignite-link "https://gingersnapgaming.com")
 
+(def languages [{:id   :en
+                 :name "English"}
+                {:id   :de
+                 :name "deutsch"}
+                {:id   :es
+                 :name "español"}
+                {:id   :fr
+                 :name "français"}])
+
 (def grid-breakpoints [{:xs 4, :sm 3, :md 2, :lg 1}
                        {:xs 6, :sm 4, :md 3, :lg 2}
                        {:xs 12, :sm 6, :md 4, :lg 3}

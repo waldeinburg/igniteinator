@@ -26,6 +26,9 @@
 (reg-event-db-assoc :set-mode)
 (reg-event-db-assoc :set-waiting?)
 
+(reg-event-db-assoc :set-language)
+(reg-event-db-assoc :set-language-menu-open?)
+
 (reg-event-fx
   :load-data
   (fn [{:keys [db]} _]

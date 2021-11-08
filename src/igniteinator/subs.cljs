@@ -22,7 +22,7 @@
     (not-empty (:page-history db))))
 
 (reg-sub-db :main-menu-mobile/open?)
-
+(reg-sub-db :language-menu-open?)
 (reg-sub-db :reload-snackbar/open?)
 
 (reg-sub
@@ -37,7 +37,9 @@
   :txt
   :<- [:language]
   (fn [lang [_ key]]
-    (get-in text/strings [key lang])))
+    (or
+      (get-in text/strings [key lang])
+      (get-in text/strings [key constants/default-language]))))
 
 (reg-sub
   :txt-c
