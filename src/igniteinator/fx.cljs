@@ -2,6 +2,7 @@
   (:require [igniteinator.util.message :as msg]
             [igniteinator.util.environment :as environment]
             [re-frame.core :refer [reg-fx]]
+            [akiroz.re-frame.storage :as storage]
             [promesa.core :as p]))
 
 (defn- reload []
@@ -12,6 +13,11 @@
   (set! (.. js/document -body -scrollTop) n)
   ;; Others
   (set! (.. js/document -documentElement -scrollTop) n))
+
+(storage/reg-co-fx!
+  :igniteinator/store
+  {:fx   :store
+   :cofx :store})
 
 (reg-fx
   :scroll-to

@@ -3,25 +3,31 @@
             [igniteinator.text :refer [txt]]
             [igniteinator.constants :as constants]
             [igniteinator.model.setups :as setups]
-            [igniteinator.util.re-frame :refer [reg-event-db-assoc assoc-ins]]
+            [igniteinator.util.re-frame :refer [reg-event-db-assoc reg-event-db-assoc-store reg-event-set-option
+                                                assoc-ins]]
             [clojure.string :as s]
             [re-frame.core :refer [reg-event-fx reg-event-db inject-cofx]]
             [ajax.core :as ajax]))
 
 (reg-event-fx
   :init-db
-  [(inject-cofx :query-params)]
-  (fn [{:keys [query-params]} _]
-    {:db (if (or
-               (empty? (:ids query-params))
-               (not (re-matches #"[1-9][0-9]*(,[1-9][0-9]*)*" (:ids query-params))))
-           default-db
-           (let [ids (map js/parseInt
-                       (s/split (:ids query-params) #","))]
-             (assoc-ins default-db
-               [:current-page] :cards
-               [:cards-page :base] ids
-               [:cards-page :card-selection :ids] (set ids))))}))
+  [(inject-cofx :query-params)
+   (inject-cofx :store)]
+  (fn [{:keys [query-params store]} _]
+    (let [db (if (or
+                   (empty? (:ids query-params))
+                   (not (re-matches #"[1-9][0-9]*(,[1-9][0-9]*)*" (:ids query-params))))
+               default-db
+               (let [ids (map js/parseInt
+                           (s/split (:ids query-params) #","))]
+                 (assoc-ins default-db
+                   [:current-page] :cards
+                   [:cards-page :base] ids
+                   [:cards-page :card-selection :ids] (set ids))))]
+      {:db (-> db
+             ;; Don't put language in options map. We often need to access it in events.
+             (update :language #(or (:language store) %))
+             (update :options #(merge % (:options store))))})))
 
 (reg-event-db-assoc :set-mode)
 (reg-event-db-assoc :set-waiting?)
@@ -90,13 +96,17 @@
 
 (reg-event-fx
   :set-language
-  [(inject-cofx :standalone-mode?)]
-  (fn [{:keys [db standalone-mode?]} [_ lang]]
+  [(inject-cofx :store)
+   (inject-cofx :standalone-mode?)]
+  (fn [{:keys [db store standalone-mode?]} [_ lang]]
     (conj
-      {:db (assoc db :language lang)}
+      {:db    (assoc db :language lang)
+       :store (assoc store :language lang)}
       (if (and standalone-mode? (not= lang (:language db)))
         {:post-message [:mode {:mode     :standalone
                                :language lang}]}))))
+
+(reg-event-set-option :set-size)
 
 (reg-event-fx
   :reload

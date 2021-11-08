@@ -2,7 +2,7 @@
   (:require [igniteinator.text :as text]
             [igniteinator.constants :as constants]
             [igniteinator.util.image-path :refer [image-path]]
-            [igniteinator.util.re-frame :refer [reg-sub-db <sub]]
+            [igniteinator.util.re-frame :refer [reg-sub-db reg-sub-option <sub]]
             [igniteinator.model.cards :as cards]
             [igniteinator.model.setups :as setups]
             [igniteinator.util.sort :as sort-util]
@@ -48,7 +48,7 @@
   (fn [str _]
     (s/capitalize str)))
 
-(reg-sub-db :size)
+(reg-sub-option :size)
 
 (reg-sub
   :size+1

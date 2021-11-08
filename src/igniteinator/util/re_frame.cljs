@@ -45,6 +45,13 @@
      (fn [db _]
        (get-in db path)))))
 
+(defn reg-sub-option [key]
+  (reg-sub-db key [:options key]))
+
+(defn- keyword->set-path [kw]
+  (keyword->path kw
+    #(s/replace % #"^set-(.+)" "$1")))
+
 (defn reg-event-db-assoc
   "Register event with a (assoc-in db path val).
   (reg-sub-db name path): Register name with path.
@@ -55,10 +62,25 @@
   :foo.bar/baz [:foo :bar :baz]
   :foo.bar/set-baz [:foo :bar :baz]"
   ([path-name]
-   (reg-event-db-assoc path-name (keyword->path path-name
-                                   #(s/replace % #"^set-(.+)" "$1"))))
+   (reg-event-db-assoc path-name (keyword->set-path path-name)))
   ([name path]
    (rf/reg-event-db
      name
      (fn [db [_ val]]
        (assoc-in db path val)))))
+
+(defn reg-event-db-assoc-store
+  "As reg-event-db-assoc but also with local storage."
+  ([path-name]
+   (reg-event-db-assoc-store path-name (keyword->set-path path-name)))
+  ([name path]
+   (rf/reg-event-fx
+     name
+     [(rf/inject-cofx :store)]
+     (fn [{:keys [db store]} [_ val]]
+       {:db    (assoc-in db path val)
+        :store (assoc-in store path val)}))))
+
+(defn reg-event-set-option [name]
+  (let [key (first (keyword->set-path name))]
+    (reg-event-db-assoc-store name [:options key])))

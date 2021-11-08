@@ -5,6 +5,7 @@
 (def default-db
   {
    :language            constants/default-language
+   :options             {:size 1}
    :mode                :init
    :waiting?            false
    :main-menu-mobile    {:open? false}
@@ -13,7 +14,6 @@
    :caching-progress    nil
    :current-page        :cards
    :page-history        []
-   :size                1
    :language-menu-open? false
    :share               {:dialog-open?   false
                          :snackbar-open? false
