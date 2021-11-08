@@ -1,6 +1,8 @@
 (ns igniteinator.fx
   (:require [igniteinator.util.message :as msg]
-            [re-frame.core :refer [reg-fx]]))
+            [igniteinator.util.environment :as environment]
+            [re-frame.core :refer [reg-fx]]
+            [promesa.core :as p]))
 
 (defn- reload []
   (.. js/window -location reload))
@@ -31,3 +33,12 @@
     (.addEventListener js/navigator.serviceWorker "controllerchange" reload)
     ;; Tell the new service worker to activate immediately.
     (msg/post new-sw :skip-waiting nil)))
+
+(reg-fx
+  :post-message
+  (fn [[msg-type msg-data]]
+    (if-let [sw-cnt js/navigator.serviceWorker]
+      ;; Be sure the message is not lost because of race conditions.
+      (p/let [sw-reg (.-ready sw-cnt)]
+        (if (environment/standalone-mode?)
+          (msg/post (.-active sw-reg) msg-type msg-data))))))

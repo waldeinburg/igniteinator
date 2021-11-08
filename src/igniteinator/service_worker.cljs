@@ -161,15 +161,14 @@
               (.put cache path response)
               (warn "Error response! Not caching." path response))))))))
 
-(defn handle-mode [mode client-id]
-  (info "Mode is" (name mode))
-  (when (= mode :standalone)
+(defn handle-mode [{:keys [mode] :as data} client-id]
+  (info "Mode is" mode)
+  (when (= (keyword mode) :standalone)
     (dbg "Standalone mode. Ensure images in cache.")
     ;; At installation we would want to cache the default language if in standalone mode. However, the service worker is
     ;; already installed at the first visit. Instead, the client messages the service worker and the worker ensures that
     ;; the images are in the cache.
-    ;; TODO: At language change, receive message with the current language.
-    (get-data-and-cache-image-list constants/default-language client-id)))
+    (get-data-and-cache-image-list (keyword (:language data)) client-id)))
 
 (defn handle-skip-waiting []
   (info "Received skip-waiting")
@@ -179,7 +178,7 @@
                       (fn [msg-type msg-data e]
                         (let [client-id (.. e -source -id)]
                           (condp = msg-type
-                            :mode (handle-mode (keyword msg-data) client-id)
+                            :mode (handle-mode msg-data client-id)
                             :skip-waiting (handle-skip-waiting)
                             (warn "Invalid message type" (if (keyword? msg-type)
                                                            (name msg-type)

@@ -1,5 +1,6 @@
 (ns igniteinator.cofx
-  (:require [re-frame.core :refer [reg-cofx]]
+  (:require [igniteinator.util.environment :as environment]
+            [re-frame.core :refer [reg-cofx]]
             [cljs-http.client :refer [parse-url]]))
 
 (reg-cofx
@@ -17,3 +18,7 @@
   (fn [cofx _]
     (assoc cofx :query-params
                 (-> js/self .-location.href parse-url :query-params))))
+
+(reg-cofx :standalone-mode?
+  (fn [cofx _]
+    (assoc cofx :standalone-mode? (environment/standalone-mode?))))

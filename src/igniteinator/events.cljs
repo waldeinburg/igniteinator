@@ -26,7 +26,6 @@
 (reg-event-db-assoc :set-mode)
 (reg-event-db-assoc :set-waiting?)
 
-(reg-event-db-assoc :set-language)
 (reg-event-db-assoc :set-language-menu-open?)
 
 (reg-event-fx
@@ -80,6 +79,24 @@
       :mode :fatal-error
       :waiting? false
       :fatal-message message)))
+
+(reg-event-fx
+  :service-worker-ready
+  [(inject-cofx :standalone-mode?)]
+  (fn [{:keys [db standalone-mode?]} _]
+    (if standalone-mode?
+      {:post-message [:mode {:mode     :standalone
+                             :language (:language db)}]})))
+
+(reg-event-fx
+  :set-language
+  [(inject-cofx :standalone-mode?)]
+  (fn [{:keys [db standalone-mode?]} [_ lang]]
+    (conj
+      {:db (assoc db :language lang)}
+      (if (and standalone-mode? (not= lang (:language db)))
+        {:post-message [:mode {:mode     :standalone
+                               :language lang}]}))))
 
 (reg-event-fx
   :reload

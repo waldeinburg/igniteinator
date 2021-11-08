@@ -4,11 +4,6 @@
             [igniteinator.ui.caching-progress :refer [handle-img-cache-message]]
             [promesa.core :as p]))
 
-(defn standalone-mode? []
-  (or
-    (.. js/self -navigator -standalone)
-    (-> js/self (.matchMedia "(display-mode: standalone)") .-matches)))
-
 (def handle-message (msg/message-handler
                       (fn [msg-type msg-data _]
                         (condp = msg-type
@@ -37,9 +32,9 @@
     (p/then handle-service-worker-registered)
     (p/catch #(js/console.error "Failed to load service worker:" %)))
   (.addEventListener sw-cnt "message" handle-message)
+  ;; Redundant to wait and send service worker. But then the fx won't break if not using ready().
   (p/let [sw-reg (.-ready sw-cnt)]
-    (if (standalone-mode?)
-      (msg/post (.-active sw-reg) :mode :standalone))))
+    (>evt :service-worker-ready sw-reg)))
 
 (defn reg-sw []
   (if-let [sw-cnt js/navigator.serviceWorker]
