@@ -10,7 +10,7 @@
 ;; and the following and related articles.
 ;; https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Offline_Service_workers
 
-(def image-cache-version 2)
+(def image-cache-version 3)
 (def app-cache-name (str "igniteinator-data-v" constants/version))
 (def image-cache-name (str "igniteinator-img-v" image-cache-version))
 
