@@ -1,9 +1,9 @@
-(ns igniteinator.ui.search-bar
+(ns igniteinator.ui.components.search-bar
   (:require [igniteinator.util.event :as event]
             [igniteinator.text :refer [txt-c txt]]
             [igniteinator.constants :as const]
             [igniteinator.util.string :as ss]
-            [igniteinator.ui.link :refer [external-link]]
+            [igniteinator.ui.components.link :refer [external-link]]
             [igniteinator.util.re-frame :refer [<sub >evt]]
             [reagent.core :as r]
             [reagent-material-ui.core.text-field :refer [text-field]]

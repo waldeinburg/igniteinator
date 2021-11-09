@@ -1,4 +1,4 @@
-(ns igniteinator.ui.loading-progress
+(ns igniteinator.ui.components.loading-progress
   (:require [reagent-material-ui.core.box :refer [box]]
             [reagent-material-ui.core.circular-progress :refer [circular-progress]]))
 

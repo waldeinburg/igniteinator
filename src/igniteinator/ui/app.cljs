@@ -1,15 +1,15 @@
 (ns igniteinator.ui.app
   (:require [igniteinator.util.re-frame :refer [<sub]]
-            [igniteinator.ui.cards-page :refer [cards-page]]
+            [igniteinator.ui.pages.cards-page :refer [cards-page]]
             [igniteinator.ui.header :refer [header]]
             [igniteinator.ui.footer :refer [footer]]
-            [igniteinator.ui.loading-progress :refer [loading-progress]]
-            [igniteinator.ui.wait-modal :refer [waiting-modal]]
-            [igniteinator.ui.reload-snackbar :refer [reload-snackbar]]
-            [igniteinator.ui.caching-progress :refer [caching-progress]]
-            [igniteinator.ui.card-details :refer [card-details-page]]
-            [igniteinator.ui.setups-page :refer [setups-page]]
-            [igniteinator.ui.display-setup-page :refer [display-setup-page]]
+            [igniteinator.ui.components.loading-progress :refer [loading-progress]]
+            [igniteinator.ui.components.wait-modal :refer [waiting-modal]]
+            [igniteinator.ui.singletons.reload-snackbar :refer [reload-snackbar]]
+            [igniteinator.ui.singletons.caching-progress :refer [caching-progress]]
+            [igniteinator.ui.pages.card-details :refer [card-details-page]]
+            [igniteinator.ui.pages.setups-page :refer [setups-page]]
+            [igniteinator.ui.pages.display-setup-page :refer [display-setup-page]]
             [reagent-material-ui.core.css-baseline :refer [css-baseline]]
             [reagent-material-ui.core.container :refer [container]]))
 

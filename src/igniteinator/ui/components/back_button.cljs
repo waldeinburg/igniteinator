@@ -1,7 +1,7 @@
-(ns igniteinator.ui.back-button
+(ns igniteinator.ui.components.back-button
   (:require [igniteinator.util.re-frame :refer [<sub >evt]]
             [igniteinator.text :refer [txt-c]]
-            [igniteinator.ui.tooltip :refer [tooltip]]
+            [igniteinator.ui.components.tooltip :refer [tooltip]]
             [reagent-material-ui.core.box :refer [box]]
             [reagent-material-ui.core.button :refer [button]]
             [reagent-material-ui.icons.arrow-back :refer [arrow-back]]))

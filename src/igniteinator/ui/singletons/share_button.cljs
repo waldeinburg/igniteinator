@@ -1,8 +1,8 @@
-(ns igniteinator.ui.share-button
+(ns igniteinator.ui.singletons.share-button
   (:require [igniteinator.text :refer [txt txt-c]]
             [igniteinator.util.event :as event]
             [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
-            [igniteinator.ui.dialog :refer [dialog]]
+            [igniteinator.ui.components.dialog :refer [dialog]]
             [promesa.core :as p]
             [reagent.core :as r]
             [reagent-material-ui.core.box :refer [box]]

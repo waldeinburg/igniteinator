@@ -1,4 +1,4 @@
-(ns igniteinator.ui.reload-snackbar
+(ns igniteinator.ui.singletons.reload-snackbar
   (:require [igniteinator.text :refer [txt]]
             [igniteinator.util.re-frame :refer [<sub >evt]]
             [reagent.core :as r]

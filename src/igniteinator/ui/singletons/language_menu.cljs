@@ -1,10 +1,10 @@
-(ns igniteinator.ui.language-menu
+(ns igniteinator.ui.singletons.language-menu
   (:require [igniteinator.constants :as constants]
             [igniteinator.util.re-frame :refer [<sub >evt]]
             [igniteinator.util.reagent :refer [add-children]]
             [igniteinator.text :refer [txt]]
+            [igniteinator.ui.components.tooltip :refer [tooltip]]
             [goog.dom :as gdom]
-            [igniteinator.ui.tooltip :refer [tooltip]]
             [reagent-material-ui.core.icon-button :refer [icon-button]]
             [reagent-material-ui.icons.translate :refer [translate] :rename {translate translate-icon}]
             [reagent-material-ui.core.menu :refer [menu]]

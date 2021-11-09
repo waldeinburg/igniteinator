@@ -1,11 +1,11 @@
-(ns igniteinator.ui.display-setup-page
+(ns igniteinator.ui.pages.display-setup-page
   (:require [igniteinator.text :refer [txt]]
             [igniteinator.util.re-frame :refer [<sub >evt]]
-            [igniteinator.ui.page :refer [page]]
-            [igniteinator.ui.back-button :refer [back-button]]
-            [igniteinator.ui.card-list :refer [card-list]]
+            [igniteinator.ui.components.page :refer [page]]
+            [igniteinator.ui.components.back-button :refer [back-button]]
+            [igniteinator.ui.components.card-list :refer [card-list]]
+            [igniteinator.ui.components.tooltip :refer [tooltip]]
             [reagent-material-ui.core.box :refer [box]]
-            [igniteinator.ui.tooltip :refer [tooltip]]
             [reagent-material-ui.core.toolbar :refer [toolbar]]
             [reagent-material-ui.core.button :refer [button]]
             [reagent-material-ui.icons.file-copy :refer [file-copy]]))

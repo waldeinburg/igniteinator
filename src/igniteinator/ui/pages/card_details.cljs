@@ -1,8 +1,8 @@
-(ns igniteinator.ui.card-details
+(ns igniteinator.ui.pages.card-details
   (:require [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
-            [igniteinator.ui.page :refer [page]]
-            [igniteinator.ui.back-button :refer [back-button]]
-            [igniteinator.ui.card-list :refer [card-list card-grid]]
+            [igniteinator.ui.components.page :refer [page]]
+            [igniteinator.ui.components.back-button :refer [back-button]]
+            [igniteinator.ui.components.card-list :refer [card-list card-grid]]
             [igniteinator.text :refer [txt txt-c]]
             [reagent-material-ui.core.grid :refer [grid]]
             [reagent-material-ui.core.modal :refer [modal]]))

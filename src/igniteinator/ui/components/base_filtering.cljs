@@ -1,10 +1,10 @@
-(ns igniteinator.ui.base-filtering
+(ns igniteinator.ui.components.base-filtering
   (:require [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
             [igniteinator.text :refer [txt txt-c]]
             [igniteinator.util.event :as event]
-            [igniteinator.ui.tooltip :refer [tooltip]]
-            [igniteinator.ui.search-bar :refer [search-bar]]
-            [igniteinator.ui.dialog :refer [dialog]]
+            [igniteinator.ui.components.tooltip :refer [tooltip]]
+            [igniteinator.ui.components.search-bar :refer [search-bar]]
+            [igniteinator.ui.components.dialog :refer [dialog]]
             [reagent.core :as r]
             [reagent-material-ui.core.toolbar :refer [toolbar]]
             [reagent-material-ui.core.box :refer [box]]

@@ -1,6 +1,6 @@
 (ns igniteinator.ui.footer
   (:require [igniteinator.constants :refer [version page-url github-url]]
-            [igniteinator.ui.link :refer [external-link]]
+            [igniteinator.ui.components.link :refer [external-link]]
             [reagent-material-ui.core.link :refer [link]]
             [reagent-material-ui.core.box :refer [box]]))
 

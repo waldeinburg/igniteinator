@@ -1,4 +1,4 @@
-(ns igniteinator.ui.caching-progress
+(ns igniteinator.ui.singletons.caching-progress
   (:require [igniteinator.util.re-frame :refer [<sub >evt]]
             [igniteinator.text :refer [txt]]
             [reagent-material-ui.styles :as styles]

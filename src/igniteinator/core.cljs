@@ -11,7 +11,7 @@
     [igniteinator.util.re-frame :refer [>evt]]
     [igniteinator.util.message :as msg]
     [igniteinator.service-worker-client :refer [reg-sw]]
-    [igniteinator.ui.install-button :refer [reg-beforeinstallprompt-event]]
+    [igniteinator.ui.singletons.install-button :refer [reg-beforeinstallprompt-event]]
     [goog.dom :as gdom]
     [re-frame.core :as rf]
     [reagent.dom :as rdom]))

@@ -1,4 +1,4 @@
-(ns igniteinator.ui.dialog
+(ns igniteinator.ui.components.dialog
   (:require [igniteinator.text :refer [txt-c]]
             [igniteinator.util.reagent :refer [add-children]]
             [reagent-material-ui.styles :as styles]

@@ -1,7 +1,7 @@
-(ns igniteinator.ui.install-button
+(ns igniteinator.ui.singletons.install-button
   (:require [igniteinator.util.re-frame :refer [<sub >evt]]
             [igniteinator.text :refer [txt]]
-            [igniteinator.ui.tooltip :refer [tooltip]]
+            [igniteinator.ui.components.tooltip :refer [tooltip]]
             [igniteinator.util.environment :refer [user-agent]]
             [reagent.core :as r]
             [reagent-material-ui.core.box :refer [box]]

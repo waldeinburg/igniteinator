@@ -1,8 +1,8 @@
-(ns igniteinator.ui.card-list
+(ns igniteinator.ui.components.card-list
   (:require [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
             [igniteinator.constants :as constants]
             [igniteinator.text :refer [txt txt-c]]
-            [igniteinator.ui.tooltip :refer [tooltip] :rename {tooltip mui-tooltip}]
+            [igniteinator.ui.components.tooltip :refer [tooltip] :rename {tooltip tooltip-elem}]
             [reagent.core :as r]
             [reagent-material-ui.util :refer [adapt-react-class]]
             [reagent-material-ui.core.box :refer [box]]
@@ -38,7 +38,7 @@
          (= :loaded load-state)
          (let []
            (if tooltip
-             [mui-tooltip tooltip img]
+             [tooltip-elem tooltip img]
              img))
          ;; The image is visible on screen but not loaded yet. Show the placeholder image still to
          ;; avoid the height of the container to be zero until the height of the image is loaded

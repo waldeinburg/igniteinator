@@ -1,8 +1,8 @@
-(ns igniteinator.ui.setups-page
+(ns igniteinator.ui.pages.setups-page
   (:require [igniteinator.text :refer [txt txt-c]]
             [igniteinator.util.re-frame :refer [<sub >evt]]
             [igniteinator.util.event :as event]
-            [igniteinator.ui.page :refer [page]]
+            [igniteinator.ui.components.page :refer [page]]
             [reagent.core :as r]
             [reagent-material-ui.core.box :refer [box]]
             [reagent-material-ui.core.list :refer [list]]

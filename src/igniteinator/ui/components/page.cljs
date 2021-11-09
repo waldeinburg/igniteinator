@@ -1,4 +1,4 @@
-(ns igniteinator.ui.page
+(ns igniteinator.ui.components.page
   (:require [igniteinator.util.reagent :refer [add-children]]))
 
 (defn page-title [title]

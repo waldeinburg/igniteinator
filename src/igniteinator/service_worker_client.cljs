@@ -1,7 +1,7 @@
 (ns igniteinator.service-worker-client
   (:require [igniteinator.util.re-frame :refer [>evt]]
             [igniteinator.util.message :as msg]
-            [igniteinator.ui.caching-progress :refer [handle-img-cache-message]]
+            [igniteinator.ui.singletons.caching-progress :refer [handle-img-cache-message]]
             [promesa.core :as p]))
 
 (def handle-message (msg/message-handler

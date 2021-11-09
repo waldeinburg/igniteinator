@@ -1,4 +1,4 @@
-(ns igniteinator.ui.tooltip
+(ns igniteinator.ui.components.tooltip
   (:require [reagent.core :as r]
             [reagent-material-ui.core.tooltip :as mui]))
 

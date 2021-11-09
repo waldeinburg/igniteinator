@@ -1,8 +1,8 @@
-(ns igniteinator.ui.cards-page
-  (:require [igniteinator.ui.base-filtering :refer [base-filtering]]
-            [igniteinator.ui.card-list :refer [card-list]]
-            [igniteinator.ui.page :refer [page]]
-            [igniteinator.ui.search-bar :refer [search-bar]]
+(ns igniteinator.ui.pages.cards-page
+  (:require [igniteinator.ui.components.base-filtering :refer [base-filtering]]
+            [igniteinator.ui.components.card-list :refer [card-list]]
+            [igniteinator.ui.components.page :refer [page]]
+            [igniteinator.ui.components.search-bar :refer [search-bar]]
             [igniteinator.text :refer [txt]]
             [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
             [reagent-material-ui.core.box :refer [box]]

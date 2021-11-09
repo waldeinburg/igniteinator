@@ -1,4 +1,4 @@
-(ns igniteinator.ui.wait-modal
+(ns igniteinator.ui.components.wait-modal
   (:require [igniteinator.util.re-frame :refer [<sub]]
             [reagent-material-ui.styles :as styles]
             [reagent-material-ui.core.backdrop :refer [backdrop]]
