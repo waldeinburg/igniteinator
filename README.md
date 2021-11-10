@@ -14,6 +14,11 @@ deck randomizer mechanism.
 
 ## Development setup
 
+_It is not possible to set up a development environment from scratch after downloading images was
+replaced with processing images provided by Ginger Snap Gaming. If you want to contribute, please
+contact me and I will create scripts for downloading the data from the currently deployed
+Igniteinator._
+
 ### Install npm packages
 
 Run once to install npm packages:
@@ -26,6 +31,10 @@ If deploying: Symlink to `remote_sync.sh` from
 [Poor mans rsync](https://github.com/waldeinburg/poor-mans-rsync).
 
 ### Development certificate
+
+To ensure that the service worker is functioning without bypassing security a certificate is
+generated and registered. The process needs to be repeated after a couple of months (the symptom
+is that Chrome complains that the server cannot be reached).
 
 Run:
 
@@ -40,12 +49,6 @@ In Chrome: Go to [Settings - Manage certificates](chrome://settings/certificates
 choose `/home/.../_certifiable_certs/.../dev-root-trust-this.pem`.
 
 Forget adding the certificate in Android; it doesn't work.
-
-### Generate data
-
-To download images and generate data files:
-
-    ./gen-data/run-complete-generate-data.sh
 
 ## Development
 
