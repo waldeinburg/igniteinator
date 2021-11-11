@@ -26,6 +26,8 @@
             "fig:build"    ["run" "-m" "figwheel.main"
                             "--optimizations" "advanced"
                             "--build-once" "prod"]
+            ;; Cleans service worker compile folder, not target/public/sw.js.
+            "fig:clean-sw" ["run" "-m" "figwheel.main" "--clean" "sw"]
             ;; No sw build without optimizations (cf. sw.cljs.edn).
             "fig:build-sw" ["run" "-m" "figwheel.main"
                             "--optimizations" "advanced"
