@@ -1,11 +1,13 @@
-(ns igniteinator.ui.singletons.clear-data-button
+(ns igniteinator.ui.settings.clear-data-button
   (:require [igniteinator.util.re-frame :refer [<sub-ref >evt]]
             [igniteinator.text :refer [txt txt-c]]
             [igniteinator.ui.components.dialog :refer [dialog]]
             [reagent-material-ui.core.button :refer [button]]))
 
 (defn clear-data-dialog []
-  (let [on-close #(>evt :clear-data/set-dialog-open? false)]
+  (let [on-close (fn []
+                   (>evt :set-settings-menu-open? false)
+                   (>evt :clear-data/set-dialog-open? false))]
     [dialog {:title     (txt :clear-data/dialog-title)
              :open?-ref (<sub-ref :clear-data/dialog-open?)
              :on-close  on-close

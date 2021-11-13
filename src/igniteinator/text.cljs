@@ -46,10 +46,12 @@
    :app-update-message          {:en "New version available!"}
    :app-update-button           {:en "Use now"}
    :caching-progress-title      {:en "Downloading images"}
+   :share/button-tooltip        {:en "Share card list"}
    :share/dialog-title          {:en "Share card list"}
    :share/dialog-text           {:en "Copy the following URL or list of names to share the currently listed cards."}
    :share/snackbar-text         {:en "{value} copied to clipboard!"}
    :language-button-tooltip     {:en "Language"}
+   :settings-button-tooltip     {:en "Settings"}
    :install-app                 {:en "Install app"}
    :add-to-home-screen          {:en "Add to Home screen"}
    :a2hs-instructions-title     {:en "Add to Home screen: Instructions"}

@@ -3,6 +3,7 @@
             [igniteinator.util.event :as event]
             [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
             [igniteinator.ui.components.dialog :refer [dialog]]
+            [igniteinator.ui.components.tooltip :refer [tooltip]]
             [promesa.core :as p]
             [reagent.core :as r]
             [reagent-material-ui.core.box :refer [box]]
@@ -65,5 +66,6 @@
      [share-dialog value]
      [share-snackbar]
      (if value
-       [icon-button {:on-click #(>evt :share/set-dialog-open? true)}
-        [share-icon]])]))
+       [tooltip (txt :share/button-tooltip)
+        [icon-button {:on-click #(>evt :share/set-dialog-open? true)}
+         [share-icon]]])]))

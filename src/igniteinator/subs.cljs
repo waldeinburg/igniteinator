@@ -336,3 +336,5 @@
 (reg-sub-db :install-dialog/open?)
 
 (reg-sub-db :clear-data/dialog-open?)
+
+(reg-sub-db :settings-menu-open?)

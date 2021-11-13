@@ -6,8 +6,8 @@
             [igniteinator.ui.components.link :refer [external-link]]
             [igniteinator.ui.singletons.share-button :refer [share-button]]
             [igniteinator.ui.singletons.install-button :refer [install-button]]
-            [igniteinator.ui.singletons.clear-data-button :refer [clear-data-button]]
             [igniteinator.ui.singletons.language-menu :refer [language-menu]]
+            [igniteinator.ui.settings.settings-menu :refer [settings-button]]
             [goog.dom :as gdom]
             [reagent-material-ui.core.box :refer [box]]
             [reagent-material-ui.core.typography :refer [typography]]
@@ -101,5 +101,5 @@
      [box {:ml "auto"}
       [share-button]
       [language-menu]
-      [clear-data-button]
+      [settings-button]
       [install-button]]]]])

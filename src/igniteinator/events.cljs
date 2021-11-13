@@ -279,3 +279,5 @@
   :data-cleared
   (fn [_ _]
     {:reload nil}))
+
+(reg-event-db-assoc :set-settings-menu-open?)
