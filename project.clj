@@ -33,11 +33,13 @@
                             "--optimizations" "advanced"
                             "--fw-opts" {:final-output-to "target/final/sw.js"}
                             "--build-once" "sw"]
+            ;; Service worker dev-mode without cache.
             "fig:dev-sw"   ["run" "-m" "figwheel.main"
                             "--compile-opts" {:dev? true}
                             "--fw-opts" {:final-output-to "target/public/sw.js"}
                             "--optimizations" "simple"
                             "--build-once" "sw"]
+            ;; Not :dev? true; this is debugging the real behavior.
             "fig:debug-sw" ["run" "-m" "figwheel.main"
                             "--compile-opts" {:debug? true}
                             "--fw-opts" {:final-output-to "target/public/sw.js"}
