@@ -136,7 +136,6 @@
     (->> keys
       (map #(when-not (#{app-cache-name image-cache-name} %)
               (.delete js/caches %)))
-      clj->js
       p/all)))
 
 (defn activate-service-worker []
@@ -174,12 +173,21 @@
   (info "Received skip-waiting")
   (.skipWaiting js/self))
 
+(defn handle-clear-data [client-id]
+  (info "Clearing data")
+  (p/let [keys (.keys js/caches)]
+    (->
+      (map #(.delete js/caches %) keys)
+      p/all
+      (p/then #(post-msg client-id :data-cleared nil)))))
+
 (def handle-message (msg/message-handler
                       (fn [msg-type msg-data e]
                         (let [client-id (.. e -source -id)]
                           (condp = msg-type
                             :mode (handle-mode msg-data client-id)
                             :skip-waiting (handle-skip-waiting)
+                            :clear-data (handle-clear-data client-id)
                             (warn "Invalid message type" (if (keyword? msg-type)
                                                            (name msg-type)
                                                            msg-type)))))))

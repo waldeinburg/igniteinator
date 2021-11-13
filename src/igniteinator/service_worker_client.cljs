@@ -2,12 +2,15 @@
   (:require [igniteinator.util.re-frame :refer [>evt]]
             [igniteinator.util.message :as msg]
             [igniteinator.ui.singletons.caching-progress :refer [handle-img-cache-message]]
-            [promesa.core :as p]))
+            [promesa.core :as p])
+  (:require-macros [igniteinator.util.debug :refer [dbg]]))
 
 (def handle-message (msg/message-handler
                       (fn [msg-type msg-data _]
+                        (dbg "Received message" (clj->js msg-type))
                         (condp = msg-type
                           :img-caching-progress (handle-img-cache-message msg-data)
+                          :data-cleared (>evt :data-cleared)
                           (js/console.warn "Invalid message type" (if (keyword? msg-type)
                                                                     (name msg-type)
                                                                     msg-type))))))

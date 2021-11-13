@@ -334,3 +334,5 @@
                               :names names))})))
 
 (reg-sub-db :install-dialog/open?)
+
+(reg-sub-db :clear-data/dialog-open?)

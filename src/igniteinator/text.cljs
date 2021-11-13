@@ -7,6 +7,7 @@
   {
    :subtitle                    {:en "an inator for"}
    :ok                          {:en "ok"}
+   :cancel                      {:en "cancel"}
    :close                       {:en "close"}
    :back                        {:en "back"}
    :some-of                     {:en "some of"}
@@ -53,6 +54,9 @@
    :add-to-home-screen          {:en "Add to Home screen"}
    :a2hs-instructions-title     {:en "Add to Home screen: Instructions"}
    :got-it                      {:en "Got it!"}
+   :clear-data/button-text      {:en "Clear data …"}
+   :clear-data/dialog-title     {:en "Clear data"}
+   :clear-data/dialog-text      {:en "Do you want to clear all data and reload the page?"}
    ;; A2HS Instructions for iPhone. Cf. https://www.netguru.com/blog/pwa-ios.
    ;; We cannot show the icon because of Apple copyright.
    ;; (https://developer.apple.com/design/human-interface-guidelines/sf-symbols/overview/)

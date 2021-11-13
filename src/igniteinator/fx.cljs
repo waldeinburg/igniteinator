@@ -1,9 +1,9 @@
 (ns igniteinator.fx
   (:require [igniteinator.util.message :as msg]
-            [igniteinator.util.environment :as environment]
             [re-frame.core :refer [reg-fx]]
             [akiroz.re-frame.storage :as storage]
-            [promesa.core :as p]))
+            [promesa.core :as p])
+  (:require-macros [igniteinator.util.debug :refer [dbg]]))
 
 (defn- reload []
   (.. js/window -location reload))
@@ -43,8 +43,9 @@
 (reg-fx
   :post-message
   (fn [[msg-type msg-data]]
+    (dbg "Post message fx" (clj->js msg-type))
     (if-let [sw-cnt js/navigator.serviceWorker]
       ;; Be sure the message is not lost because of race conditions.
       (p/let [sw-reg (.-ready sw-cnt)]
-        (if (environment/standalone-mode?)
-          (msg/post (.-active sw-reg) msg-type msg-data))))))
+        (msg/post (.-active sw-reg) msg-type msg-data))
+      (js/console.warn "navigator.serviceWorker not available"))))

@@ -265,5 +265,17 @@
 (reg-event-db-assoc :share/set-snackbar-open?)
 (reg-event-db-assoc :share/set-mode)
 
-(reg-event-db-assoc
-  :install-dialog/set-open?)
+(reg-event-db-assoc :install-dialog/set-open?)
+
+(reg-event-db-assoc :clear-data/set-dialog-open?)
+(reg-event-fx
+  :clear-data
+  (fn [{:keys [db]}]
+    {:db (assoc db :waiting? true)
+     ;; Clear local storage, then message service worker to clear cache.
+     :fx [[:store {}]
+          [:post-message [:clear-data]]]}))
+(reg-event-fx
+  :data-cleared
+  (fn [_ _]
+    {:reload nil}))

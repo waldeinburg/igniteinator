@@ -19,6 +19,7 @@
                          :snackbar-open? false
                          :mode           :url}
    :install-dialog      {:open? false}
+   :clear-data          {:dialog-open? false}
    :select-cards-dialog {:search-str ""}
    :cards-page          {:base           :all
                          :filters        []
