@@ -3,21 +3,19 @@
             [igniteinator.util.re-frame :refer [<sub >evt]]
             [igniteinator.util.reagent :refer [add-children]]
             [igniteinator.constants :as const]
+            [igniteinator.ui.components.menu-button :refer [menu-button]]
             [igniteinator.ui.components.link :refer [external-link]]
             [igniteinator.ui.singletons.share-button :refer [share-button]]
             [igniteinator.ui.singletons.install-button :refer [install-button]]
             [igniteinator.ui.singletons.language-menu :refer [language-menu]]
             [igniteinator.ui.settings.settings-menu :refer [settings-button]]
-            [goog.dom :as gdom]
             [reagent-material-ui.core.box :refer [box]]
             [reagent-material-ui.core.typography :refer [typography]]
             [reagent-material-ui.core.app-bar :refer [app-bar]]
             [reagent-material-ui.core.toolbar :refer [toolbar]]
             [reagent-material-ui.core.button :refer [button]]
             [reagent-material-ui.icons.menu :refer [menu] :rename {menu menu-icon}]
-            [reagent-material-ui.core.menu :refer [menu]]
             [reagent-material-ui.core.menu-item :refer [menu-item]]
-            [reagent-material-ui.core.icon-button :refer [icon-button]]
             [reagent-material-ui.core.use-media-query :refer [use-media-query]]))
 
 (def main-menu-list [[:cards :cards-page-title]
@@ -52,20 +50,14 @@
 
 (defn main-menu-mobile []
   (let [current-page (<sub :current-page)
-        open?        (<sub :main-menu-mobile/open?)
         on-close     #(>evt :main-menu-mobile/set-open? false)]
     [box {:mr 2}
-     [icon-button {:id            :main-menu-button
-                   :aria-controls :main-menu-mobile
-                   :aria-haspopup true
-                   :aria-expanded open?
-                   :on-click      #(>evt :main-menu-mobile/set-open? true)}
-      [menu-icon]]
-     [menu {:id            :main-menu-mobile
-            :open          open?
-            :on-close      on-close
-            :anchor-el     #(gdom/getElement (name :main-menu-button))
-            :MenuListProps {:aria-labelledby :main-menu-button}}
+     [menu-button {:button-id     :main-menu-button
+                   :menu-id       :main-menu-mobile
+                   :open?-sub     :main-menu-mobile/open?
+                   :set-open?-evt :main-menu-mobile/set-open?
+                   :tooltip-key   :main-menu-button-tooltip
+                   :icon          menu-icon}
       (add-children
         (main-menu-items current-page
           (fn [page-key title active?]

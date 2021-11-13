@@ -50,6 +50,7 @@
    :share/dialog-title          {:en "Share card list"}
    :share/dialog-text           {:en "Copy the following URL or list of names to share the currently listed cards."}
    :share/snackbar-text         {:en "{value} copied to clipboard!"}
+   :main-menu-button-tooltip    {:en "Main menu"}
    :language-button-tooltip     {:en "Language"}
    :settings-button-tooltip     {:en "Settings"}
    :install-app                 {:en "Install app"}
