@@ -26,5 +26,6 @@
 (defn clear-data-button []
   [:<>
    [clear-data-dialog]
-   [button {:on-click #(>evt :clear-data/set-dialog-open? true)}
+   [button {:variant  :outlined
+            :on-click #(>evt :clear-data/set-dialog-open? true)}
     (txt :clear-data/button-text)]])

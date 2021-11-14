@@ -9,7 +9,8 @@
   {:value value, :label (txt label-key)})
 
 (defn size-settings []
-  [form-control {:component "fieldset"}
+  [form-control {:component  "fieldset"
+                 :class-name :full-width}
    [form-label {:component "legend"} (txt :settings.size/label)]
    [slider {:value               (<sub :size)
             :value-label-display :off
