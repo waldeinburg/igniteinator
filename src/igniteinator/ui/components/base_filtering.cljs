@@ -5,6 +5,7 @@
             [igniteinator.ui.components.tooltip :refer [tooltip]]
             [igniteinator.ui.components.search-bar :refer [search-bar]]
             [igniteinator.ui.components.dialog :refer [dialog]]
+            [igniteinator.ui.components.radio-group :refer [radio-group radio]]
             [reagent.core :as r]
             [reagent-material-ui.core.toolbar :refer [toolbar]]
             [reagent-material-ui.core.box :refer [box]]
@@ -17,37 +18,24 @@
             [reagent-material-ui.core.form-label :refer [form-label]]
             [reagent-material-ui.core.form-group :refer [form-group]]
             [reagent-material-ui.core.form-control-label :refer [form-control-label]]
-            [reagent-material-ui.core.radio-group :refer [radio-group]]
-            [reagent-material-ui.core.radio :refer [radio] :rename {radio mui-radio}]
             [reagent-material-ui.core.form-helper-text :refer [form-helper-text]]
             [reagent-material-ui.core.checkbox :refer [checkbox]]
             [reagent-material-ui.lab.toggle-button-group :refer [toggle-button-group]]
             [reagent-material-ui.lab.toggle-button :refer [toggle-button]]))
 
-(defn radio-elem []
-  (r/as-element [mui-radio]))
-
-(defn combo-radio [value label on-dialog-close]
-  (let [radio-elem (radio-elem)]
-    (fn [value label on-dialog-close]
-      [form-control-label {:value    value
-                           :control  radio-elem
-                           :label    label
-                           :on-click on-dialog-close}])))
-
 (defn combos-dialog [{:keys [open?-ref on-close value-ref on-change]}]
   [dialog {:title     (txt :combos-dialog-title)
            :open?-ref open?-ref
            :on-close  on-close}
-   [form-control {:component "fieldset"}
-    [radio-group {:value     @value-ref
-                  :on-change #(on-change (event/value->keyword %))}
-     [combo-radio
-      :official
-      (r/as-element [:<> (txt :combos-dialog-official-item)
-                     [form-helper-text (txt :combos-dialog-official-help)]])
-      on-close]
-     [combo-radio :all (txt :combos-dialog-all-item) on-close]]]])
+   [radio-group {:value-ref value-ref
+                 :on-change on-change}
+    [radio {:value    :official
+            :label    (r/as-element [:<> (txt :combos-dialog-official-item)
+                                     [form-helper-text (txt :combos-dialog-official-help)]])
+            :on-click on-close}]
+    [radio {:value    :all
+            :label    (txt :combos-dialog-all-item)
+            :on-click on-close}]]])
 
 (defn dialog-card-item [card <sub-dialog-item-selected?-ref on-dialog-item-selected-change]
   (let [id    (:id card)
