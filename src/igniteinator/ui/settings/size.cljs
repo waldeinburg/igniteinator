@@ -1,15 +1,24 @@
 (ns igniteinator.ui.settings.size
-  (:require [igniteinator.util.re-frame :refer [<sub-ref >evt]]
+  (:require [igniteinator.util.re-frame :refer [<sub >evt]]
             [igniteinator.text :refer [txt]]
-            [igniteinator.ui.components.radio-group :refer [radio-group radio]]))
+            [reagent-material-ui.core.form-control :refer [form-control]]
+            [reagent-material-ui.core.form-label :refer [form-label]]
+            [reagent-material-ui.core.slider :refer [slider]]))
+
+(defn mark [value label-key]
+  {:value value, :label (txt label-key)})
 
 (defn size-settings []
-  [radio-group {:label      (txt :settings.size/label)
-                :row        true
-                :value-ref  (<sub-ref :size)
-                :value-type :number
-                :on-change  #(>evt :set-size %)}
-   [radio {:value 0, :label (txt :settings.size/size-0)}]
-   [radio {:value 1, :label (txt :settings.size/size-1)}]
-   [radio {:value 2, :label (txt :settings.size/size-2)}]
-   [radio {:value 3, :label (txt :settings.size/size-3)}]])
+  [form-control {:component "fieldset"}
+   [form-label {:component "legend"} (txt :settings.size/label)]
+   [slider {:value               (<sub :size)
+            :value-label-display :off
+            :track               false
+            :step                nil
+            :min                 0
+            :max                 3
+            :on-change           #(>evt :set-size %2)
+            :marks               [(mark 0 :settings.size/size-0)
+                                  (mark 1 :settings.size/size-1)
+                                  (mark 2 :settings.size/size-2)
+                                  (mark 3 :settings.size/size-3)]}]])
