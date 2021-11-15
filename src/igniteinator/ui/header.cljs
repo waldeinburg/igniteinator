@@ -3,6 +3,7 @@
             [igniteinator.util.re-frame :refer [<sub >evt]]
             [igniteinator.util.reagent :refer [add-children]]
             [igniteinator.constants :as const]
+            [igniteinator.ui.hooks :refer [desktop-menu?-hook show-title-in-bar?-hook]]
             [igniteinator.ui.components.menu-button :refer [menu-button]]
             [igniteinator.ui.components.link :refer [external-link]]
             [igniteinator.ui.singletons.share-button :refer [share-button]]
@@ -15,17 +16,13 @@
             [reagent-material-ui.core.toolbar :refer [toolbar]]
             [reagent-material-ui.core.button :refer [button]]
             [reagent-material-ui.icons.menu :refer [menu] :rename {menu menu-icon}]
-            [reagent-material-ui.core.menu-item :refer [menu-item]]
-            [reagent-material-ui.core.use-media-query :refer [use-media-query]]))
+            [reagent-material-ui.core.menu-item :refer [menu-item]]))
 
 (def main-menu-list [[:cards :cards-page-title]
                      [:setups :setups-page-title]])
 
 (defn navigate [page-key]
   (>evt :page/set page-key))
-
-(defn desktop-menu?-hook []
-  (use-media-query "(min-width:650px)"))
 
 (defn if-desktop-menu [f]
   [:f> (fn []
@@ -48,6 +45,19 @@
    [typography {:component "h1", :variant "h4"} "Igniteinator"]
    [:div.subtitle "– " (txt :subtitle) " " [external-link const/ignite-link "Ignite"]]])
 
+(defn bar-title []
+  [:f>
+   (fn []
+     (if (show-title-in-bar?-hook)
+       [title]))])
+
+(defn mobile-menu-title []
+  [:f>
+   (fn []
+     (if (not (show-title-in-bar?-hook))
+       [box {:px 2, :pb 2}
+        [title]]))])
+
 (defn main-menu-mobile []
   (let [current-page (<sub :current-page)
         on-close     #(>evt :main-menu-mobile/set-open? false)]
@@ -58,6 +68,7 @@
                    :set-open?-evt :main-menu-mobile/set-open?
                    :tooltip-key   :main-menu-button-tooltip
                    :icon          menu-icon}
+      [mobile-menu-title]
       (add-children
         (main-menu-items current-page
           (fn [page-key title active?]
@@ -88,7 +99,7 @@
    [app-bar {:position :static, :color :transparent}
     [toolbar {:display :flex}
      [if-mobile-menu [main-menu-mobile]]
-     [title]
+     [bar-title]
      [if-desktop-menu [main-menu-desktop]]
      [box {:ml "auto"}
       [share-button]

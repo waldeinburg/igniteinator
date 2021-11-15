@@ -3,6 +3,7 @@
             [igniteinator.ui.pages.cards-page :refer [cards-page]]
             [igniteinator.ui.header :refer [header]]
             [igniteinator.ui.footer :refer [footer]]
+            [igniteinator.ui.hooks :refer [desktop-menu?-hook]]
             [igniteinator.ui.components.loading-progress :refer [loading-progress]]
             [igniteinator.ui.components.wait-modal :refer [waiting-modal]]
             [igniteinator.ui.singletons.reload-snackbar :refer [reload-snackbar]]
@@ -31,13 +32,23 @@
       :fatal-error [:div (<sub :fatal-message)]
       [:div (str "No such mode: " mode)])))
 
+(defn main []
+  [:f>
+   (fn []
+     (let [desktop-menu? (desktop-menu?-hook)]
+       [:<>
+        (if (not desktop-menu?)
+          [header])
+        [container
+         (if desktop-menu?
+           [header])
+         [content]
+         [footer]]]))])
+
 (defn app []
   [:<>
    [css-baseline]
-   [container
-    [header]
-    [content]
-    [footer]]
+   [main]
    [caching-progress]
    [reload-snackbar]
    [waiting-modal]])
