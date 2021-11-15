@@ -5,4 +5,4 @@
   (use-media-query "(min-width:725px)"))
 
 (defn show-title-in-bar?-hook []
-  (use-media-query "(min-width: 475px)"))
+  (use-media-query "(min-width: 480px)"))

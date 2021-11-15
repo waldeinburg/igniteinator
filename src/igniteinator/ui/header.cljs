@@ -67,7 +67,10 @@
                    :open?-sub     :main-menu-mobile/open?
                    :set-open?-evt :main-menu-mobile/set-open?
                    :tooltip-key   :main-menu-button-tooltip
-                   :icon          menu-icon}
+                   :button-elem   button
+                   :icon          menu-icon
+                   :button-props  {:color   :primary
+                                   :variant :outlined}}
       [mobile-menu-title]
       (add-children
         (main-menu-items current-page

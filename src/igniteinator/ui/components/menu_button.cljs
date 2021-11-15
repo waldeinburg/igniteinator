@@ -7,20 +7,27 @@
             [reagent-material-ui.core.menu :refer [menu]]
             [reagent-material-ui.core.icon-button :refer [icon-button]]))
 
-(defn menu-button [{:keys [button-id menu-id tooltip-key icon open?-sub set-open?-evt]}
+(defn menu-button [{:keys [button-elem
+                           button-id menu-id tooltip-key icon
+                           open?-sub set-open?-evt
+                           button-props
+                           menu-props]
+                    :or   {button-elem icon-button}}
                    & children]
   (let [open? (<sub open?-sub)]
     [:<>
      [tooltip (txt tooltip-key)
-      [icon-button {:id            button-id
-                    :aria-controls menu-id
-                    :aria-haspopup true
-                    :aria-expanded open?
-                    :on-click      #(>evt set-open?-evt true)}
+      [button-elem (into {:id            button-id
+                          :aria-controls menu-id
+                          :aria-haspopup true
+                          :aria-expanded open?
+                          :on-click      #(>evt set-open?-evt true)}
+                     button-props)
        [icon]]]
-     [menu {:id            menu-id
-            :open          open?
-            :on-close      #(>evt set-open?-evt false)
-            :anchor-el     #(gdom/getElement (name button-id))
-            :MenuListProps {:aria-labelledby button-id}}
+     [menu (into {:id            menu-id
+                  :open          open?
+                  :on-close      #(>evt set-open?-evt false)
+                  :anchor-el     #(gdom/getElement (name button-id))
+                  :MenuListProps {:aria-labelledby button-id}}
+             menu-props)
       (add-children children)]]))
