@@ -13,6 +13,144 @@
       "name": "A New Enemy"
     }
   ],
+  "types": [
+    {
+      "id": 1,
+      "name": "Title"
+    },
+    {
+      "id": 2,
+      "name": "Ability"
+    },
+    {
+      "id": 3,
+      "name": "AoE"
+    },
+    {
+      "id": 4,
+      "name": "Blade"
+    },
+    {
+      "id": 5,
+      "name": "Bow"
+    },
+    {
+      "id": 6,
+      "name": "Equipment"
+    },
+    {
+      "id": 7,
+      "name": "Event"
+    },
+    {
+      "id": 8,
+      "name": "Fire"
+    },
+    {
+      "id": 9,
+      "name": "Freeze"
+    },
+    {
+      "id": 10,
+      "name": "Healing"
+    },
+    {
+      "id": 11,
+      "name": "Immovable"
+    },
+    {
+      "id": 12,
+      "name": "Impassable Terrain"
+    },
+    {
+      "id": 13,
+      "name": "Item"
+    },
+    {
+      "id": 14,
+      "name": "Lightning"
+    },
+    {
+      "id": 15,
+      "name": "Melee"
+    },
+    {
+      "id": 16,
+      "name": "Minion"
+    },
+    {
+      "id": 17,
+      "name": "Mount"
+    },
+    {
+      "id": 18,
+      "name": "Movement"
+    },
+    {
+      "id": 19,
+      "name": "Nature"
+    },
+    {
+      "id": 20,
+      "name": "Passable Terrain"
+    },
+    {
+      "id": 21,
+      "name": "Projectile"
+    },
+    {
+      "id": 22,
+      "name": "Ranged"
+    },
+    {
+      "id": 23,
+      "name": "Shield"
+    },
+    {
+      "id": 24,
+      "name": "Small"
+    },
+    {
+      "id": 25,
+      "name": "Special"
+    },
+    {
+      "id": 26,
+      "name": "Spell"
+    },
+    {
+      "id": 27,
+      "name": "Terrain"
+    },
+    {
+      "id": 28,
+      "name": "Weapon"
+    },
+    {
+      "id": 29,
+      "name": "Dark"
+    },
+    {
+      "id": 30,
+      "name": "Fly"
+    },
+    {
+      "id": 31,
+      "name": "Modifier"
+    },
+    {
+      "id": 32,
+      "name": "Monetary"
+    },
+    {
+      "id": 33,
+      "name": "War Machine"
+    },
+    {
+      "id": 34,
+      "name": "Transformation"
+    }
+  ],
   "setups": [
     {
       "id": 0,
