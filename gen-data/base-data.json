@@ -155,490 +155,983 @@
     {
       "id": 0,
       "name": "Recommended starter set",
-      "requires": [1],
-      "cards": [6, 11, 20, 34, 35, 37, 38, 51, 57, 59, 61, 71, 84, 113, 115, 122]
+      "requires": [
+        1
+      ],
+      "cards": [
+        6,
+        11,
+        20,
+        34,
+        35,
+        37,
+        38,
+        51,
+        57,
+        59,
+        61,
+        71,
+        84,
+        113,
+        115,
+        122
+      ]
     }
   ],
   "cards": [
     {
       "id": 1,
-      "name": "Acid Arrow"
+      "name": "Acid Arrow",
+      "types": [
+        21
+      ]
     },
     {
       "id": 2,
-      "name": "Adept Trickster"
+      "name": "Adept Trickster",
+      "types": [
+        1
+      ]
     },
     {
       "id": 3,
-      "name": "Adrenaline"
+      "name": "Adrenaline",
+      "types": [
+        2
+      ]
     },
     {
       "id": 4,
-      "name": "Advanced Planning"
+      "name": "Advanced Planning",
+      "types": [
+        7
+      ]
     },
     {
       "id": 5,
-      "name": "Air Shield"
+      "name": "Air Shield",
+      "types": [
+        23
+      ]
     },
     {
       "id": 6,
-      "name": "Arrow"
+      "name": "Arrow",
+      "types": [
+        21
+      ]
     },
     {
       "id": 7,
-      "name": "Arrow Storm"
+      "name": "Arrow Storm",
+      "types": [
+        2
+      ]
     },
     {
       "id": 8,
-      "name": "Aura Blast"
+      "name": "Aura Blast",
+      "types": [
+        7
+      ]
     },
     {
       "id": 9,
-      "name": "Avalanche"
+      "name": "Avalanche",
+      "types": [
+        26,
+        19
+      ]
     },
     {
       "id": 10,
-      "name": "Ballista"
+      "name": "Ballista",
+      "types": [
+        33,
+        11
+      ]
     },
     {
       "id": 11,
-      "name": "Berserk"
+      "name": "Berserk",
+      "types": [
+        2
+      ]
     },
     {
       "id": 12,
-      "name": "Blessed Spear"
+      "name": "Blessed Spear",
+      "types": [
+        28,
+        15,
+        4
+      ]
     },
     {
       "id": 13,
-      "name": "Bone Crusher"
+      "name": "Bone Crusher",
+      "types": [
+        2
+      ]
     },
     {
       "id": 14,
-      "name": "Catapult"
+      "name": "Catapult",
+      "types": [
+        33,
+        11
+      ]
     },
     {
       "id": 15,
-      "name": "Change of Heart"
+      "name": "Change of Heart",
+      "types": [
+        7
+      ]
     },
     {
       "id": 16,
-      "name": "Chariot"
+      "name": "Chariot",
+      "types": [
+        18,
+        17
+      ]
     },
     {
       "id": 17,
-      "name": "Charm"
+      "name": "Charm",
+      "types": [
+        26
+      ]
     },
     {
       "id": 19,
-      "name": "Close Range Master"
+      "name": "Close Range Master",
+      "types": [
+        2
+      ]
     },
     {
       "id": 20,
-      "name": "Conditioning"
+      "name": "Conditioning",
+      "types": [
+        18
+      ]
     },
     {
       "id": 21,
-      "name": "Consume Energy"
+      "name": "Consume Energy",
+      "types": [
+        26,
+        29
+      ]
     },
     {
       "id": 22,
-      "name": "Counter Spell"
+      "name": "Counter Spell",
+      "types": [
+        26
+      ]
     },
     {
       "id": 23,
-      "name": "Crystal Shard"
+      "name": "Crystal Shard",
+      "types": [
+        13,
+        24
+      ]
     },
     {
       "id": 24,
-      "name": "Cursed Blade"
+      "name": "Cursed Blade",
+      "types": [
+        28,
+        15,
+        4,
+        24
+      ]
     },
     {
       "id": 25,
-      "name": "Cyclone"
+      "name": "Cyclone",
+      "types": [
+        26,
+        19
+      ]
     },
     {
       "id": 26,
-      "name": "Dagger"
+      "name": "Dagger",
+      "types": [
+        28,
+        15,
+        4,
+        24
+      ]
     },
     {
       "id": 27,
-      "name": "Dead Aim"
+      "name": "Dead Aim",
+      "types": [
+        2
+      ]
     },
     {
       "id": 28,
-      "name": "Deadly Arrow"
+      "name": "Deadly Arrow",
+      "types": [
+        21
+      ]
     },
     {
       "id": 29,
-      "name": "Diplomacy"
+      "name": "Diplomacy",
+      "types": [
+        2
+      ]
     },
     {
       "id": 30,
-      "name": "Disarm"
+      "name": "Disarm",
+      "types": [
+        7
+      ]
     },
     {
       "id": 31,
-      "name": "Divine Shield"
+      "name": "Divine Shield",
+      "types": [
+        23
+      ]
     },
     {
       "id": 32,
-      "name": "Dragon Potion"
+      "name": "Dragon Potion",
+      "types": [
+        13,
+        34,
+        8,
+        30
+      ]
     },
     {
       "id": 33,
-      "name": "Earthquake"
+      "name": "Earthquake",
+      "types": [
+        26,
+        19,
+        3
+      ]
     },
     {
       "id": 34,
-      "name": "Fire Arrow"
+      "name": "Fire Arrow",
+      "types": [
+        21,
+        26,
+        8
+      ]
     },
     {
       "id": 35,
-      "name": "Flail"
+      "name": "Flail",
+      "types": [
+        28,
+        15,
+        25
+      ]
     },
     {
       "id": 36,
-      "name": "Freeze"
+      "name": "Freeze",
+      "types": [
+        26,
+        19,
+        9
+      ]
     },
     {
       "id": 37,
-      "name": "Full Moon Axe"
+      "name": "Full Moon Axe",
+      "types": [
+        28,
+        15,
+        4
+      ]
     },
     {
       "id": 38,
-      "name": "Gladiator Net"
+      "name": "Gladiator Net",
+      "types": [
+        13,
+        6
+      ]
     },
     {
       "id": 39,
-      "name": "Gold Stash"
+      "name": "Gold Stash",
+      "types": [
+        13,
+        32
+      ]
     },
     {
       "id": 40,
-      "name": "Grand Finale"
+      "name": "Grand Finale",
+      "types": [
+        7
+      ]
     },
     {
       "id": 41,
-      "name": "Hatchet"
+      "name": "Hatchet",
+      "types": [
+        28,
+        15,
+        4,
+        24
+      ]
     },
     {
       "id": 42,
-      "name": "Healing Spell"
+      "name": "Healing Spell",
+      "types": [
+        26,
+        10
+      ]
     },
     {
       "id": 43,
-      "name": "Hex Bomb"
+      "name": "Hex Bomb",
+      "types": [
+        13,
+        24,
+        26,
+        3
+      ]
     },
     {
       "id": 44,
-      "name": "Hexed Arrow"
+      "name": "Hexed Arrow",
+      "types": [
+        21,
+        26
+      ]
     },
     {
       "id": 45,
-      "name": "Hexing"
+      "name": "Hexing",
+      "types": [
+        26,
+        29
+      ]
     },
     {
       "id": 46,
-      "name": "Hideaway"
+      "name": "Hideaway",
+      "types": [
+        7
+      ]
     },
     {
       "id": 47,
-      "name": "Hoarding"
+      "name": "Hoarding",
+      "types": [
+        7
+      ]
     },
     {
       "id": 48,
-      "name": "Horse"
+      "name": "Horse",
+      "types": [
+        18,
+        17
+      ]
     },
     {
       "id": 49,
-      "name": "Hydro Necromancer"
+      "name": "Hydro Necromancer",
+      "types": [
+        1
+      ]
     },
     {
       "id": 50,
-      "name": "Ice Arrow"
+      "name": "Ice Arrow",
+      "types": [
+        21,
+        26,
+        9
+      ]
     },
     {
       "id": 51,
-      "name": "Ice Wall"
+      "name": "Ice Wall",
+      "types": [
+        26,
+        12,
+        3
+      ]
     },
     {
       "id": 52,
-      "name": "Javelin"
+      "name": "Javelin",
+      "types": [
+        28,
+        15,
+        22,
+        4
+      ]
     },
     {
       "id": 53,
-      "name": "King of the Jungle"
+      "name": "King of the Jungle",
+      "types": [
+        1
+      ]
     },
     {
       "id": 54,
-      "name": "Kneecapped"
+      "name": "Kneecapped",
+      "types": [
+        2
+      ]
     },
     {
       "id": 55,
-      "name": "Kraken"
+      "name": "Kraken",
+      "types": [
+        26,
+        16,
+        11
+      ]
     },
     {
       "id": 56,
-      "name": "Lance"
+      "name": "Lance",
+      "types": [
+        28,
+        15,
+        4
+      ]
     },
     {
       "id": 57,
-      "name": "Large Quiver"
+      "name": "Large Quiver",
+      "types": [
+        13,
+        6
+      ]
     },
     {
       "id": 58,
-      "name": "Lesser Eagle"
+      "name": "Lesser Eagle",
+      "types": [
+        18,
+        17,
+        30
+      ]
     },
     {
       "id": 59,
-      "name": "Lightning Bolt"
+      "name": "Lightning Bolt",
+      "types": [
+        26,
+        19,
+        14
+      ]
     },
     {
       "id": 60,
-      "name": "Little Helper"
+      "name": "Little Helper",
+      "types": [
+        1
+      ]
     },
     {
       "id": 61,
-      "name": "Long Bow"
+      "name": "Long Bow",
+      "types": [
+        28,
+        22,
+        5
+      ]
     },
     {
       "id": 62,
-      "name": "Long-Range Arrow"
+      "name": "Long-Range Arrow",
+      "types": [
+        21
+      ]
     },
     {
       "id": 63,
-      "name": "Loving Squire"
+      "name": "Loving Squire",
+      "types": [
+        7
+      ]
     },
     {
       "id": 64,
-      "name": "Magic Potion Bomb"
+      "name": "Magic Potion Bomb",
+      "types": [
+        13,
+        24,
+        26,
+        3
+      ]
     },
     {
       "id": 65,
-      "name": "Magic Quiver"
+      "name": "Magic Quiver",
+      "types": [
+        13,
+        6
+      ]
     },
     {
       "id": 66,
-      "name": "March"
+      "name": "March",
+      "types": [
+        18
+      ]
     },
     {
       "id": 67,
-      "name": "Massive Blizzard"
+      "name": "Massive Blizzard",
+      "types": [
+        26,
+        19
+      ]
     },
     {
       "id": 68,
-      "name": "Master of the Sea"
+      "name": "Master of the Sea",
+      "types": [
+        1
+      ]
     },
     {
       "id": 69,
-      "name": "Medicine"
+      "name": "Medicine",
+      "types": [
+        13,
+        10
+      ]
     },
     {
       "id": 70,
-      "name": "Metal Shield"
+      "name": "Metal Shield",
+      "types": [
+        23
+      ]
     },
     {
       "id": 71,
-      "name": "Meteor Strike"
+      "name": "Meteor Strike",
+      "types": [
+        26,
+        19,
+        3
+      ]
     },
     {
       "id": 72,
-      "name": "Modified Bow"
+      "name": "Modified Bow",
+      "types": [
+        28,
+        15,
+        22,
+        4,
+        5
+      ]
     },
     {
       "id": 73,
-      "name": "Monopoly"
+      "name": "Monopoly",
+      "types": [
+        2
+      ]
     },
     {
       "id": 74,
-      "name": "Morale Boost"
+      "name": "Morale Boost",
+      "types": [
+        7,
+        31
+      ]
     },
     {
       "id": 75,
-      "name": "Old Wooden Shield"
+      "name": "Old Wooden Shield",
+      "types": [
+        23
+      ]
     },
     {
       "id": 76,
-      "name": "Pickpocket"
+      "name": "Pickpocket",
+      "types": [
+        7
+      ]
     },
     {
       "id": 77,
-      "name": "Pike"
+      "name": "Pike",
+      "types": [
+        28,
+        15,
+        4
+      ]
     },
     {
       "id": 78,
-      "name": "Plagued Rats"
+      "name": "Plagued Rats",
+      "types": [
+        13,
+        6
+      ]
     },
     {
       "id": 79,
-      "name": "Pocket Change"
+      "name": "Pocket Change",
+      "types": [
+        13,
+        32
+      ]
     },
     {
       "id": 80,
-      "name": "Poison"
+      "name": "Poison",
+      "types": [
+        13,
+        31
+      ]
     },
     {
       "id": 81,
-      "name": "Poison Arrow"
+      "name": "Poison Arrow",
+      "types": [
+        21
+      ]
     },
     {
       "id": 82,
-      "name": "Poison Blade"
+      "name": "Poison Blade",
+      "types": [
+        28,
+        15,
+        4,
+        24
+      ]
     },
     {
       "id": 83,
-      "name": "Possess"
+      "name": "Possess",
+      "types": [
+        26,
+        29
+      ]
     },
     {
       "id": 84,
-      "name": "Quick Hands"
+      "name": "Quick Hands",
+      "types": [
+        2
+      ]
     },
     {
       "id": 85,
-      "name": "Quick Reflexes"
+      "name": "Quick Reflexes",
+      "types": [
+        18
+      ]
     },
     {
       "id": 86,
-      "name": "Quick Shot"
+      "name": "Quick Shot",
+      "types": [
+        2
+      ]
     },
     {
       "id": 87,
-      "name": "Raiders of the North"
+      "name": "Raiders of the North",
+      "types": [
+        1
+      ]
     },
     {
       "id": 88,
-      "name": "Recurve Bow"
+      "name": "Recurve Bow",
+      "types": [
+        28,
+        22,
+        5
+      ]
     },
     {
       "id": 89,
-      "name": "Reinforcements"
+      "name": "Reinforcements",
+      "types": [
+        7
+      ]
     },
     {
       "id": 90,
-      "name": "Ring Blade"
+      "name": "Ring Blade",
+      "types": [
+        28,
+        15,
+        4
+      ]
     },
     {
       "id": 91,
-      "name": "Ring of Fire"
+      "name": "Ring of Fire",
+      "types": [
+        26,
+        19,
+        8,
+        3
+      ]
     },
     {
       "id": 92,
-      "name": "Rooted"
+      "name": "Rooted",
+      "types": [
+        26,
+        19,
+        3
+      ]
     },
     {
       "id": 93,
-      "name": "Sabotage"
+      "name": "Sabotage",
+      "types": [
+        7
+      ]
     },
     {
       "id": 94,
-      "name": "Scavenger"
+      "name": "Scavenger",
+      "types": [
+        7
+      ]
     },
     {
       "id": 95,
-      "name": "Scorched Earth"
+      "name": "Scorched Earth",
+      "types": [
+        26,
+        20,
+        3
+      ]
     },
     {
       "id": 96,
-      "name": "Servant's Loyalty"
+      "name": "Servant's Loyalty",
+      "types": [
+        7
+      ]
     },
     {
       "id": 97,
-      "name": "Shaman Chieftain"
+      "name": "Shaman Chieftain",
+      "types": [
+        1
+      ]
     },
     {
       "id": 99,
-      "name": "Short Sword"
+      "name": "Short Sword",
+      "types": [
+        28,
+        15,
+        4
+      ]
     },
     {
       "id": 100,
-      "name": "Sled Dogs"
+      "name": "Sled Dogs",
+      "types": [
+        18,
+        17
+      ]
     },
     {
       "id": 101,
-      "name": "Smoke Screen"
+      "name": "Smoke Screen",
+      "types": [
+        13,
+        6
+      ]
     },
     {
       "id": 102,
-      "name": "Stealth Tactics"
+      "name": "Stealth Tactics",
+      "types": [
+        7
+      ]
     },
     {
       "id": 103,
-      "name": "Sure-Footed"
+      "name": "Sure-Footed",
+      "types": [
+        2
+      ]
     },
     {
       "id": 104,
-      "name": "Teleport"
+      "name": "Teleport",
+      "types": [
+        26,
+        18,
+        3
+      ]
     },
     {
       "id": 105,
-      "name": "The Blessed One"
+      "name": "The Blessed One",
+      "types": [
+        1
+      ]
     },
     {
       "id": 106,
-      "name": "Throw Weapon"
+      "name": "Throw Weapon",
+      "types": [
+        2
+      ]
     },
     {
       "id": 107,
-      "name": "Throwing Star"
+      "name": "Throwing Star",
+      "types": [
+        28,
+        22,
+        4,
+        24
+      ]
     },
     {
       "id": 108,
-      "name": "Tiger Mount"
+      "name": "Tiger Mount",
+      "types": [
+        18,
+        17
+      ]
     },
     {
       "id": 109,
-      "name": "Time Bend"
+      "name": "Time Bend",
+      "types": [
+        26,
+        19
+      ]
     },
     {
       "id": 111,
-      "name": "Torch"
+      "name": "Torch",
+      "types": [
+        13,
+        6,
+        8
+      ]
     },
     {
       "id": 112,
-      "name": "Trading Up"
+      "name": "Trading Up",
+      "types": [
+        7
+      ]
     },
     {
       "id": 113,
-      "name": "Triple Sheath"
+      "name": "Triple Sheath",
+      "types": [
+        13,
+        6
+      ]
     },
     {
       "id": 114,
-      "name": "Troop March"
+      "name": "Troop March",
+      "types": [
+        18
+      ]
     },
     {
       "id": 115,
-      "name": "Unicorn"
+      "name": "Unicorn",
+      "types": [
+        18,
+        17
+      ]
     },
     {
       "id": 116,
-      "name": "Vampire's Curse"
+      "name": "Vampire's Curse",
+      "types": [
+        7,
+        31
+      ]
     },
     {
       "id": 117,
-      "name": "Vine Pull"
+      "name": "Vine Pull",
+      "types": [
+        26,
+        19
+      ]
     },
     {
       "id": 118,
-      "name": "Voodoo Doll"
+      "name": "Voodoo Doll",
+      "types": [
+        26,
+        29
+      ]
     },
     {
       "id": 119,
-      "name": "Warhammer"
+      "name": "Warhammer",
+      "types": [
+        28,
+        15,
+        25
+      ]
     },
     {
       "id": 120,
-      "name": "Water Minion"
+      "name": "Water Minion",
+      "types": [
+        26,
+        16
+      ]
     },
     {
       "id": 121,
-      "name": "Water Missile"
+      "name": "Water Missile",
+      "types": [
+        26,
+        19
+      ]
     },
     {
       "id": 122,
-      "name": "Weapon Dealer"
+      "name": "Weapon Dealer",
+      "types": [
+        7
+      ]
     },
     {
       "id": 123,
-      "name": "Wind Arrow"
+      "name": "Wind Arrow",
+      "types": [
+        21,
+        26
+      ]
     }
   ]
 }
