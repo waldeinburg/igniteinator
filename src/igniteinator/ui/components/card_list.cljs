@@ -12,6 +12,11 @@
 (def placeholder-img-src (str constants/img-base-path "/placeholder.png"))
 (def visibility-sensor (r/adapt-react-class (.-default VisibilitySensor)))
 
+(defn card-debug-data [card]
+  (if (<sub :debug/show-card-data)
+    [:ul {:style {:list-style :none, :padding 0}}
+     [:li [:strong "Types: "] (<sub :types-str card)]]))
+
 (defn card-image
   ([card]
    [card-image {} card])
@@ -59,7 +64,9 @@
   ([card]
    [card-container {} card])
   ([props card]
-   [card-image props card]))
+   [:<>
+    [card-image props card]
+    [card-debug-data card]]))
 
 (defn card-grid [{:keys [grid-breakpoints-ref component]
                   :or {grid-breakpoints-ref (<sub-ref :grid-breakpoints)

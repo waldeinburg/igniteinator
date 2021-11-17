@@ -9,6 +9,8 @@
             [re-frame.core :refer [reg-event-fx reg-event-db inject-cofx]]
             [ajax.core :as ajax]))
 
+(reg-event-db-assoc :debug/set-show-card-data)
+
 (reg-event-fx
   :init-db
   [(inject-cofx :query-params)
@@ -59,6 +61,7 @@
       (assoc
         :mode :ready
         :boxes (id-map (:boxes result))
+        :types (id-map (:types result))
         :cards (id-map (:cards result))
         :combos-set (:combos result)
         :setups (id-map (:setups result)))

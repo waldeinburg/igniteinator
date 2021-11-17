@@ -6,6 +6,7 @@
   {
    :language            constants/default-language
    :options             {:size 1}
+   :debug               {:show-card-data false}
    :mode                :init
    :waiting?            false
    :main-menu-mobile    {:open? false}

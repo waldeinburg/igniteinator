@@ -11,6 +11,8 @@
             [clojure.string :as s])
   (:require-macros [reagent.ratom :as ra]))
 
+(reg-sub-db :debug/show-card-data)
+
 (reg-sub-db :language)
 (reg-sub-db :mode)
 (reg-sub-db :waiting?)
@@ -165,6 +167,13 @@
           base
           (filter-util/filter-multi preds)
           (sort-util/sort-by-hierarchy comps))))))
+
+(reg-sub
+  :types-str
+  (fn [db [_ card]]
+    (s/join ", "
+      (map #(-> db :types (get %) :name)
+        (:types card)))))
 
 (reg-sub-db
   :boxes-map
