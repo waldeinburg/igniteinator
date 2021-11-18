@@ -169,11 +169,15 @@
           (sort-util/sort-by-hierarchy comps))))))
 
 (reg-sub
-  :types-str
+  :card/types-str
   (fn [db [_ card]]
     (s/join ", "
       (map #(-> db :types (get %) :name)
         (:types card)))))
+(reg-sub
+  :card/box-name
+  (fn [db [_ card]]
+    (-> db :boxes (get (:box card)) :name)))
 
 (reg-sub-db
   :boxes-map
