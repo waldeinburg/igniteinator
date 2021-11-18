@@ -15,7 +15,8 @@
 (defn card-debug-data [card]
   (if (<sub :debug/show-card-data)
     [:ul {:style {:list-style :none, :padding 0}}
-     [:li [:strong "Types: "] (<sub :types-str card)]]))
+     [:li [:strong "Types: "] (<sub :types-str card)]
+     [:li [:strong "Cost: "] (str (:cost card))]]))
 
 (defn card-image
   ([card]
