@@ -4,9 +4,8 @@
 cd "${0%/*}" || exit 1
 source ../common.inc.sh
 
-type_img=$(mktemp --suffix=".png")
-types_file=$(mktemp)
-trap 'rm -f "$type_img" "$types_file"' 0
+tmp_img=$(mktemp --suffix=".png")
+trap 'rm -f "$tmp_img"' 0
 
 jq -r '
   .cards[] |
@@ -19,9 +18,9 @@ jq -r '
     cost="[5,7,9,11,13,15,17,20]"
   else
     img="../$IMG_INPUT_DIR/en/$name.jpg"
-    convert "$img" -crop 230x171+1908+3509 -negate "$type_img"
+    convert "$img" -crop 230x171+1908+3509 -negate "$tmp_img"
     # psm 8: single word
-    cost=$(tesseract --psm 8 "$type_img" - 2>/dev/null | \
+    cost=$(tesseract --psm 8 "$tmp_img" - 2>/dev/null | \
       # Correct some cases which Tesseract gets wrong and remove junk characters.
       sed -r '
       s/\$/8/;
