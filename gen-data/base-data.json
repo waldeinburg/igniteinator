@@ -183,6 +183,7 @@
       "id": 1,
       "name": "Acid Arrow",
       "cost": 7,
+      "honor": 2,
       "types": [
         21
       ]
@@ -208,6 +209,7 @@
       "id": 3,
       "name": "Adrenaline",
       "cost": 5,
+      "honor": 2,
       "types": [
         2
       ]
@@ -216,6 +218,7 @@
       "id": 4,
       "name": "Advanced Planning",
       "cost": 3,
+      "honor": 1,
       "types": [
         7
       ]
@@ -224,6 +227,7 @@
       "id": 5,
       "name": "Air Shield",
       "cost": 7,
+      "honor": 2,
       "types": [
         23
       ]
@@ -232,6 +236,7 @@
       "id": 6,
       "name": "Arrow",
       "cost": 3,
+      "honor": 1,
       "types": [
         21
       ]
@@ -240,6 +245,7 @@
       "id": 7,
       "name": "Arrow Storm",
       "cost": 8,
+      "honor": 3,
       "types": [
         2
       ]
@@ -248,6 +254,7 @@
       "id": 8,
       "name": "Aura Blast",
       "cost": 3,
+      "honor": 1,
       "types": [
         7
       ]
@@ -256,6 +263,7 @@
       "id": 9,
       "name": "Avalanche",
       "cost": 4,
+      "honor": 0,
       "types": [
         26,
         19
@@ -265,6 +273,7 @@
       "id": 10,
       "name": "Ballista",
       "cost": 9,
+      "honor": 1,
       "types": [
         33,
         11
@@ -274,6 +283,7 @@
       "id": 11,
       "name": "Berserk",
       "cost": 7,
+      "honor": 2,
       "types": [
         2
       ]
@@ -282,6 +292,7 @@
       "id": 12,
       "name": "Blessed Spear",
       "cost": 5,
+      "honor": 2,
       "types": [
         28,
         15,
@@ -292,6 +303,7 @@
       "id": 13,
       "name": "Bone Crusher",
       "cost": 6,
+      "honor": 2,
       "types": [
         2
       ]
@@ -300,6 +312,7 @@
       "id": 14,
       "name": "Catapult",
       "cost": 9,
+      "honor": 1,
       "types": [
         33,
         11
@@ -309,6 +322,7 @@
       "id": 15,
       "name": "Change of Heart",
       "cost": 7,
+      "honor": 2,
       "types": [
         7
       ]
@@ -317,6 +331,7 @@
       "id": 16,
       "name": "Chariot",
       "cost": 6,
+      "honor": 3,
       "types": [
         18,
         17
@@ -326,6 +341,7 @@
       "id": 17,
       "name": "Charm",
       "cost": 9,
+      "honor": 0,
       "types": [
         26
       ]
@@ -334,6 +350,7 @@
       "id": 19,
       "name": "Close Range Master",
       "cost": 3,
+      "honor": 1,
       "types": [
         2
       ]
@@ -342,6 +359,7 @@
       "id": 20,
       "name": "Conditioning",
       "cost": 5,
+      "honor": 1,
       "types": [
         18
       ]
@@ -350,6 +368,7 @@
       "id": 21,
       "name": "Consume Energy",
       "cost": 7,
+      "honor": 0,
       "types": [
         26,
         29
@@ -359,6 +378,7 @@
       "id": 22,
       "name": "Counter Spell",
       "cost": 4,
+      "honor": 0,
       "types": [
         26
       ]
@@ -367,6 +387,7 @@
       "id": 23,
       "name": "Crystal Shard",
       "cost": 9,
+      "honor": 2,
       "types": [
         13,
         24
@@ -376,6 +397,7 @@
       "id": 24,
       "name": "Cursed Blade",
       "cost": 8,
+      "honor": 3,
       "types": [
         28,
         15,
@@ -387,6 +409,7 @@
       "id": 25,
       "name": "Cyclone",
       "cost": 5,
+      "honor": 0,
       "types": [
         26,
         19
@@ -396,6 +419,7 @@
       "id": 26,
       "name": "Dagger",
       "cost": 3,
+      "honor": 1,
       "types": [
         28,
         15,
@@ -407,6 +431,7 @@
       "id": 27,
       "name": "Dead Aim",
       "cost": 5,
+      "honor": 2,
       "types": [
         2
       ]
@@ -415,6 +440,7 @@
       "id": 28,
       "name": "Deadly Arrow",
       "cost": 10,
+      "honor": 3,
       "types": [
         21
       ]
@@ -423,6 +449,7 @@
       "id": 29,
       "name": "Diplomacy",
       "cost": 7,
+      "honor": 2,
       "types": [
         2
       ]
@@ -431,6 +458,7 @@
       "id": 30,
       "name": "Disarm",
       "cost": 7,
+      "honor": 2,
       "types": [
         7
       ]
@@ -439,6 +467,7 @@
       "id": 31,
       "name": "Divine Shield",
       "cost": 9,
+      "honor": 2,
       "types": [
         23
       ]
@@ -447,6 +476,7 @@
       "id": 32,
       "name": "Dragon Potion",
       "cost": 11,
+      "honor": 1,
       "types": [
         13,
         34,
@@ -458,6 +488,7 @@
       "id": 33,
       "name": "Earthquake",
       "cost": 4,
+      "honor": 0,
       "types": [
         26,
         19,
@@ -468,6 +499,7 @@
       "id": 34,
       "name": "Fire Arrow",
       "cost": 5,
+      "honor": 2,
       "types": [
         21,
         26,
@@ -478,6 +510,7 @@
       "id": 35,
       "name": "Flail",
       "cost": 4,
+      "honor": 2,
       "types": [
         28,
         15,
@@ -488,6 +521,7 @@
       "id": 36,
       "name": "Freeze",
       "cost": 8,
+      "honor": 0,
       "types": [
         26,
         19,
@@ -498,6 +532,7 @@
       "id": 37,
       "name": "Full Moon Axe",
       "cost": 7,
+      "honor": 2,
       "types": [
         28,
         15,
@@ -508,6 +543,7 @@
       "id": 38,
       "name": "Gladiator Net",
       "cost": 4,
+      "honor": 2,
       "types": [
         13,
         6
@@ -517,6 +553,7 @@
       "id": 39,
       "name": "Gold Stash",
       "cost": 6,
+      "honor": 4,
       "types": [
         13,
         32
@@ -526,6 +563,7 @@
       "id": 40,
       "name": "Grand Finale",
       "cost": 6,
+      "honor": 1,
       "types": [
         7
       ]
@@ -534,6 +572,7 @@
       "id": 41,
       "name": "Hatchet",
       "cost": 5,
+      "honor": 2,
       "types": [
         28,
         15,
@@ -545,6 +584,7 @@
       "id": 42,
       "name": "Healing Spell",
       "cost": 8,
+      "honor": 0,
       "types": [
         26,
         10
@@ -554,6 +594,7 @@
       "id": 43,
       "name": "Hex Bomb",
       "cost": 6,
+      "honor": 2,
       "types": [
         13,
         24,
@@ -565,6 +606,7 @@
       "id": 44,
       "name": "Hexed Arrow",
       "cost": 6,
+      "honor": 2,
       "types": [
         21,
         26
@@ -574,6 +616,7 @@
       "id": 45,
       "name": "Hexing",
       "cost": 7,
+      "honor": 0,
       "types": [
         26,
         29
@@ -583,6 +626,7 @@
       "id": 46,
       "name": "Hideaway",
       "cost": 4,
+      "honor": 1,
       "types": [
         7
       ]
@@ -591,6 +635,7 @@
       "id": 47,
       "name": "Hoarding",
       "cost": 5,
+      "honor": 1,
       "types": [
         7
       ]
@@ -599,6 +644,7 @@
       "id": 48,
       "name": "Horse",
       "cost": 7,
+      "honor": 2,
       "types": [
         18,
         17
@@ -625,6 +671,7 @@
       "id": 50,
       "name": "Ice Arrow",
       "cost": 7,
+      "honor": 2,
       "types": [
         21,
         26,
@@ -635,6 +682,7 @@
       "id": 51,
       "name": "Ice Wall",
       "cost": 6,
+      "honor": 0,
       "types": [
         26,
         12,
@@ -645,6 +693,7 @@
       "id": 52,
       "name": "Javelin",
       "cost": 8,
+      "honor": 3,
       "types": [
         28,
         15,
@@ -673,6 +722,7 @@
       "id": 54,
       "name": "Kneecapped",
       "cost": 3,
+      "honor": 1,
       "types": [
         2
       ]
@@ -681,6 +731,7 @@
       "id": 55,
       "name": "Kraken",
       "cost": 9,
+      "honor": 0,
       "types": [
         26,
         16,
@@ -691,6 +742,7 @@
       "id": 56,
       "name": "Lance",
       "cost": 7,
+      "honor": 2,
       "types": [
         28,
         15,
@@ -701,6 +753,7 @@
       "id": 57,
       "name": "Large Quiver",
       "cost": 8,
+      "honor": 3,
       "types": [
         13,
         6
@@ -710,6 +763,7 @@
       "id": 58,
       "name": "Lesser Eagle",
       "cost": 10,
+      "honor": 2,
       "types": [
         18,
         17,
@@ -720,6 +774,7 @@
       "id": 59,
       "name": "Lightning Bolt",
       "cost": 8,
+      "honor": 0,
       "types": [
         26,
         19,
@@ -747,6 +802,7 @@
       "id": 61,
       "name": "Long Bow",
       "cost": 8,
+      "honor": 3,
       "types": [
         28,
         22,
@@ -757,6 +813,7 @@
       "id": 62,
       "name": "Long-Range Arrow",
       "cost": 6,
+      "honor": 2,
       "types": [
         21
       ]
@@ -765,6 +822,7 @@
       "id": 63,
       "name": "Loving Squire",
       "cost": 7,
+      "honor": 0,
       "types": [
         7
       ]
@@ -773,6 +831,7 @@
       "id": 64,
       "name": "Magic Potion Bomb",
       "cost": 5,
+      "honor": 2,
       "types": [
         13,
         24,
@@ -784,6 +843,7 @@
       "id": 65,
       "name": "Magic Quiver",
       "cost": 9,
+      "honor": 0,
       "types": [
         13,
         6
@@ -793,6 +853,7 @@
       "id": 66,
       "name": "March",
       "cost": 3,
+      "honor": 1,
       "types": [
         18
       ]
@@ -801,6 +862,7 @@
       "id": 67,
       "name": "Massive Blizzard",
       "cost": 10,
+      "honor": 0,
       "types": [
         26,
         19
@@ -827,6 +889,7 @@
       "id": 69,
       "name": "Medicine",
       "cost": 4,
+      "honor": 1,
       "types": [
         13,
         10
@@ -836,6 +899,7 @@
       "id": 70,
       "name": "Metal Shield",
       "cost": 6,
+      "honor": 2,
       "types": [
         23
       ]
@@ -844,6 +908,7 @@
       "id": 71,
       "name": "Meteor Strike",
       "cost": 9,
+      "honor": 0,
       "types": [
         26,
         19,
@@ -854,6 +919,7 @@
       "id": 72,
       "name": "Modified Bow",
       "cost": 10,
+      "honor": 3,
       "types": [
         28,
         15,
@@ -866,6 +932,7 @@
       "id": 73,
       "name": "Monopoly",
       "cost": 3,
+      "honor": 0,
       "types": [
         2
       ]
@@ -874,6 +941,7 @@
       "id": 74,
       "name": "Morale Boost",
       "cost": 8,
+      "honor": 2,
       "types": [
         7,
         31
@@ -883,6 +951,7 @@
       "id": 75,
       "name": "Old Wooden Shield",
       "cost": 3,
+      "honor": 0,
       "types": [
         23
       ]
@@ -891,6 +960,7 @@
       "id": 76,
       "name": "Pickpocket",
       "cost": 10,
+      "honor": 2,
       "types": [
         7
       ]
@@ -899,6 +969,7 @@
       "id": 77,
       "name": "Pike",
       "cost": 6,
+      "honor": 2,
       "types": [
         28,
         15,
@@ -909,6 +980,7 @@
       "id": 78,
       "name": "Plagued Rats",
       "cost": 6,
+      "honor": 1,
       "types": [
         13,
         6
@@ -918,6 +990,7 @@
       "id": 79,
       "name": "Pocket Change",
       "cost": 3,
+      "honor": 0,
       "types": [
         13,
         32
@@ -927,6 +1000,7 @@
       "id": 80,
       "name": "Poison",
       "cost": 5,
+      "honor": 2,
       "types": [
         13,
         31
@@ -936,6 +1010,7 @@
       "id": 81,
       "name": "Poison Arrow",
       "cost": 9,
+      "honor": 3,
       "types": [
         21
       ]
@@ -944,6 +1019,7 @@
       "id": 82,
       "name": "Poison Blade",
       "cost": 9,
+      "honor": 3,
       "types": [
         28,
         15,
@@ -955,6 +1031,7 @@
       "id": 83,
       "name": "Possess",
       "cost": 7,
+      "honor": 0,
       "types": [
         26,
         29
@@ -964,6 +1041,7 @@
       "id": 84,
       "name": "Quick Hands",
       "cost": 11,
+      "honor": 3,
       "types": [
         2
       ]
@@ -972,6 +1050,7 @@
       "id": 85,
       "name": "Quick Reflexes",
       "cost": 9,
+      "honor": 2,
       "types": [
         18
       ]
@@ -980,6 +1059,7 @@
       "id": 86,
       "name": "Quick Shot",
       "cost": 7,
+      "honor": 2,
       "types": [
         2
       ]
@@ -1005,6 +1085,7 @@
       "id": 88,
       "name": "Recurve Bow",
       "cost": 6,
+      "honor": 2,
       "types": [
         28,
         22,
@@ -1015,6 +1096,7 @@
       "id": 89,
       "name": "Reinforcements",
       "cost": 10,
+      "honor": 1,
       "types": [
         7
       ]
@@ -1023,6 +1105,7 @@
       "id": 90,
       "name": "Ring Blade",
       "cost": 7,
+      "honor": 3,
       "types": [
         28,
         15,
@@ -1033,6 +1116,7 @@
       "id": 91,
       "name": "Ring of Fire",
       "cost": 9,
+      "honor": 0,
       "types": [
         26,
         19,
@@ -1044,6 +1128,7 @@
       "id": 92,
       "name": "Rooted",
       "cost": 10,
+      "honor": 0,
       "types": [
         26,
         19,
@@ -1054,6 +1139,7 @@
       "id": 93,
       "name": "Sabotage",
       "cost": 5,
+      "honor": 2,
       "types": [
         7
       ]
@@ -1062,6 +1148,7 @@
       "id": 94,
       "name": "Scavenger",
       "cost": 8,
+      "honor": 1,
       "types": [
         7
       ]
@@ -1070,6 +1157,7 @@
       "id": 95,
       "name": "Scorched Earth",
       "cost": 6,
+      "honor": 0,
       "types": [
         26,
         20,
@@ -1080,6 +1168,7 @@
       "id": 96,
       "name": "Servant's Loyalty",
       "cost": 7,
+      "honor": 2,
       "types": [
         7
       ]
@@ -1105,6 +1194,7 @@
       "id": 99,
       "name": "Short Sword",
       "cost": 4,
+      "honor": 2,
       "types": [
         28,
         15,
@@ -1115,6 +1205,7 @@
       "id": 100,
       "name": "Sled Dogs",
       "cost": 5,
+      "honor": 2,
       "types": [
         18,
         17
@@ -1124,6 +1215,7 @@
       "id": 101,
       "name": "Smoke Screen",
       "cost": 4,
+      "honor": 2,
       "types": [
         13,
         6
@@ -1133,6 +1225,7 @@
       "id": 102,
       "name": "Stealth Tactics",
       "cost": 3,
+      "honor": 1,
       "types": [
         7
       ]
@@ -1141,6 +1234,7 @@
       "id": 103,
       "name": "Sure-Footed",
       "cost": 3,
+      "honor": 1,
       "types": [
         2
       ]
@@ -1149,6 +1243,7 @@
       "id": 104,
       "name": "Teleport",
       "cost": 8,
+      "honor": 0,
       "types": [
         26,
         18,
@@ -1176,6 +1271,7 @@
       "id": 106,
       "name": "Throw Weapon",
       "cost": 4,
+      "honor": 1,
       "types": [
         2
       ]
@@ -1184,6 +1280,7 @@
       "id": 107,
       "name": "Throwing Star",
       "cost": 6,
+      "honor": 2,
       "types": [
         28,
         22,
@@ -1195,6 +1292,7 @@
       "id": 108,
       "name": "Tiger Mount",
       "cost": 9,
+      "honor": 2,
       "types": [
         18,
         17
@@ -1204,6 +1302,7 @@
       "id": 109,
       "name": "Time Bend",
       "cost": 4,
+      "honor": 0,
       "types": [
         26,
         19
@@ -1213,6 +1312,7 @@
       "id": 111,
       "name": "Torch",
       "cost": 6,
+      "honor": 2,
       "types": [
         13,
         6,
@@ -1223,6 +1323,7 @@
       "id": 112,
       "name": "Trading Up",
       "cost": 5,
+      "honor": 2,
       "types": [
         7
       ]
@@ -1231,6 +1332,7 @@
       "id": 113,
       "name": "Triple Sheath",
       "cost": 3,
+      "honor": 1,
       "types": [
         13,
         6
@@ -1240,6 +1342,7 @@
       "id": 114,
       "name": "Troop March",
       "cost": 5,
+      "honor": 2,
       "types": [
         18
       ]
@@ -1248,6 +1351,7 @@
       "id": 115,
       "name": "Unicorn",
       "cost": 10,
+      "honor": 2,
       "types": [
         18,
         17
@@ -1257,6 +1361,7 @@
       "id": 116,
       "name": "Vampire's Curse",
       "cost": 7,
+      "honor": 2,
       "types": [
         7,
         31
@@ -1266,6 +1371,7 @@
       "id": 117,
       "name": "Vine Pull",
       "cost": 4,
+      "honor": 0,
       "types": [
         26,
         19
@@ -1275,6 +1381,7 @@
       "id": 118,
       "name": "Voodoo Doll",
       "cost": 10,
+      "honor": 0,
       "types": [
         26,
         29
@@ -1284,6 +1391,7 @@
       "id": 119,
       "name": "Warhammer",
       "cost": 8,
+      "honor": 3,
       "types": [
         28,
         15,
@@ -1294,6 +1402,7 @@
       "id": 120,
       "name": "Water Minion",
       "cost": 10,
+      "honor": 0,
       "types": [
         26,
         16
@@ -1303,6 +1412,7 @@
       "id": 121,
       "name": "Water Missile",
       "cost": 11,
+      "honor": 0,
       "types": [
         26,
         19
@@ -1312,6 +1422,7 @@
       "id": 122,
       "name": "Weapon Dealer",
       "cost": 5,
+      "honor": 1,
       "types": [
         7
       ]
@@ -1320,6 +1431,7 @@
       "id": 123,
       "name": "Wind Arrow",
       "cost": 4,
+      "honor": 1,
       "types": [
         21,
         26
