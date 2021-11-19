@@ -69,6 +69,10 @@
      (fn [db [_ val]]
        (assoc-in db path val)))))
 
+(defn assoc-db-and-store [{:keys [db store]} path val]
+  {:db    (assoc-in db path val)
+   :store (assoc-in store path val)})
+
 (defn reg-event-db-assoc-store
   "As reg-event-db-assoc but also with local storage."
   ([path-name]
@@ -77,9 +81,8 @@
    (rf/reg-event-fx
      name
      [(rf/inject-cofx :store)]
-     (fn [{:keys [db store]} [_ val]]
-       {:db    (assoc-in db path val)
-        :store (assoc-in store path val)}))))
+     (fn [cofx [_ val]]
+       (assoc-db-and-store cofx path val)))))
 
 (defn reg-event-set-option [name]
   (let [key (first (keyword->set-path name))]

@@ -4,7 +4,7 @@
             [igniteinator.constants :as constants]
             [igniteinator.model.setups :as setups]
             [igniteinator.util.re-frame :refer [reg-event-db-assoc reg-event-db-assoc-store reg-event-set-option
-                                                assoc-ins]]
+                                                assoc-ins assoc-db-and-store]]
             [clojure.string :as s]
             [re-frame.core :refer [reg-event-fx reg-event-db inject-cofx]]
             [ajax.core :as ajax]))
@@ -53,22 +53,55 @@
     {}
     coll))
 
-(reg-event-db
-  :load-data-success
-  (fn [db [_ result]]
+(defn add-ks-to-boxes [boxes cards]
+  (mapv (fn [box]
+          (assoc box :ks?
+                     (some #(and (:ks %) (= (:id box) (:box %))) cards)))
+    boxes))
+
+(defn default-boxes-setting [boxes]
+  (reduce
+    (fn [c box]
+      (assoc c (:id box)
+               (if (:ks? box)
+                 :ks
+                 true)))
+    {}
+    boxes))
+
+(defn- load-data-update-db [db result]
+  (let [cards (:cards result)
+        boxes (add-ks-to-boxes (:boxes result) cards)]
     (->
       db
       (assoc
         :mode :ready
-        :boxes (id-map (:boxes result))
+        :boxes (id-map boxes)
         :types (id-map (:types result))
-        :cards (id-map (:cards result))
+        :cards (id-map cards)
         :combos-set (:combos result)
         :setups (id-map (:setups result)))
+      (update-in [:options :boxes]
+        (fn [boxes-setting]
+          (if (= (count boxes-setting) (count boxes))
+            boxes-setting
+            ;; New boxes or first load. Calculate settings.
+            (merge boxes-setting (default-boxes-setting boxes)))))
       (assoc-in [:setups-filter :selection]
         (set (map :id (setups/filter-boxes-with-setups
                         (:boxes result)
                         (:setups result))))))))
+
+(reg-event-fx
+  :load-data-success
+  [(inject-cofx :store)]
+  (fn [{:keys [db store]} [_ result]]
+    ;; Db currently contains options loaded from store. If the boxes are updated, update store.
+    (let [new-db    (load-data-update-db db result)
+          new-store (assoc-in store [:options :boxes]
+                      (get-in new-db [:options :boxes]))]
+      {:db    new-db
+       :store new-store})))
 
 (reg-event-fx
   :load-data-failure
@@ -108,6 +141,25 @@
       (if (and standalone-mode? (not= lang (:language db)))
         {:post-message [:mode {:mode     :standalone
                                :language lang}]}))))
+
+;; Box is either false, true or :ks. If selected, alså select ks. Deselecting ks means true instead.
+(reg-event-fx
+  :boxes-setting/set-box?
+  (fn [{:keys [db]} [_ box-id on?]]
+    (let [ks-box? (-> db :boxes (get box-id) :ks?)]
+      {:dispatch [:boxes-setting/set-box?-raw box-id
+                  (if on?
+                    (if ks-box? :ks true)
+                    false)]})))
+(reg-event-fx
+  :boxes-setting/set-box-ks?
+  (fn [_ [_ box-id on?]]
+    {:dispatch [:boxes-setting/set-box?-raw box-id (if on? :ks true)]}))
+(reg-event-fx
+  :boxes-setting/set-box?-raw
+  [(inject-cofx :store)]
+  (fn [cofx [_ box-id val]]
+    (assoc-db-and-store cofx [:options :boxes box-id] val)))
 
 (reg-event-set-option :set-size)
 (reg-event-set-option :set-default-order)

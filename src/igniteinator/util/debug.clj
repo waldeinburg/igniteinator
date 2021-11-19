@@ -7,7 +7,7 @@
 (defn compiler-option? [k]
   (and cljs.env/*compiler*
     (when-let [{:keys [options]} @cljs.env/*compiler*]
-      (get options k))))
+      (options k))))
 
 (defn dev? []
   (compiler-option? :dev?))

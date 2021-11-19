@@ -6,6 +6,8 @@
             [igniteinator.ui.components.search-bar :refer [search-bar]]
             [igniteinator.ui.components.dialog :refer [dialog]]
             [igniteinator.ui.components.radio-group :refer [radio-group radio]]
+            [igniteinator.ui.components.form-item :refer [form-item]]
+            [igniteinator.ui.components.checkbox :refer [checkbox]]
             [reagent.core :as r]
             [reagent-material-ui.core.toolbar :refer [toolbar]]
             [reagent-material-ui.core.box :refer [box]]
@@ -14,12 +16,8 @@
             [reagent-material-ui.core.button :refer [button]]
             [reagent-material-ui.icons.check-box :refer [check-box] :rename {check-box check-box-icon}]
             [reagent-material-ui.icons.check-box-outline-blank :refer [check-box-outline-blank]]
-            [reagent-material-ui.core.form-control :refer [form-control]]
-            [reagent-material-ui.core.form-label :refer [form-label]]
             [reagent-material-ui.core.form-group :refer [form-group]]
-            [reagent-material-ui.core.form-control-label :refer [form-control-label]]
             [reagent-material-ui.core.form-helper-text :refer [form-helper-text]]
-            [reagent-material-ui.core.checkbox :refer [checkbox]]
             [reagent-material-ui.lab.toggle-button-group :refer [toggle-button-group]]
             [reagent-material-ui.lab.toggle-button :refer [toggle-button]]))
 
@@ -38,12 +36,11 @@
             :on-click on-close}]]])
 
 (defn dialog-card-item [card <sub-dialog-item-selected?-ref on-dialog-item-selected-change]
-  (let [id    (:id card)
-        chbox [checkbox {:checked   @(<sub-dialog-item-selected?-ref id)
-                         :name      (str id)
-                         :on-change #(on-dialog-item-selected-change id (event/checked? %))}]]
-    [form-control-label {:control (r/as-element chbox)
-                         :label   (:name card)}]))
+  (let [id (:id card)]
+    [checkbox {:checked?-ref (<sub-dialog-item-selected?-ref id)
+               :name         (str id)
+               :on-change    #(on-dialog-item-selected-change id %)
+               :label        (:name card)}]))
 
 (defn select-cards-dialog [{:keys [search-str-ref
                                    on-search-str-change
@@ -67,7 +64,7 @@
          [icon-button {:on-click #(on-dialog-selection-set :none)}
           [check-box-outline-blank]]]]]
       [search-bar search-str-ref on-search-str-change]]
-     [form-control {:component "fieldset"}
+     [form-item {}
       [form-group
        (doall
          (for [c cards]

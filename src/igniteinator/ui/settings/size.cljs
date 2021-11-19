@@ -1,17 +1,15 @@
 (ns igniteinator.ui.settings.size
   (:require [igniteinator.util.re-frame :refer [<sub >evt]]
             [igniteinator.text :refer [txt]]
-            [reagent-material-ui.core.form-control :refer [form-control]]
-            [reagent-material-ui.core.form-label :refer [form-label]]
+            [igniteinator.ui.components.form-item :refer [form-item]]
             [reagent-material-ui.core.slider :refer [slider]]))
 
 (defn mark [value label-key]
   {:value value, :label (txt label-key)})
 
 (defn size-settings []
-  [form-control {:component  "fieldset"
-                 :class-name :full-width}
-   [form-label {:component "legend"} (txt :settings.size/label)]
+  [form-item {:label      (txt :settings.size/label)
+              :class-name :full-width}
    [slider {:value               (<sub :size)
             :value-label-display :off
             :track               false

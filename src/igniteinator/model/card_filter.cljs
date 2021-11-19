@@ -21,4 +21,14 @@
                     (let [o (case operator := =, :< <, :> >, :<= <=, :>= >=)]
                       ;; title cards will always be filtered away.
                       #(o (:cost %) value)))
-   })
+   :box-and-ks    (fn [boxes-setting]
+                    #(let [bs (boxes-setting (:box %))]
+                       (and
+                         ;; Box setting is non-false
+                         bs
+                         ;; and
+                         (or
+                           ;; the card is not a KS Exclusive card
+                           (not (:ks %))
+                           ;; or the Kickstarter setting is set for the box.
+                           (= :ks bs)))))})

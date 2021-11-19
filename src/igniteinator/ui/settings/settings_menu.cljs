@@ -1,6 +1,7 @@
 (ns igniteinator.ui.settings.settings-menu
   (:require [igniteinator.util.re-frame :refer [<sub >evt]]
             [igniteinator.ui.settings.clear-data-button :refer [clear-data-button]]
+            [igniteinator.ui.settings.boxes :refer [boxes-settings]]
             [igniteinator.ui.settings.size :refer [size-settings]]
             [igniteinator.ui.settings.default-order :refer [default-order-settings]]
             [igniteinator.ui.settings.display-name :refer [display-name-settings]]
@@ -24,6 +25,7 @@
             :open     (<sub :settings-menu-open?)
             :on-close #(>evt :set-settings-menu-open? false)}
     [list
+     [setting [boxes-settings]]
      [setting [size-settings]]
      [setting [default-order-settings]]
      [setting [display-name-settings]]

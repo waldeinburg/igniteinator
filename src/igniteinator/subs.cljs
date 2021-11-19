@@ -63,10 +63,29 @@
   (fn [str _]
     (s/capitalize str)))
 
+(reg-sub-db :boxes-setting [:options :boxes])
 (reg-sub-option :size)
 (reg-sub-option :default-order)
 ;; Use :display-name? for the actual state.
 (reg-sub-db :display-name?-setting [:options :display-name?])
+
+(reg-sub
+  :boxes-setting/box?
+  :<- [:boxes-setting]
+  (fn [setting [_ box]]
+    (setting (:id box))))
+(reg-sub
+  :boxes-setting/box-ks?
+  (fn [[_ box]]
+    (subscribe [:boxes-setting/box? box]))
+  (fn [box?]
+    (= :ks box?)))
+
+(reg-sub
+  :global-filters
+  :<- [:boxes-setting]
+  (fn [boxes-setting _]
+    [{:key :box-and-ks, :args [boxes-setting]}]))
 
 (reg-sub
   :size+1
@@ -122,12 +141,13 @@
 (reg-sub-db :select-cards-dialog/search-str)
 (reg-sub
   :select-cards-dialog/cards
+  :<- [:global-filters]
   :<- [:select-cards-dialog/search-str]
-  (fn [search-str _]
-    (let [filters  (if (empty? search-str)
-                     []
-                     [{:key :name-contains, :args [search-str]}])
-          sortings [{:key :name, :order :asc}]]
+  (fn [[global-filters search-str] _]
+    (let [search-filter (if (not-empty search-str)
+                          [{:key :name-contains, :args [search-str]}])
+          filters       (into global-filters search-filter)
+          sortings      [{:key :name, :order :asc}]]
       (<sub :cards :all filters sortings))))
 
 (reg-sub
@@ -169,7 +189,7 @@
   :card
   :<- [:cards-map]
   (fn [cards-map [_ id]]
-    (get cards-map id)))
+    (cards-map id)))
 
 ;; Get cards based on filters and sortings from model.
 ;; Base is :all or a sequence of ids.
@@ -226,19 +246,20 @@
   :cards-page/cards
   :<- [:cards-page/base]
   :<- [:cards-page.combos/value]
+  :<- [:global-filters]
   :<- [:cards-page/filters]
   :<- [:cards-page/search-str]
   :<- [:default-order-sortings]
   :<- [:cards-page/sortings]
-  (fn [[base combos-value page-filters search-str default-sortings page-sortings] _]
+  (fn [[base combos-value global-filters page-filters search-str default-sortings page-sortings] _]
     (let [combos-base-filter (if (and (= :combos base) (= :all combos-value))
                                [{:key :has-combos}])
+          search-filter      (if (not-empty search-str)
+                               [{:key :name-contains, :args [search-str]}])
           sortings           (or (not-empty page-sortings) default-sortings)
           base-spec          (if combos-base-filter :all base)
-          base-filters       (into page-filters combos-base-filter)
-          filters            (if (empty? search-str)
-                               base-filters
-                               (conj base-filters {:key :name-contains, :args [search-str]}))]
+          filters            (->> search-filter
+                               (into combos-base-filter) (into page-filters) (into global-filters))]
       (<sub :cards base-spec filters sortings))))
 
 (reg-sub-db :card-details-page/card-id)

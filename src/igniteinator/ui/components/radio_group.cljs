@@ -2,9 +2,8 @@
   (:require [igniteinator.util.re-frame :refer [<sub >evt]]
             [igniteinator.util.reagent :refer [add-children]]
             [igniteinator.util.event :as event]
+            [igniteinator.ui.components.form-item :refer [form-item]]
             [reagent.core :as r]
-            [reagent-material-ui.core.form-control :refer [form-control]]
-            [reagent-material-ui.core.form-label :refer [form-label]]
             [reagent-material-ui.core.form-control-label :refer [form-control-label]]
             [reagent-material-ui.core.radio-group :refer [radio-group] :rename {radio-group mui-radio-group}]
             [reagent-material-ui.core.radio :refer [radio] :rename {radio mui-radio}]))
@@ -35,8 +34,6 @@
                         {:value     @value-ref
                          :on-change #(on-change (convert-value (event/value %)))}
                         (dissoc props :label :value-ref :value-type :on-change))]
-    [form-control {:component "fieldset"}
-     (if label
-       [form-label {:component "legend"} label])
+    [form-item {:label label}
      [mui-radio-group rg-props
       (add-children children)]]))

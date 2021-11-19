@@ -5,7 +5,8 @@
 (def default-db
   {
    :language            constants/default-language
-   :options             {:size          1,
+   :options             {:boxes         nil                 ; set when loading
+                         :size          1,
                          :default-order :cost-name
                          :display-name? :translating}
    :debug               {:show-card-data false}
