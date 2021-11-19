@@ -178,6 +178,10 @@
   :card/box-name
   (fn [db [_ card]]
     (-> db :boxes (get (:box card)) :name)))
+(reg-sub
+  :card/ks-exclusive?
+  (fn [_ [_ card]]
+    (true? (:ks card))))
 
 (reg-sub-db
   :boxes-map

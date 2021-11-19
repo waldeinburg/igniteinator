@@ -271,6 +271,7 @@
       "id": 9,
       "name": "Avalanche",
       "box": 2,
+      "ks": true,
       "cost": 4,
       "honor": 0,
       "types": [
@@ -701,6 +702,7 @@
       "id": 49,
       "name": "Hydro Necromancer",
       "box": 1,
+      "ks": true,
       "cost": [
         5,
         7,
@@ -938,6 +940,7 @@
       "id": 68,
       "name": "Master of the Sea",
       "box": 1,
+      "ks": true,
       "cost": [
         5,
         7,
@@ -1153,6 +1156,7 @@
       "id": 87,
       "name": "Raiders of the North",
       "box": 1,
+      "ks": true,
       "cost": [
         5,
         7,
@@ -1272,6 +1276,7 @@
       "id": 97,
       "name": "Shaman Chieftain",
       "box": 2,
+      "ks": true,
       "cost": [
         5,
         7,

@@ -16,6 +16,7 @@
   (if (<sub :debug/show-card-data)
     [:ul {:style {:list-style :none, :padding 0}}
      [:li [:strong "Box: "] (<sub :card/box-name card)]
+     [:li [:strong "KS Exclusive: "] (if (<sub :card/ks-exclusive? card) "Yes" "No")]
      [:li [:strong "Types: "] (<sub :card/types-str card)]
      [:li [:strong "Cost: "] (str (:cost card))]]))
 
