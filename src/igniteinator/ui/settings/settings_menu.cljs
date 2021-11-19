@@ -3,6 +3,7 @@
             [igniteinator.ui.settings.clear-data-button :refer [clear-data-button]]
             [igniteinator.ui.settings.size :refer [size-settings]]
             [igniteinator.ui.settings.default-order :refer [default-order-settings]]
+            [igniteinator.ui.settings.display-name :refer [display-name-settings]]
             [reagent-material-ui.core.drawer :refer [drawer]]
             [reagent-material-ui.core.icon-button :refer [icon-button]]
             [reagent-material-ui.core.list :refer [list]]
@@ -25,4 +26,5 @@
     [list
      [setting [size-settings]]
      [setting [default-order-settings]]
+     [setting [display-name-settings]]
      [list-item [clear-data-button]]]]])

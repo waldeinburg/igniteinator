@@ -6,7 +6,8 @@
   {
    :language            constants/default-language
    :options             {:size          1,
-                         :default-order :cost-name}
+                         :default-order :cost-name
+                         :display-name? :translating}
    :debug               {:show-card-data false}
    :mode                :init
    :waiting?            false

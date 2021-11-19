@@ -5,7 +5,8 @@
             [igniteinator.ui.components.card-list :refer [card-list card-grid]]
             [igniteinator.text :refer [txt txt-c]]
             [reagent-material-ui.core.grid :refer [grid]]
-            [reagent-material-ui.core.modal :refer [modal]]))
+            [reagent-material-ui.core.modal :refer [modal]]
+            [reagent-material-ui.core.box :refer [box]]))
 
 (defn combos-list [card]
   (let [cards (<sub :card-details-page/combos)]
@@ -27,11 +28,12 @@
 (defn card-details-page []
   (let [card (<sub :card-details-page/card)]
     [page (str (txt :card-details-page-title) " " (:name card))
-     [back-button]
-     ;; Just show in full size.
+     [box {:mb 2} [back-button]]
+     ;; Show the next step larger than the card list.
      [grid {:container true}
       [card-grid {:component            "div"
-                  :grid-breakpoints-ref (<sub-ref :grid-breakpoints+1)}
+                  :grid-breakpoints-ref (<sub-ref :grid-breakpoints+1)
+                  :display-name?        false}
        card]]
      (if (empty? (:combos card))
        [:p (txt :no-combos)]

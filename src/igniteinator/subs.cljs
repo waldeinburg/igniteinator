@@ -19,6 +19,19 @@
 (reg-sub-db :fatal-message)
 (reg-sub-db :current-page)
 
+(reg-sub
+  :translating?
+  :<- [:language]
+  (fn [lang _]
+    (not= constants/default-language lang)))
+
+(reg-sub
+  :display-name?
+  :<- [:display-name?-setting]
+  :<- [:translating?]
+  (fn [[setting translating?] _]
+    (or (= :always setting) (and (= :translating setting) translating?))))
+
 (reg-sub :page-history-not-empty?
   (fn [db _]
     (not-empty (:page-history db))))
@@ -52,6 +65,8 @@
 
 (reg-sub-option :size)
 (reg-sub-option :default-order)
+;; Use :display-name? for the actual state.
+(reg-sub-db :display-name?-setting [:options :display-name?])
 
 (reg-sub
   :size+1

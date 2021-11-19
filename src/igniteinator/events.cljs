@@ -111,6 +111,7 @@
 
 (reg-event-set-option :set-size)
 (reg-event-set-option :set-default-order)
+(reg-event-set-option :set-display-name?)
 
 (reg-event-fx
   :reload

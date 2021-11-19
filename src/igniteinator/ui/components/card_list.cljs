@@ -20,6 +20,10 @@
      [:li [:strong "Types: "] (<sub :card/types-str card)]
      [:li [:strong "Cost: "] (str (:cost card))]]))
 
+(defn card-name [card display-name?]
+  (if (or display-name? (and (nil? display-name?) (<sub :display-name?)))
+    [box {:align :center} (:name card)]))
+
 (defn card-image
   ([card]
    [card-image {} card])
@@ -69,6 +73,7 @@
   ([props card]
    [:<>
     [card-image props card]
+    [card-name card (:display-name? props)]
     [card-debug-data card]]))
 
 (defn card-grid [{:keys [grid-breakpoints-ref component]
