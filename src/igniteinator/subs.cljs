@@ -51,6 +51,7 @@
     (s/capitalize str)))
 
 (reg-sub-option :size)
+(reg-sub-option :default-order)
 
 (reg-sub
   :size+1
@@ -70,6 +71,15 @@
   :<- [:size+1]
   (fn [size _]
     (constants/grid-breakpoints size)))
+
+(reg-sub
+  :default-order-sortings
+  :<- [:default-order]
+  (fn [order _]
+    (case order
+      :cost-name [{:key :cost, :order :asc}
+                  {:key :name, :order :asc}]
+      :name [{:key :name, :order :asc}])))
 
 (reg-sub
   :image-path
@@ -203,10 +213,12 @@
   :<- [:cards-page.combos/value]
   :<- [:cards-page/filters]
   :<- [:cards-page/search-str]
+  :<- [:default-order-sortings]
   :<- [:cards-page/sortings]
-  (fn [[base combos-value page-filters search-str sortings] _]
+  (fn [[base combos-value page-filters search-str default-sortings page-sortings] _]
     (let [combos-base-filter (if (and (= :combos base) (= :all combos-value))
                                [{:key :has-combos}])
+          sortings           (or (not-empty page-sortings) default-sortings)
           base-spec          (if combos-base-filter :all base)
           base-filters       (into page-filters combos-base-filter)
           filters            (if (empty? search-str)
@@ -222,6 +234,13 @@
   :<- [:card-details-page/card-id]
   (fn [card-id _]
     (<sub :card card-id)))
+(reg-sub
+  :card-details-page/combos
+  :<- [:card-details-page/card]
+  :<- [:default-order-sortings]
+  :<- [:card-details-page/sortings]
+  (fn [[card default-sortings page-sortings] _]
+    (<sub :cards (:combos card) [] (or page-sortings default-sortings))))
 
 (reg-sub-db
   :setups-map
@@ -292,9 +311,10 @@
 (reg-sub
   :current-setup/cards
   :<- [:current-setup]
+  :<- [:default-order-sortings]
   :<- [:display-setup-page/sortings]
-  (fn [[setup sortings] _]
-    (<sub :cards (:cards setup) [] sortings)))
+  (fn [[setup default-order-sortings page-sortings] _]
+    (<sub :cards (:cards setup) [] (or page-sortings default-order-sortings))))
 (reg-sub
   :current-setup/required-boxes
   :<- [:current-setup]

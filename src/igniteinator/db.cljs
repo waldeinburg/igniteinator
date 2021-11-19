@@ -5,7 +5,8 @@
 (def default-db
   {
    :language            constants/default-language
-   :options             {:size 1}
+   :options             {:size          1,
+                         :default-order :cost-name}
    :debug               {:show-card-data false}
    :mode                :init
    :waiting?            false
@@ -25,18 +26,18 @@
    :select-cards-dialog {:search-str ""}
    :cards-page          {:base           :all
                          :filters        []
-                         :sortings       [{:key :name, :order :asc}]
+                         :sortings       nil
                          :search-str     ""
                          :combos         {:dialog-open? false
                                           :value        :official}
                          :card-selection {:dialog-open? false
                                           :ids          #{}}}
    :card-details-page   {:card-id  nil
-                         :sortings [{:key :name, :order :asc}]}
+                         :sortings nil}
    :setups-filter       {:operator  :some
                          :selection nil}                    ; filled when data is loaded
    :setup               {:id nil}
-   :display-setup-page  {:sortings [{:key :name, :order :asc}]}
+   :display-setup-page  {:sortings nil}
    :card-load-state     {:en nil}
    :cards               nil
    :combos-set          nil})

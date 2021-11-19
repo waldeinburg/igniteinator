@@ -8,8 +8,7 @@
             [reagent-material-ui.core.modal :refer [modal]]))
 
 (defn combos-list [card]
-  (let [sortings (<sub :card-details-page/sortings)
-        cards    (<sub :cards (:combos card) [] sortings)]
+  (let [cards (<sub :card-details-page/combos)]
     [card-list
      {:on-click-fn (fn [c]
                      #(>evt :show-card-details c :page/replace))

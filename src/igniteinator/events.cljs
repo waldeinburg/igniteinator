@@ -110,6 +110,7 @@
                                :language lang}]}))))
 
 (reg-event-set-option :set-size)
+(reg-event-set-option :set-default-order)
 
 (reg-event-fx
   :reload
