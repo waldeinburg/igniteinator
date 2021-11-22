@@ -5,7 +5,7 @@
             [igniteinator.ui.settings.size :refer [size-settings]]
             [igniteinator.ui.settings.default-order :refer [default-order-settings]]
             [igniteinator.ui.settings.display-name :refer [display-name-settings]]
-            [reagent-material-ui.core.drawer :refer [drawer]]
+            [reagent-material-ui.core.swipeable-drawer :refer [swipeable-drawer]]
             [reagent-material-ui.core.icon-button :refer [icon-button]]
             [reagent-material-ui.core.list :refer [list]]
             [reagent-material-ui.core.list-item :refer [list-item]]
@@ -21,9 +21,10 @@
   [:<>
    [icon-button {:on-click #(>evt :set-settings-menu-open? true)}
     [settings-icon]]
-   [drawer {:anchor   :right
-            :open     (<sub :settings-menu-open?)
-            :on-close #(>evt :set-settings-menu-open? false)}
+   [swipeable-drawer {:anchor   :right
+                      :open     (<sub :settings-menu-open?)
+                      :on-close #(>evt :set-settings-menu-open? false)
+                      :on-open  #(>evt :set-settings-menu-open? true)}
     [list
      [setting [boxes-settings]]
      [setting [size-settings]]
