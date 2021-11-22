@@ -26,3 +26,10 @@ if [[ "$(grep -o '"Pick Pocket"' "$CARDS_FILE" | wc -l)" -ne 1 ]]; then
 fi
 echo "Fixing Pickpocket name ..."
 sed -i 's/"Pick Pocket"/"Pickpocket"/' "$DOWNLOAD_DIR"/*.json
+
+if [[ "$(grep -o '"Sure-Footed"' "$CARDS_FILE" | wc -l)" -ne 1 ]]; then
+  echo "Did not find 1 instance of \"Sure-Footed\" in $CARDS_FILE."
+  exit 1
+fi
+echo "Fixing Sure Footed name ..."
+sed -i 's/"Sure-Footed"/"Sure Footed"/' "$DOWNLOAD_DIR"/*.json
