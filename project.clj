@@ -7,8 +7,8 @@
   :min-lein-version "2.7.1"
 
   :dependencies [[org.clojure/clojure "1.10.3"]
-                 [org.clojure/clojurescript "1.10.844"]
-                 [org.clojure/core.async "1.3.618"]
+                 [org.clojure/clojurescript "1.10.893"]
+                 [org.clojure/core.async "1.5.640"]
                  [funcool/promesa "6.0.2"]
                  [cljs-http "0.1.46"]
                  [re-frame "1.2.0"
