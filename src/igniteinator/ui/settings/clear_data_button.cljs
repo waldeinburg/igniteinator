@@ -2,7 +2,7 @@
   (:require [igniteinator.util.re-frame :refer [<sub-ref >evt]]
             [igniteinator.text :refer [txt txt-c]]
             [igniteinator.ui.components.dialog :refer [dialog]]
-            [reagent-material-ui.core.button :refer [button]]))
+            [reagent-mui.material.button :refer [button]]))
 
 (defn clear-data-dialog []
   (let [on-close (fn []

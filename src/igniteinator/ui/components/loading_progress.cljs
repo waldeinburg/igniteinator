@@ -1,6 +1,6 @@
 (ns igniteinator.ui.components.loading-progress
-  (:require [reagent-material-ui.core.box :refer [box]]
-            [reagent-material-ui.core.circular-progress :refer [circular-progress]]))
+  (:require [reagent-mui.material.box :refer [box]]
+            [reagent-mui.material.circular-progress :refer [circular-progress]]))
 
 (defn loading-progress []
   [box {:display         :flex

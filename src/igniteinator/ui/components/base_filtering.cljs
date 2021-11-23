@@ -1,7 +1,6 @@
 (ns igniteinator.ui.components.base-filtering
   (:require [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
             [igniteinator.text :refer [txt txt-c]]
-            [igniteinator.util.event :as event]
             [igniteinator.ui.components.tooltip :refer [tooltip]]
             [igniteinator.ui.components.search-bar :refer [search-bar]]
             [igniteinator.ui.components.dialog :refer [dialog]]
@@ -9,17 +8,17 @@
             [igniteinator.ui.components.form-item :refer [form-item]]
             [igniteinator.ui.components.checkbox :refer [checkbox]]
             [reagent.core :as r]
-            [reagent-material-ui.core.toolbar :refer [toolbar]]
-            [reagent-material-ui.core.box :refer [box]]
-            [reagent-material-ui.core.button-group :refer [button-group]]
-            [reagent-material-ui.core.icon-button :refer [icon-button]]
-            [reagent-material-ui.core.button :refer [button]]
-            [reagent-material-ui.icons.check-box :refer [check-box] :rename {check-box check-box-icon}]
-            [reagent-material-ui.icons.check-box-outline-blank :refer [check-box-outline-blank]]
-            [reagent-material-ui.core.form-group :refer [form-group]]
-            [reagent-material-ui.core.form-helper-text :refer [form-helper-text]]
-            [reagent-material-ui.lab.toggle-button-group :refer [toggle-button-group]]
-            [reagent-material-ui.lab.toggle-button :refer [toggle-button]]))
+            [reagent-mui.material.toolbar :refer [toolbar]]
+            [reagent-mui.material.box :refer [box]]
+            [reagent-mui.material.button-group :refer [button-group]]
+            [reagent-mui.material.icon-button :refer [icon-button]]
+            [reagent-mui.material.button :refer [button]]
+            [reagent-mui.icons.check-box :refer [check-box] :rename {check-box check-box-icon}]
+            [reagent-mui.icons.check-box-outline-blank :refer [check-box-outline-blank]]
+            [reagent-mui.material.form-group :refer [form-group]]
+            [reagent-mui.material.form-helper-text :refer [form-helper-text]]
+            [reagent-mui.material.toggle-button-group :refer [toggle-button-group]]
+            [reagent-mui.material.toggle-button :refer [toggle-button]]))
 
 (defn combos-dialog [{:keys [open?-ref on-close value-ref on-change]}]
   [dialog {:title     (txt :combos-dialog-title)

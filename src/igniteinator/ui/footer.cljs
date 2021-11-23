@@ -1,8 +1,8 @@
 (ns igniteinator.ui.footer
   (:require [igniteinator.constants :refer [version page-url github-url]]
             [igniteinator.ui.components.link :refer [external-link]]
-            [reagent-material-ui.core.link :refer [link]]
-            [reagent-material-ui.core.box :refer [box]]))
+            [reagent-mui.material.link :refer [link]]
+            [reagent-mui.material.box :refer [box]]))
 
 (defn footer []
   [box {:mt 6, :color :text.secondary}

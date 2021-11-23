@@ -4,14 +4,14 @@
             [igniteinator.ui.components.tooltip :refer [tooltip]]
             [igniteinator.util.environment :refer [user-agent]]
             [reagent.core :as r]
-            [reagent-material-ui.core.box :refer [box]]
-            [reagent-material-ui.core.icon-button :refer [icon-button]]
-            [reagent-material-ui.icons.add-to-home-screen :refer [add-to-home-screen]]
-            [reagent-material-ui.core.dialog :refer [dialog]]
-            [reagent-material-ui.core.dialog-title :refer [dialog-title]]
-            [reagent-material-ui.core.dialog-content :refer [dialog-content]]
-            [reagent-material-ui.core.dialog-actions :refer [dialog-actions]]
-            [reagent-material-ui.core.button :refer [button]]))
+            [reagent-mui.material.box :refer [box]]
+            [reagent-mui.material.icon-button :refer [icon-button]]
+            [reagent-mui.icons.add-to-home-screen :refer [add-to-home-screen]]
+            [reagent-mui.material.dialog :refer [dialog]]
+            [reagent-mui.material.dialog-title :refer [dialog-title]]
+            [reagent-mui.material.dialog-content :refer [dialog-content]]
+            [reagent-mui.material.dialog-actions :refer [dialog-actions]]
+            [reagent-mui.material.button :refer [button]]))
 
 (defonce beforeinstallprompt-event (r/atom nil))
 

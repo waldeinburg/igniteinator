@@ -2,7 +2,7 @@
   (:require [igniteinator.util.re-frame :refer [<sub >evt]]
             [igniteinator.text :refer [txt]]
             [igniteinator.ui.components.form-item :refer [form-item]]
-            [reagent-material-ui.core.slider :refer [slider]]))
+            [reagent-mui.material.slider :refer [slider]]))
 
 (defn mark [value label-key]
   {:value value, :label (txt label-key)})

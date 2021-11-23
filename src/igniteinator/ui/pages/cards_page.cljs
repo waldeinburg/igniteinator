@@ -5,8 +5,8 @@
             [igniteinator.ui.components.search-bar :refer [search-bar]]
             [igniteinator.text :refer [txt]]
             [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
-            [reagent-material-ui.core.box :refer [box]]
-            [reagent-material-ui.core.toolbar :refer [toolbar]]))
+            [reagent-mui.material.box :refer [box]]
+            [reagent-mui.material.toolbar :refer [toolbar]]))
 
 (defn page-base-filtering []
   [base-filtering

@@ -10,13 +10,13 @@
             [igniteinator.ui.singletons.install-button :refer [install-button]]
             [igniteinator.ui.singletons.language-menu :refer [language-menu]]
             [igniteinator.ui.settings.settings-menu :refer [settings-button]]
-            [reagent-material-ui.core.box :refer [box]]
-            [reagent-material-ui.core.typography :refer [typography]]
-            [reagent-material-ui.core.app-bar :refer [app-bar]]
-            [reagent-material-ui.core.toolbar :refer [toolbar]]
-            [reagent-material-ui.core.button :refer [button]]
-            [reagent-material-ui.icons.menu :refer [menu] :rename {menu menu-icon}]
-            [reagent-material-ui.core.menu-item :refer [menu-item]]))
+            [reagent-mui.material.box :refer [box]]
+            [reagent-mui.material.typography :refer [typography]]
+            [reagent-mui.material.app-bar :refer [app-bar]]
+            [reagent-mui.material.toolbar :refer [toolbar]]
+            [reagent-mui.material.button :refer [button]]
+            [reagent-mui.icons.menu :refer [menu] :rename {menu menu-icon}]
+            [reagent-mui.material.menu-item :refer [menu-item]]))
 
 (def main-menu-list [[:cards :cards-page-title]
                      [:setups :setups-page-title]])

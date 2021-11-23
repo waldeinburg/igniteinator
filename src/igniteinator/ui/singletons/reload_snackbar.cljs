@@ -2,11 +2,11 @@
   (:require [igniteinator.text :refer [txt]]
             [igniteinator.util.re-frame :refer [<sub >evt]]
             [reagent.core :as r]
-            [reagent-material-ui.core.snackbar :refer [snackbar]]
-            [reagent-material-ui.core.button :refer [button]]
-            [reagent-material-ui.core.toolbar :refer [toolbar]]
-            [reagent-material-ui.core.icon-button :refer [icon-button]]
-            [reagent-material-ui.icons.cancel :refer [cancel] :rename {cancel cancel-icon}]))
+            [reagent-mui.material.snackbar :refer [snackbar]]
+            [reagent-mui.material.button :refer [button]]
+            [reagent-mui.material.toolbar :refer [toolbar]]
+            [reagent-mui.material.icon-button :refer [icon-button]]
+            [reagent-mui.icons.cancel :refer [cancel] :rename {cancel cancel-icon}]))
 
 (defn close-reload-snackbar [_ reason]
   (if (not= "clickaway" reason)

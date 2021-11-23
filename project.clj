@@ -16,7 +16,8 @@
                  [day8.re-frame/http-fx "0.2.3"]
                  [akiroz.re-frame/storage "0.1.4"]
                  [arttuka/reagent-material-ui "5.0.0-0"
-                  :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server arttuka/reagent-material-ui-js]]]
+                  :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server
+                               arttuka/reagent-material-ui-js]]]
 
   :source-paths ["src"]
 

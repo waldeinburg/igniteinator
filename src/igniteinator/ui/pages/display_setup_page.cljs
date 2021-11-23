@@ -5,10 +5,10 @@
             [igniteinator.ui.components.back-button :refer [back-button]]
             [igniteinator.ui.components.card-list :refer [card-list]]
             [igniteinator.ui.components.tooltip :refer [tooltip]]
-            [reagent-material-ui.core.box :refer [box]]
-            [reagent-material-ui.core.toolbar :refer [toolbar]]
-            [reagent-material-ui.core.button :refer [button]]
-            [reagent-material-ui.icons.file-copy :refer [file-copy]]))
+            [reagent-mui.material.box :refer [box]]
+            [reagent-mui.material.toolbar :refer [toolbar]]
+            [reagent-mui.material.button :refer [button]]
+            [reagent-mui.icons.file-copy :refer [file-copy]]))
 
 (defn copy-to-cards-page-button []
   [tooltip (txt :copy-to-cards-page-tooltip)

@@ -5,12 +5,12 @@
             [igniteinator.ui.settings.size :refer [size-settings]]
             [igniteinator.ui.settings.default-order :refer [default-order-settings]]
             [igniteinator.ui.settings.display-name :refer [display-name-settings]]
-            [reagent-material-ui.core.swipeable-drawer :refer [swipeable-drawer]]
-            [reagent-material-ui.core.icon-button :refer [icon-button]]
-            [reagent-material-ui.core.list :refer [list]]
-            [reagent-material-ui.core.list-item :refer [list-item]]
-            [reagent-material-ui.core.divider :refer [divider]]
-            [reagent-material-ui.icons.settings :refer [settings] :rename {settings settings-icon}]))
+            [reagent-mui.material.swipeable-drawer :refer [swipeable-drawer]]
+            [reagent-mui.material.icon-button :refer [icon-button]]
+            [reagent-mui.material.list :refer [list]]
+            [reagent-mui.material.list-item :refer [list-item]]
+            [reagent-mui.material.divider :refer [divider]]
+            [reagent-mui.icons.settings :refer [settings] :rename {settings settings-icon}]))
 
 (defn setting [elem]
   [:<>

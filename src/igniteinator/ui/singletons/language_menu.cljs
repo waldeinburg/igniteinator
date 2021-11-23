@@ -2,8 +2,8 @@
   (:require [igniteinator.constants :as constants]
             [igniteinator.util.re-frame :refer [<sub >evt]]
             [igniteinator.ui.components.menu-button :refer [menu-button]]
-            [reagent-material-ui.icons.translate :refer [translate] :rename {translate translate-icon}]
-            [reagent-material-ui.core.menu-item :refer [menu-item]]
+            [reagent-mui.icons.translate :refer [translate] :rename {translate translate-icon}]
+            [reagent-mui.material.menu-item :refer [menu-item]]
             [clojure.string :as s]))
 
 (defn language-menu []

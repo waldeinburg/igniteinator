@@ -1,25 +1,25 @@
 (ns igniteinator.ui.singletons.caching-progress
   (:require [igniteinator.util.re-frame :refer [<sub >evt]]
             [igniteinator.text :refer [txt]]
-            [reagent-material-ui.styles :as styles]
-            [reagent-material-ui.core.snackbar :refer [snackbar]]
-            [reagent-material-ui.lab.alert :refer [alert]]
-            [reagent-material-ui.lab.alert-title :refer [alert-title]]
-            [reagent-material-ui.core.linear-progress :refer [linear-progress]]))
+            [reagent-mui.material.snackbar :refer [snackbar]]
+            [reagent-mui.material.alert :refer [alert]]
+            [reagent-mui.material.alert-title :refer [alert-title]]
+            [reagent-mui.material.linear-progress :refer [linear-progress]]))
 
 (defn handle-img-cache-message [msg-data]
   ;; The message data will contain a progress and a count integer.
   ;; Also, set an open flag (cf. the compenent below).
   (>evt :caching-progress/set-progress msg-data))
 
-(def thick-linear-progress
+#_(def thick-linear-progress
   ((styles/with-styles {:root {:height        10
                                :border-radius 5}})
    linear-progress))
-
-(def large-alert ((styles/with-styles {:root    {:width "100%"}
+(def thick-linear-progress linear-progress)
+#_(def large-alert ((styles/with-styles {:root    {:width "100%"}
                                        :message {:width "100%"}})
                   alert))
+(def large-alert alert)
 
 (defn caching-progress []
   ;; If we never got a message about caching progress, avoid rendering at all. But when rendering, we want to show/hide

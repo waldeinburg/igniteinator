@@ -6,14 +6,14 @@
             [igniteinator.ui.components.form-item :refer [form-item]]
             [igniteinator.ui.components.checkbox :refer [checkbox]]
             [reagent.core :as r]
-            [reagent-material-ui.core.box :refer [box]]
-            [reagent-material-ui.core.list :refer [list]]
-            [reagent-material-ui.core.list-item :refer [list-item]]
-            [reagent-material-ui.core.list-item-text :refer [list-item-text]]
-            [reagent-material-ui.core.divider :refer [divider]]
-            [reagent-material-ui.core.form-group :refer [form-group]]
-            [reagent-material-ui.core.select :refer [select]]
-            [reagent-material-ui.core.menu-item :refer [menu-item]]))
+            [reagent-mui.material.box :refer [box]]
+            [reagent-mui.material.list :refer [list]]
+            [reagent-mui.material.list-item :refer [list-item]]
+            [reagent-mui.material.list-item-text :refer [list-item-text]]
+            [reagent-mui.material.divider :refer [divider]]
+            [reagent-mui.material.form-group :refer [form-group]]
+            [reagent-mui.material.select :refer [select]]
+            [reagent-mui.material.menu-item :refer [menu-item]]))
 
 (defn setups-filter-operator []
   [select {:value     (<sub :setups-filter/operator)

@@ -4,8 +4,8 @@
             [igniteinator.text :refer [txt]]
             [igniteinator.ui.components.tooltip :refer [tooltip]]
             [goog.dom :as gdom]
-            [reagent-material-ui.core.menu :refer [menu]]
-            [reagent-material-ui.core.icon-button :refer [icon-button]]))
+            [reagent-mui.material.menu :refer [menu]]
+            [reagent-mui.material.icon-button :refer [icon-button]]))
 
 (defn menu-button [{:keys [button-elem
                            button-id menu-id tooltip-key icon

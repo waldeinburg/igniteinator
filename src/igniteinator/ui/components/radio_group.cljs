@@ -4,9 +4,9 @@
             [igniteinator.util.event :as event]
             [igniteinator.ui.components.form-item :refer [form-item]]
             [reagent.core :as r]
-            [reagent-material-ui.core.form-control-label :refer [form-control-label]]
-            [reagent-material-ui.core.radio-group :refer [radio-group] :rename {radio-group mui-radio-group}]
-            [reagent-material-ui.core.radio :refer [radio] :rename {radio mui-radio}]))
+            [reagent-mui.material.form-control-label :refer [form-control-label]]
+            [reagent-mui.material.radio-group :refer [radio-group] :rename {radio-group mui-radio-group}]
+            [reagent-mui.material.radio :refer [radio] :rename {radio mui-radio}]))
 
 (defn radio-elem []
   (r/as-element [mui-radio]))

@@ -6,15 +6,15 @@
             [igniteinator.ui.components.tooltip :refer [tooltip]]
             [promesa.core :as p]
             [reagent.core :as r]
-            [reagent-material-ui.core.box :refer [box]]
-            [reagent-material-ui.core.form-group :refer [form-group]]
-            [reagent-material-ui.core.text-field :refer [text-field]]
-            [reagent-material-ui.core.button :refer [button]]
-            [reagent-material-ui.core.select :refer [select]]
-            [reagent-material-ui.core.menu-item :refer [menu-item]]
-            [reagent-material-ui.core.icon-button :refer [icon-button]]
-            [reagent-material-ui.icons.share :refer [share] :rename {share share-icon}]
-            [reagent-material-ui.core.snackbar :refer [snackbar]]))
+            [reagent-mui.material.box :refer [box]]
+            [reagent-mui.material.form-group :refer [form-group]]
+            [reagent-mui.material.text-field :refer [text-field]]
+            [reagent-mui.material.button :refer [button]]
+            [reagent-mui.material.select :refer [select]]
+            [reagent-mui.material.menu-item :refer [menu-item]]
+            [reagent-mui.material.icon-button :refer [icon-button]]
+            [reagent-mui.icons.share :refer [share] :rename {share share-icon}]
+            [reagent-mui.material.snackbar :refer [snackbar]]))
 
 (defn share-mode-select []
   [select {:value     (<sub :share/mode)

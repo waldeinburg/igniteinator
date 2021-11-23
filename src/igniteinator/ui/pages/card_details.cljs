@@ -4,9 +4,9 @@
             [igniteinator.ui.components.back-button :refer [back-button]]
             [igniteinator.ui.components.card-list :refer [card-list card-grid]]
             [igniteinator.text :refer [txt txt-c]]
-            [reagent-material-ui.core.grid :refer [grid]]
-            [reagent-material-ui.core.modal :refer [modal]]
-            [reagent-material-ui.core.box :refer [box]]))
+            [reagent-mui.material.grid :refer [grid]]
+            [reagent-mui.material.modal :refer [modal]]
+            [reagent-mui.material.box :refer [box]]))
 
 (defn combos-list [card]
   (let [cards (<sub :card-details-page/combos)]

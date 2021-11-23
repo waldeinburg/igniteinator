@@ -4,9 +4,9 @@
             [igniteinator.text :refer [txt txt-c]]
             [igniteinator.ui.components.tooltip :refer [tooltip] :rename {tooltip tooltip-elem}]
             [reagent.core :as r]
-            [reagent-material-ui.util :refer [adapt-react-class]]
-            [reagent-material-ui.core.box :refer [box]]
-            [reagent-material-ui.core.grid :refer [grid]]
+            [reagent-mui.util :refer [adapt-react-class]]
+            [reagent-mui.material.box :refer [box]]
+            [reagent-mui.material.grid :refer [grid]]
             ["react-visibility-sensor" :as VisibilitySensor]))
 
 (def placeholder-img-src (str constants/img-base-path "/placeholder.png"))

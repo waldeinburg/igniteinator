@@ -4,8 +4,8 @@
             [igniteinator.text :refer [txt]]
             [igniteinator.ui.components.form-item :refer [form-item]]
             [igniteinator.ui.components.checkbox :refer [checkbox]]
-            [reagent-material-ui.core.box :refer [box]]
-            [reagent-material-ui.core.form-group :refer [form-group]]))
+            [reagent-mui.material.box :refer [box]]
+            [reagent-mui.material.form-group :refer [form-group]]))
 
 (defn boxes-settings []
   (let [boxes (<sub :all-boxes)]

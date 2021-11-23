@@ -9,7 +9,6 @@
     ;; Re-frame registrations END
     [igniteinator.ui.app :refer [app]]
     [igniteinator.util.re-frame :refer [>evt]]
-    [igniteinator.util.message :as msg]
     [igniteinator.service-worker-client :refer [reg-sw]]
     [igniteinator.ui.singletons.install-button :refer [reg-beforeinstallprompt-event]]
     [goog.dom :as gdom]

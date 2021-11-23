@@ -11,8 +11,8 @@
             [igniteinator.ui.pages.card-details :refer [card-details-page]]
             [igniteinator.ui.pages.setups-page :refer [setups-page]]
             [igniteinator.ui.pages.display-setup-page :refer [display-setup-page]]
-            [reagent-material-ui.core.css-baseline :refer [css-baseline]]
-            [reagent-material-ui.core.container :refer [container]]))
+            [reagent-mui.material.css-baseline :refer [css-baseline]]
+            [reagent-mui.material.container :refer [container]]))
 
 (defn pages []
   ;; TODO: add router here?

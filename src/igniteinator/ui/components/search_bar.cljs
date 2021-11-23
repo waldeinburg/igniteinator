@@ -6,11 +6,11 @@
             [igniteinator.ui.components.link :refer [external-link]]
             [igniteinator.util.re-frame :refer [<sub >evt]]
             [reagent.core :as r]
-            [reagent-material-ui.core.text-field :refer [text-field]]
-            [reagent-material-ui.core.input-adornment :refer [input-adornment]]
-            [reagent-material-ui.core.icon-button :refer [icon-button]]
-            [reagent-material-ui.icons.search :refer [search] :rename {search search-icon}]
-            [reagent-material-ui.icons.clear :refer [clear] :rename {clear clear-icon}]))
+            [reagent-mui.material.text-field :refer [text-field]]
+            [reagent-mui.material.input-adornment :refer [input-adornment]]
+            [reagent-mui.material.icon-button :refer [icon-button]]
+            [reagent-mui.icons.search :refer [search] :rename {search search-icon}]
+            [reagent-mui.icons.clear :refer [clear] :rename {clear clear-icon}]))
 
 (defn clear-search-bar [input-ref on-change]
   (set! (.-value @input-ref))
