@@ -34,11 +34,11 @@
 
 (defn cards-page []
   [page (txt :cards-page-title)
-   [box {:mb 2}
-    [toolbar {:disable-gutters true}
-     [box {:mr 2}
-      [page-base-filtering]]
-     [search-bar
-      (<sub-ref :cards-page/search-str)
-      #(>evt :cards-page/set-search-str %)]]]
+   [toolbar {:disable-gutters true
+             :sx              {:mb 2}}
+    [box {:mr 2}
+     [page-base-filtering]]
+    [search-bar
+     (<sub-ref :cards-page/search-str)
+     #(>evt :cards-page/set-search-str %)]]
    [page-card-list]])

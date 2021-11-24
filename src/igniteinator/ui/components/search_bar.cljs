@@ -37,7 +37,8 @@
             re?        (and
                          (re-find #"[.*+?{}()\[\]^$\|\\]" search-str)
                          (ss/re-pattern-no-error search-str))]
-        [text-field {:input-ref     #(reset! input-ref %)
+        [text-field {:variant       :standard
+                     :input-ref     #(reset! input-ref %)
                      :default-value search-str              ; not :value (will cause rerendering on input)
                      :placeholder   placeholder
                      :on-key-down   #(when (= "Escape" (.-key %))

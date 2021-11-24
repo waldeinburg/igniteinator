@@ -9,7 +9,6 @@
             [igniteinator.ui.components.checkbox :refer [checkbox]]
             [reagent.core :as r]
             [reagent-mui.material.toolbar :refer [toolbar]]
-            [reagent-mui.material.box :refer [box]]
             [reagent-mui.material.button-group :refer [button-group]]
             [reagent-mui.material.icon-button :refer [icon-button]]
             [reagent-mui.material.button :refer [button]]
@@ -54,14 +53,13 @@
              :open?-ref open?-ref
              :on-close  on-close}
      [toolbar {:disable-gutters true}
-      [box {:mr 1}
-       [button-group
-        [tooltip (txt-c :select-all)
-         [icon-button {:on-click #(on-dialog-selection-set :all)}
-          [check-box-icon]]]
-        [tooltip (txt-c :clear-selection)
-         [icon-button {:on-click #(on-dialog-selection-set :none)}
-          [check-box-outline-blank]]]]]
+      [button-group {:sx {:mr 1}}
+       [tooltip (txt-c :select-all)
+        [icon-button {:on-click #(on-dialog-selection-set :all)}
+         [check-box-icon]]]
+       [tooltip (txt-c :clear-selection)
+        [icon-button {:on-click #(on-dialog-selection-set :none)}
+         [check-box-outline-blank]]]]
       [search-bar search-str-ref on-search-str-change]]
      [form-item {}
       [form-group

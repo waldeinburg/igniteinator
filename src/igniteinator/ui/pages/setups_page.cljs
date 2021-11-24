@@ -16,7 +16,8 @@
             [reagent-mui.material.menu-item :refer [menu-item]]))
 
 (defn setups-filter-operator []
-  [select {:value     (<sub :setups-filter/operator)
+  [select {:variant   :standard
+           :value     (<sub :setups-filter/operator)
            :on-change #(>evt :setups-filter/set-operator (event/value->keyword %))}
    [menu-item {:value :some} (txt-c :some-of)]
    [menu-item {:value :all} (txt-c :all-of)]])
@@ -57,17 +58,18 @@
          main-list                         (if includes-recommended-starter-set?
                                              (rest setups)
                                              setups)]
-     [box {:width :fit-content}
-      [list {:component "nav"}
-       (if includes-recommended-starter-set?
-         [:<>
-          (let [s (first setups)]
-            ^{:key (:id s)} [setup-list-item s])
-          [divider]])
-       (doall
-         (for [s main-list]
-           ^{:key (:id s)}
-           [setup-list-item s]))]])])
+
+     [list {:component "nav"
+            :sx        {:width :fit-content}}
+      (if includes-recommended-starter-set?
+        [:<>
+         (let [s (first setups)]
+           ^{:key (:id s)} [setup-list-item s])
+         [divider]])
+      (doall
+        (for [s main-list]
+          ^{:key (:id s)}
+          [setup-list-item s]))])])
 
 (defn setups-page []
   [page (txt :setups-page-title)

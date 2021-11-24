@@ -17,7 +17,8 @@
             [reagent-mui.material.snackbar :refer [snackbar]]))
 
 (defn share-mode-select []
-  [select {:value     (<sub :share/mode)
+  [select {:variant   :standard
+           :value     (<sub :share/mode)
            :on-change #(>evt :share/set-mode (event/value->keyword %))}
    [menu-item {:value :url} (txt-c :link)]
    [menu-item {:value :names} (txt-c :names)]])
@@ -41,10 +42,11 @@
    (txt-c :copy)])
 
 (defn share-dialog [value]
-  [dialog {:title       (txt :share/dialog-title)
-           :button-text (txt-c :close)
-           :open?-ref   (<sub-ref :share/dialog-open?)
-           :on-close    #(>evt :share/set-dialog-open? false)}
+  [dialog {:title        (txt :share/dialog-title)
+           :button-text  (txt-c :close)
+           :open?-ref    (<sub-ref :share/dialog-open?)
+           :on-close     #(>evt :share/set-dialog-open? false)
+           :button-props {:color :secondary}}
    [:p (txt :share/dialog-text)]
    [form-group
     [box {:display :flex, :align-items :center}

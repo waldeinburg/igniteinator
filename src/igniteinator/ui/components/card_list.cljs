@@ -39,10 +39,11 @@
            name            (:name card)
            ;; The placeholder has the exact scale of the images.
            placeholder-img [:img {:src   placeholder-img-src, :alt name
-                                  :class "card-img"}]
+                                  :class :card-img}]
            img             [:img (into {:src      src, :alt name
-                                        :class    ["card-img" (when on-click "MuiLink-button")]
-                                        :on-click on-click}
+                                        :class    :card-img
+                                        :on-click on-click
+                                        :style    (if on-click {:cursor :pointer})}
                                    (if (not (= :loaded load-state))
                                      {:on-load #(>evt :set-card-load-state card :loaded)}))]]
        (cond

@@ -11,16 +11,6 @@
   ;; Also, set an open flag (cf. the compenent below).
   (>evt :caching-progress/set-progress msg-data))
 
-#_(def thick-linear-progress
-  ((styles/with-styles {:root {:height        10
-                               :border-radius 5}})
-   linear-progress))
-(def thick-linear-progress linear-progress)
-#_(def large-alert ((styles/with-styles {:root    {:width "100%"}
-                                       :message {:width "100%"}})
-                  alert))
-(def large-alert alert)
-
 (defn caching-progress []
   ;; If we never got a message about caching progress, avoid rendering at all. But when rendering, we want to show/hide
   ;; based on the :open boolean to get the transition animation.
@@ -36,9 +26,13 @@
                  :on-close                #(>evt :caching-progress/set-open? false)
                  "ClickAwayListenerProps" {"mouseEvent" false
                                            "touchEvent" false}}
-       [large-alert {:severity (if finished? :success :info)
-                     :variant  (if finished? :filled :standard)
-                     :icon     false}
+       [alert {:severity (if finished? :success :info)
+               :variant  (if finished? :filled :standard)
+               :icon     false
+               ;; This doesn't work on desktop for some reason, but the download progress is aimed at people installing
+               ;; as a smartphone app anyway.
+               :sx       {:width "100%"}}
         [alert-title (txt :caching-progress-title)]
-        [thick-linear-progress {:variant :determinate
-                                :value   value}]]])))
+        [linear-progress {:variant :determinate
+                          :value   value
+                          :sx      {:height 10, :border-radius 5}}]]])))

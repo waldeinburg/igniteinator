@@ -4,7 +4,6 @@
             [igniteinator.ui.components.tooltip :refer [tooltip]]
             [igniteinator.util.environment :refer [user-agent]]
             [reagent.core :as r]
-            [reagent-mui.material.box :refer [box]]
             [reagent-mui.material.icon-button :refer [icon-button]]
             [reagent-mui.icons.add-to-home-screen :refer [add-to-home-screen]]
             [reagent-mui.material.dialog :refer [dialog]]
