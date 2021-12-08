@@ -3,14 +3,12 @@
             [igniteinator.constants :as constants]
             [igniteinator.text :refer [txt txt-c]]
             [igniteinator.ui.components.tooltip :refer [tooltip] :rename {tooltip tooltip-elem}]
-            [reagent.core :as r]
+            [igniteinator.ui.components.vendor.visibility-sensor :refer [visibility-sensor]]
             [reagent-mui.util :refer [adapt-react-class]]
             [reagent-mui.material.box :refer [box]]
-            [reagent-mui.material.grid :refer [grid]]
-            ["react-visibility-sensor" :as VisibilitySensor]))
+            [reagent-mui.material.grid :refer [grid]]))
 
 (def placeholder-img-src (str constants/img-base-path "/placeholder.png"))
-(def visibility-sensor (r/adapt-react-class (.-default VisibilitySensor)))
 
 (defn card-debug-data [card]
   (if (<sub :debug/show-card-data)
