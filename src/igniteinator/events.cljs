@@ -245,14 +245,13 @@
           id   (:id card)]
       (assoc-in db [:card-load-state lang id] state))))
 
-(reg-event-db-assoc
-  :card-details-page/set-card-id)
-
 (reg-event-fx
   :show-card-details
-  (fn [_ [_ card navigate-event]]
-    {:fx [[:dispatch [:card-details-page/set-card-id (:id card)]]
-          [:dispatch [navigate-event :card-details]]]}))
+  (fn [{:keys [db]} [_ card-list idx navigate-event]]
+    {:db       (assoc-ins db
+                 [:card-details-page :card-ids] (map :id card-list)
+                 [:card-details-page :card-idx] idx)
+     :dispatch [navigate-event :card-details]}))
 
 (reg-event-db-assoc
   :cards-page.combos/set-dialog-open?)

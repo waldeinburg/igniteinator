@@ -97,23 +97,24 @@
      tooltip-fn-prop  :tooltip-fn}
     cards]
    ;; Default tooltip and on-click is to show card details.
-   (let [on-click-fn (cond
-                       on-click-prop (fn [_] on-click-prop)
-                       on-click-fn-prop on-click-fn-prop
-                       :else (fn [card]
-                               #(>evt :show-card-details card :page/push)))
-         tooltip-fn  (cond
-                       tooltip-prop (fn [_] tooltip-prop)
-                       tooltip-fn-prop tooltip-fn-prop
-                       :else (fn [card]
-                               (if (not-empty (:combos card))
-                                 (txt :card-tooltip-combos)
-                                 (txt :card-tooltip-no-combos))))]
+   (let [on-click-fn     (cond
+                           on-click-prop (fn [_] on-click-prop)
+                           on-click-fn-prop on-click-fn-prop
+                           :else (fn [card]
+                                   #(>evt :show-card-details cards (:idx card) :page/push)))
+         tooltip-fn      (cond
+                           tooltip-prop (fn [_] tooltip-prop)
+                           tooltip-fn-prop tooltip-fn-prop
+                           :else (fn [card]
+                                   (if (not-empty (:combos card))
+                                     (txt :card-tooltip-combos)
+                                     (txt :card-tooltip-no-combos))))
+         cards-with-idxs (map-indexed (fn [idx c] (assoc c :idx idx)) cards)]
      (if (empty? cards)
        [empty-card-list]
        [grid {:component "ol", :container true, :spacing 1, :class "card-list"}
         (doall
-          (for [c cards]
+          (for [c cards-with-idxs]
             (let [on-click (on-click-fn c)
                   tooltip  (tooltip-fn c)]
               ^{:key (:id c)}                               ; Cf. example on https://reagent-project.github.io/

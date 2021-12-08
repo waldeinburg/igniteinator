@@ -262,20 +262,15 @@
                                (into combos-base-filter) (into page-filters) (into global-filters))]
       (<sub :cards base-spec filters sortings))))
 
-(reg-sub-db :card-details-page/card-id)
+(reg-sub-db :card-details-page/card-ids)
+(reg-sub-db :card-details-page/card-idx)
 (reg-sub-db :card-details-page/sortings)
 
 (reg-sub
-  :card-details-page/card
-  :<- [:card-details-page/card-id]
-  (fn [card-id _]
-    (<sub :card card-id)))
-(reg-sub
   :card-details-page/combos
-  :<- [:card-details-page/card]
   :<- [:default-order-sortings]
   :<- [:card-details-page/sortings]
-  (fn [[card default-sortings page-sortings] _]
+  (fn [[default-sortings page-sortings] [_ card]]
     (<sub :cards (:combos card) [] (or page-sortings default-sortings))))
 
 (reg-sub-db
