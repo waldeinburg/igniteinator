@@ -34,9 +34,12 @@
                                           :value        :official}
                          :card-selection {:dialog-open? false
                                           :ids          #{}}}
-   :card-details-page   {:card-ids nil
-                         :card-idx nil
-                         :sortings nil}
+   :card-details-page   {:idx                  nil
+                         :prev-idx             nil
+                         :first-transition-in? true
+                         :card-ids             nil
+                         :initial-idx          nil
+                         :sortings             nil}
    :setups-filter       {:operator  :some
                          :selection nil}                    ; filled when data is loaded
    :setup               {:id nil}

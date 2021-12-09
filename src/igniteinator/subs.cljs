@@ -262,10 +262,31 @@
                                (into combos-base-filter) (into page-filters) (into global-filters))]
       (<sub :cards base-spec filters sortings))))
 
+(reg-sub-db :card-details-page/idx)
+(reg-sub-db :card-details-page/prev-idx)
+(reg-sub-db :card-details-page/first-transition-in?)
 (reg-sub-db :card-details-page/card-ids)
-(reg-sub-db :card-details-page/card-idx)
+(reg-sub-db :card-details-page/initial-idx)
 (reg-sub-db :card-details-page/sortings)
 
+(reg-sub
+  :card-details-page/card-titles
+  :<- [:card-details-page/card-ids]
+  :<- [:card-details-page/idx]
+  :<- [:card-details-page/prev-idx]
+  :<- [:card-details-page/first-transition-in?]
+  (fn [[card-ids idx prev-idx first-transition-in?] _]
+    (let [get-name #(->> % (get card-ids) (<sub :card) :name)]
+      [{:transition-in? first-transition-in?
+        :name           (get-name (if first-transition-in? idx prev-idx))}
+       {:transition-in? (not first-transition-in?)
+        :name           (get-name (if first-transition-in? prev-idx idx))}])))
+(reg-sub
+  :card-details-page/previous-card
+  :<- [:card-details-page/card-ids]
+  :<- [:card-details-page/prev-idx]
+  (fn [[card-ids idx] _]
+    (<sub :card (get card-ids idx))))
 (reg-sub
   :card-details-page/combos
   :<- [:default-order-sortings]

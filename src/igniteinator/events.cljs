@@ -245,12 +245,20 @@
           id   (:id card)]
       (assoc-in db [:card-load-state lang id] state))))
 
+(reg-event-db
+  :card-details-page/set-idx
+  (fn [db [_ idx]]
+    (update db :card-details-page #(assoc % :prev-idx (:idx %)
+                                            :idx idx
+                                            :first-transition-in? (not (:first-transition-in? %))))))
 (reg-event-fx
   :show-card-details
   (fn [{:keys [db]} [_ card-list idx navigate-event]]
     {:db       (assoc-ins db
-                 [:card-details-page :card-ids] (map :id card-list)
-                 [:card-details-page :card-idx] idx)
+                 [:card-details-page :card-ids] (mapv :id card-list)
+                 [:card-details-page :idx] idx
+                 [:card-details-page :first-transition-in?] true
+                 [:card-details-page :initial-idx] idx)
      :dispatch [navigate-event :card-details]}))
 
 (reg-event-db-assoc

@@ -1,5 +1,6 @@
 (ns igniteinator.ui.pages.card-details
   (:require [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
+            [igniteinator.util.reagent :refer [add-children]]
             [igniteinator.ui.components.page :refer [page]]
             [igniteinator.ui.components.back-button :refer [back-button]]
             [igniteinator.ui.components.card-list :refer [card-list card-grid]]
@@ -7,7 +8,8 @@
             [igniteinator.ui.components.vendor.swipeable-views :refer [swipeable-views]]
             [reagent-mui.material.grid :refer [grid]]
             [reagent-mui.material.modal :refer [modal]]
-            [reagent-mui.material.box :refer [box]]))
+            [reagent-mui.material.box :refer [box]]
+            [reagent-mui.material.fade :refer [fade]]))
 
 (defn combos-list [card]
   (let [cards (<sub :card-details-page/combos card)]
@@ -28,9 +30,8 @@
 
 (defn card-details [card-id]
   (let [card (<sub :card card-id)]
-    [page (str (txt :card-details-page-title) " " (:name card))
-     [box {:mb 2} [back-button]]
-     ;; Show the next step larger than the card list.
+    ;; Show the next step larger than the card list.
+    [:<>
      [grid {:container true}
       [card-grid {:component            "div"
                   :grid-breakpoints-ref (<sub-ref :grid-breakpoints+1)
@@ -40,10 +41,35 @@
        [:p (txt :no-combos)]
        [combos-section card])]))
 
-(defn card-details-page []
+(defn card-details-view []
   (let [card-ids (<sub :card-details-page/card-ids)
-        idx      (<sub :card-details-page/card-idx)]
-    [swipeable-views {:index idx}
-     (for [id card-ids]
-       ^{:key id}
-       [card-details id])]))
+        idx      (<sub :card-details-page/initial-idx)]
+    ;; Make the slides appear from the edge by canceling any padding using margin on the container and then adding the
+    ;; same amount of padding on the children.
+    ;; Margin cannot be applied to the slides containers so we cannot collapse margins. That would be nice because
+    ;; the next slide would be right behind the edge.
+    ;; Margins are the same as applied to the padding on the MUI Container.
+    [box {:mx -2, :sm {:mx -3}}
+     [swipeable-views {:animate-height  true                ; The height of the slides are very different.
+                       :index           idx
+                       :on-change-index #(>evt :card-details-page/set-idx %)}
+      (for [id card-ids]
+        ^{:key id}
+        [box {:px 2, :sm {:px 3}}
+         [card-details id]])]]))
+
+(defn card-details-page []
+  (let [card-titles (<sub :card-details-page/card-titles)]
+    [:<>
+     [page [:<>
+            (txt :card-details-page-title) " "
+            [box {:display :grid}
+             (add-children
+               (for [t card-titles]
+                 [fade {:in      (:transition-in? t)
+                        :timeout 500
+                        :appear  false
+                        :sx      {:grid-row-start 1, :grid-column-start 1}}
+                  [box (:name t)]]))]]
+      [box {:mb 2} [back-button]]]
+     [card-details-view]]))
