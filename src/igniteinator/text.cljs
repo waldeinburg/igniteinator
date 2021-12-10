@@ -33,7 +33,6 @@
    :card-tooltip-no-more-combos       {:en "Show card (no more known combos for this card)"}
    :no-combos                         {:en "No known combos for this card."}
    :cards-page-title                  {:en "Cards"}
-   :card-details-page-title           {:en ""}
    :combos-title                      {:en "Combos"}
    :card-selection                    {:en "card selection"}
    :select-all-button                 {:en "all"}

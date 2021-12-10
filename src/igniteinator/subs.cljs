@@ -2,12 +2,12 @@
   (:require [igniteinator.text :as text]
             [igniteinator.constants :as constants]
             [igniteinator.util.image-path :refer [image-path]]
-            [igniteinator.util.re-frame :refer [reg-sub-db reg-sub-option <sub]]
+            [igniteinator.util.re-frame :refer [reg-sub-db reg-sub-option <sub <sub-ref]]
             [igniteinator.model.cards :as cards]
             [igniteinator.model.setups :as setups]
             [igniteinator.util.sort :as sort-util]
             [igniteinator.util.filter :as filter-util]
-            [re-frame.core :refer [reg-sub reg-sub-raw subscribe]]
+            [re-frame.core :refer [reg-sub reg-sub-raw]]
             [clojure.string :as s])
   (:require-macros [reagent.ratom :as ra]))
 
@@ -59,7 +59,7 @@
 (reg-sub
   :txt-c
   (fn [[_ key]]
-    (subscribe [:txt key]))
+    (<sub-ref :txt key))
   (fn [str _]
     (s/capitalize str)))
 
@@ -77,7 +77,7 @@
 (reg-sub
   :boxes-setting/box-ks?
   (fn [[_ box]]
-    (subscribe [:boxes-setting/box? box]))
+    (<sub-ref :boxes-setting/box? box))
   (fn [box?]
     (= :ks box?)))
 
@@ -269,24 +269,15 @@
 (reg-sub-db :card-details-page/initial-idx)
 (reg-sub-db :card-details-page/sortings)
 
-(reg-sub
-  :card-details-page/card-titles
-  :<- [:card-details-page/card-ids]
-  :<- [:card-details-page/idx]
-  :<- [:card-details-page/prev-idx]
-  :<- [:card-details-page/first-transition-in?]
-  (fn [[card-ids idx prev-idx first-transition-in?] _]
-    (let [get-name #(->> % (get card-ids) (<sub :card) :name)]
-      [{:transition-in? first-transition-in?
-        :name           (get-name (if first-transition-in? idx prev-idx))}
-       {:transition-in? (not first-transition-in?)
-        :name           (get-name (if first-transition-in? prev-idx idx))}])))
-(reg-sub
-  :card-details-page/previous-card
-  :<- [:card-details-page/card-ids]
-  :<- [:card-details-page/prev-idx]
-  (fn [[card-ids idx] _]
-    (<sub :card (get card-ids idx))))
+(defn- reg-card-details-page-card-name [name idx-sub]
+  (reg-sub
+    name
+    :<- [:card-details-page/card-ids]
+    :<- [idx-sub]
+    (fn [[card-ids idx] _]
+      (:name (<sub :card (get card-ids idx))))))
+(reg-card-details-page-card-name :card-details-page/current-card-name :card-details-page/idx)
+(reg-card-details-page-card-name :card-details-page/previous-card-name :card-details-page/prev-idx)
 (reg-sub
   :card-details-page/combos
   :<- [:default-order-sortings]
@@ -334,7 +325,7 @@
   :<- [:setups-filter/operator]
   :<- [:setups-filter/selection]
   (fn [[setups operator selection] _]
-    (filter
+    (filterv
       (case operator
         :all #(= (set (:requires %)) selection)
         :some #(every? selection (set (:requires %))))
@@ -345,38 +336,46 @@
   (fn [setups _]
     (= (-> setups first :id) 0)))
 
-(reg-sub-db
-  :display-setup-page/sortings)
-(reg-sub-db
-  :setup/id)
 (reg-sub
-  :current-setup
+  :setups-page-ids
+  :<- [:setups-filtered-and-sorted]
+  (fn [setups _]
+    (map :id setups)))
+
+(reg-sub-db :display-setup-page/idx)
+(reg-sub-db :display-setup-page/prev-idx)
+(reg-sub-db :display-setup-page/first-transition-in?)
+(reg-sub-db :display-setup-page/sortings)
+(reg-sub
+  :setup/cards
   :<- [:setups-map]
-  :<- [:setup/id]
-  (fn [[setups-map id] _]
-    (get setups-map id)))
-(reg-sub
-  :current-setup/name
-  :<- [:current-setup]
-  (fn [setup _]
-    (:name setup)))
-(reg-sub
-  :current-setup/cards
-  :<- [:current-setup]
   :<- [:default-order-sortings]
   :<- [:display-setup-page/sortings]
-  (fn [[setup default-order-sortings page-sortings] _]
-    (<sub :cards (:cards setup) [] (or page-sortings default-order-sortings))))
+  (fn [[setups default-order-sortings page-sortings] [_ id]]
+    (let [setup (setups id)]
+      (<sub :cards (:cards setup) [] (or page-sortings default-order-sortings)))))
+
+(defn- reg-setup-page-name [name idx-sub]
+  (reg-sub
+    name
+    :<- [:setups-filtered-and-sorted]
+    :<- [idx-sub]
+    (fn [[setups idx] _]
+      (:name (get setups idx)))))
+(reg-setup-page-name :display-setup-page/current-setup-name :display-setup-page/idx)
+(reg-setup-page-name :display-setup-page/previous-setup-name :display-setup-page/prev-idx)
+
 (reg-sub
-  :current-setup/required-boxes
-  :<- [:current-setup]
-  (fn [setup _]
-    (<sub :boxes-by-ids (:requires setup))))
+  :setup/required-boxes
+  :<- [:setups-map]
+  (fn [setups [_ id]]
+    (let [setup (setups id)]
+      (<sub :boxes-by-ids (:requires setup)))))
 (reg-sub
-  :current-setup/required-boxes-string
-  :<- [:current-setup/required-boxes]
-  (fn [boxes _]
-    (s/join ", " (map :name boxes))))
+  :setup/required-boxes-string
+  (fn [_ [_ id]]
+    (let [boxes (<sub :setup/required-boxes id)]
+      (s/join ", " (map :name boxes)))))
 
 (reg-sub-db :share/dialog-open?)
 (reg-sub-db :share/snackbar-open?)

@@ -38,12 +38,13 @@
                          :prev-idx             nil
                          :first-transition-in? true
                          :card-ids             nil
-                         :initial-idx          nil
                          :sortings             nil}
    :setups-filter       {:operator  :some
                          :selection nil}                    ; filled when data is loaded
-   :setup               {:id nil}
-   :display-setup-page  {:sortings nil}
+   :display-setup-page  {:idx                  nil
+                         :prev-idx             nil
+                         :first-transition-in? true
+                         :sortings             nil}
    :card-load-state     {:en nil}
    :cards               nil
    :combos-set          nil})

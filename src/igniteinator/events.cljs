@@ -9,6 +9,19 @@
             [re-frame.core :refer [reg-event-fx reg-event-db inject-cofx]]
             [ajax.core :as ajax]))
 
+(defn- reg-nav-page-event-set-idx [name root]
+  (reg-event-db
+    name
+    (fn [db [_ idx]]
+      (update db root #(assoc % :prev-idx (:idx %)
+                                :idx idx
+                                :first-transition-in? (not (:first-transition-in? %)))))))
+(defn- nav-page-assoc-init [db root idx]
+  (assoc-ins db
+    [root :idx] idx
+    [root :prev-idx] nil
+    [root :first-transition-in?] true))
+
 (reg-event-db-assoc :debug/set-show-card-data)
 
 (reg-event-fx
@@ -30,8 +43,8 @@
              ;; Don't put language in options map. We often need to access it in events.
              (update :language #(or (:language store) %))
              (update :options #(merge % (:options store))))})))
-
 (reg-event-db-assoc :set-mode)
+
 (reg-event-db-assoc :set-waiting?)
 
 (reg-event-db-assoc :set-language-menu-open?)
@@ -53,13 +66,13 @@
     {}
     coll))
 
-(defn add-ks-to-boxes [boxes cards]
+(defn- add-ks-to-boxes [boxes cards]
   (mapv (fn [box]
           (assoc box :ks?
                      (some #(and (:ks %) (= (:id box) (:box %))) cards)))
     boxes))
 
-(defn default-boxes-setting [boxes]
+(defn- default-boxes-setting [boxes]
   (reduce
     (fn [c box]
       (assoc c (:id box)
@@ -130,6 +143,7 @@
       {:post-message [:mode {:mode     :standalone
                              :language (:language db)}]})))
 
+;; Box is either false, true or :ks. If selected, alså select ks. Deselecting ks means true instead.
 (reg-event-fx
   :set-language
   [(inject-cofx :store)
@@ -141,8 +155,6 @@
       (if (and standalone-mode? (not= lang (:language db)))
         {:post-message [:mode {:mode     :standalone
                                :language lang}]}))))
-
-;; Box is either false, true or :ks. If selected, alså select ks. Deselecting ks means true instead.
 (reg-event-fx
   :boxes-setting/set-box?
   (fn [{:keys [db]} [_ box-id on?]]
@@ -155,14 +167,15 @@
   :boxes-setting/set-box-ks?
   (fn [_ [_ box-id on?]]
     {:dispatch [:boxes-setting/set-box?-raw box-id (if on? :ks true)]}))
+
 (reg-event-fx
   :boxes-setting/set-box?-raw
   [(inject-cofx :store)]
   (fn [cofx [_ box-id val]]
     (assoc-db-and-store cofx [:options :boxes box-id] val)))
-
 (reg-event-set-option :set-size)
 (reg-event-set-option :set-default-order)
+
 (reg-event-set-option :set-display-name?)
 
 (reg-event-fx
@@ -171,20 +184,20 @@
     {:reload []}))
 
 (reg-event-db-assoc :main-menu-mobile/set-open?)
-
 (reg-event-db-assoc :reload-snackbar/set-open?)
 (reg-event-fx
   :update-available
   (fn [{:keys [db]} [_ new-sw]]
     {:db (update db :reload-snackbar merge {:open?  true
                                             :new-sw new-sw})}))
+
 (reg-event-fx
   :update-app
   (fn [{:keys [db]}]
     {:db         (assoc db :waiting? true)
      :update-app (get-in db [:reload-snackbar :new-sw])}))
-
 (reg-event-db-assoc :caching-progress/set-open?)
+
 (reg-event-db
   :caching-progress/set-progress
   (fn [db [_ {:keys [count progress]}]]
@@ -193,12 +206,13 @@
                :count    count
                :progress progress})))
 
+;; Push page onto history stack.
 (reg-event-fx
   :scroll-to
   (fn [_ [_ n]]
     {:fx [[:scroll-to n]]}))
 
-;; Push page onto history stack.
+;; Replace current page, not changing the history stack.
 (reg-event-fx
   :page/push
   [(inject-cofx :scroll-top)]
@@ -209,7 +223,7 @@
                                        :scroll-top scroll-top}))
      :fx [[:scroll-to-top]]}))
 
-;; Replace current page, not changing the history stack.
+;; Set current page, clearing the history stack.
 (reg-event-fx
   :page/replace
   [(inject-cofx :scroll-top)]
@@ -217,7 +231,7 @@
     {:db (assoc db :current-page key)
      :fx [[:scroll-to-top]]}))
 
-;; Set current page, clearing the history stack.
+;; Pop page from history stack.
 (reg-event-fx
   :page/set
   [(inject-cofx :scroll-top)]
@@ -226,7 +240,6 @@
                    :page-history [])
      :fx [[:scroll-to-top]]}))
 
-;; Pop page from history stack.
 (reg-event-fx
   :page/pop
   (fn [{:keys [db]} _]
@@ -245,20 +258,13 @@
           id   (:id card)]
       (assoc-in db [:card-load-state lang id] state))))
 
-(reg-event-db
-  :card-details-page/set-idx
-  (fn [db [_ idx]]
-    (update db :card-details-page #(assoc % :prev-idx (:idx %)
-                                            :idx idx
-                                            :first-transition-in? (not (:first-transition-in? %))))))
+(reg-nav-page-event-set-idx :card-details-page/set-idx :card-details-page)
 (reg-event-fx
   :show-card-details
   (fn [{:keys [db]} [_ card-list idx navigate-event]]
-    {:db       (assoc-ins db
-                 [:card-details-page :card-ids] (mapv :id card-list)
-                 [:card-details-page :idx] idx
-                 [:card-details-page :first-transition-in?] true
-                 [:card-details-page :initial-idx] idx)
+    {:db       (-> db
+                 (nav-page-assoc-init :card-details-page idx)
+                 (assoc-in [:card-details-page :card-ids] (mapv :id card-list)))
      :dispatch [navigate-event :card-details]}))
 
 (reg-event-db-assoc
@@ -309,10 +315,11 @@
   (fn [db [_ id set?]]
     (let [f (if set? conj disj)]
       (update-in db [:setups-filter :selection] f id))))
+(reg-nav-page-event-set-idx :display-setup-page/set-idx :display-setup-page)
 (reg-event-fx
   :display-setup
-  (fn [{:keys [db]} [_ id]]
-    {:db       (assoc-in db [:setup :id] id)
+  (fn [{:keys [db]} [_ idx]]
+    {:db       (nav-page-assoc-init db :display-setup-page idx)
      :dispatch [:page/push :display-setup]}))
 
 (reg-event-fx

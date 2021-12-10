@@ -47,18 +47,18 @@
 
 (defn setup-list-item [s]
   [list-item {:button   true
-              :on-click #(>evt :display-setup (:id s))}
+              :on-click #(>evt :display-setup (:idx s))}
    [list-item-text {:primary (:name s)}]])
 
 (defn setups-list []
   [:<>
    [setups-filtering]
    (let [setups                            (<sub :setups-filtered-and-sorted)
+         setups-with-idxs                  (map-indexed (fn [idx c] (assoc c :idx idx)) setups)
          includes-recommended-starter-set? (<sub :setups-includes-recommended-starter-set?)
          main-list                         (if includes-recommended-starter-set?
-                                             (rest setups)
-                                             setups)]
-
+                                             (rest setups-with-idxs)
+                                             setups-with-idxs)]
      [list {:component "nav"
             :sx        {:width :fit-content}}
       (if includes-recommended-starter-set?
