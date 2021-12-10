@@ -15,8 +15,7 @@
 {:main            igniteinator.core
  :dev?            true
  :debug?          true
- ;; Outcomment re-frame-10x because of performance issues.
- :preloads        [#_day8.re-frame-10x.preload
+ :preloads        [day8.re-frame-10x.preload                ; Remember: Ctrl-H to show/hide
                    devtools.preload]
  :closure-defines {re-frame.trace.trace-enabled?        true
                    day8.re-frame.tracing.trace-enabled? true}}
