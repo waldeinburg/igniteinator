@@ -63,7 +63,7 @@
             :sx        {:width :fit-content}}
       (if includes-recommended-starter-set?
         [:<>
-         (let [s (first setups)]
+         (let [s (first setups-with-idxs)]
            ^{:key (:id s)} [setup-list-item s])
          [divider]])
       (doall
