@@ -13,6 +13,7 @@
 (defn copy-to-cards-page-button []
   [tooltip (txt :copy-to-cards-page-tooltip)
    [button {:variant  :outlined
+            :color    :secondary
             :on-click #(>evt :current-setup/copy-to-cards-page)}
     [file-copy {:sx {:mr 0.5}}]
     (txt :copy-to-cards-page-button)]])
