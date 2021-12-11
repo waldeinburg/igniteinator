@@ -65,19 +65,23 @@
     [nav-button on-change-index new-idx enabled?
      [last-page]]))
 
-(defn- nav-bar [idx-ref on-change-index children-count]
-  [box {:mb 2}
+(defn- nav-bar [idx-ref on-change-index children-count extra-buttons]
+  [toolbar {:disable-gutters true, :mb 2}
    [back-button {:sx {:mr 2}}]
    [first-button idx-ref on-change-index]
    [prev-button idx-ref on-change-index]
    [next-button idx-ref on-change-index children-count]
-   [last-button idx-ref on-change-index children-count]])
+   [last-button idx-ref on-change-index children-count]
+   (if extra-buttons
+     [box {:ml 2}
+      extra-buttons])])
 
 (defn page-with-navigation [{:keys [idx-ref
                                     current-title-ref
                                     previous-title-ref
                                     first-transition-in?-ref
-                                    on-change-index]}
+                                    on-change-index
+                                    extra-buttons]}
                             children]
   (let [current-title        @current-title-ref
         previous-title       @previous-title-ref
@@ -91,7 +95,7 @@
        [title
         (not first-transition-in?)
         (if first-transition-in? previous-title current-title)]]
-      [nav-bar idx-ref on-change-index (count children)]]
+      [nav-bar idx-ref on-change-index (count children) extra-buttons]]
      [content-view {:idx-ref         idx-ref
                     :on-change-index on-change-index}
       children]]))

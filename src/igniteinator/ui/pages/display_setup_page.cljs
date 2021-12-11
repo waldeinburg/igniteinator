@@ -14,7 +14,7 @@
   [tooltip (txt :copy-to-cards-page-tooltip)
    [button {:variant  :outlined
             :on-click #(>evt :current-setup/copy-to-cards-page)}
-    [box {:component "span", :mr 0.5} [file-copy]]
+    [file-copy {:sx {:mr 0.5}}]
     (txt :copy-to-cards-page-button)]])
 
 (defn- setup [id]
@@ -31,7 +31,8 @@
       :current-title-ref        (<sub-ref :display-setup-page/current-setup-name)
       :previous-title-ref       (<sub-ref :display-setup-page/previous-setup-name)
       :first-transition-in?-ref (<sub-ref :display-setup-page/first-transition-in?)
-      :on-change-index          #(>evt :display-setup-page/set-idx %)}
+      :on-change-index          #(>evt :display-setup-page/set-idx %)
+      :extra-buttons            [copy-to-cards-page-button]}
      (for [id setup-ids]
        ^{:key id}
        [setup id])]))
