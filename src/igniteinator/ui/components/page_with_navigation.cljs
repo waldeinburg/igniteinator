@@ -6,7 +6,13 @@
             [reagent-mui.material.grid :refer [grid]]
             [reagent-mui.material.modal :refer [modal]]
             [reagent-mui.material.box :refer [box]]
-            [reagent-mui.material.fade :refer [fade]]))
+            [reagent-mui.material.toolbar :refer [toolbar]]
+            [reagent-mui.material.fade :refer [fade]]
+            [reagent-mui.material.button :refer [button]]
+            [reagent-mui.icons.navigate-before :refer [navigate-before]]
+            [reagent-mui.icons.navigate-next :refer [navigate-next]]
+            [reagent-mui.icons.first-page :refer [first-page]]
+            [reagent-mui.icons.last-page :refer [last-page]]))
 
 (defn- content-view [{:keys [idx-ref on-change-index]} children]
   ;; Make the slides appear from the edge by canceling any padding using margin on the container and then adding the
@@ -30,6 +36,43 @@
          :sx      {:grid-row-start 1, :grid-column-start 1}}
    [box t]])
 
+(defn nav-button [on-change-index new-idx enabled? icon]
+  [button {:variant  :outlined
+           :disabled (if (not enabled?) true)               ; nil if false
+           :on-click (if enabled? #(on-change-index new-idx))}
+   icon])
+
+(defn- first-button [idx-ref on-change-index]
+  (let [enabled? (> @idx-ref 0)]
+    [nav-button on-change-index 0 enabled?
+     [first-page]]))
+
+(defn- prev-button [idx-ref on-change-index]
+  (let [new-idx  (dec @idx-ref)
+        enabled? (>= new-idx 0)]
+    [nav-button on-change-index new-idx enabled?
+     [navigate-before]]))
+
+(defn- next-button [idx-ref on-change-index children-count]
+  (let [new-idx  (inc @idx-ref)
+        enabled? (< new-idx children-count)]
+    [nav-button on-change-index new-idx enabled?
+     [navigate-next]]))
+
+(defn- last-button [idx-ref on-change-index children-count]
+  (let [new-idx  (dec children-count)
+        enabled? (< @idx-ref new-idx)]
+    [nav-button on-change-index new-idx enabled?
+     [last-page]]))
+
+(defn- nav-bar [idx-ref on-change-index children-count]
+  [box {:mb 2}
+   [back-button {:sx {:mr 2}}]
+   [first-button idx-ref on-change-index]
+   [prev-button idx-ref on-change-index]
+   [next-button idx-ref on-change-index children-count]
+   [last-button idx-ref on-change-index children-count]])
+
 (defn page-with-navigation [{:keys [idx-ref
                                     current-title-ref
                                     previous-title-ref
@@ -47,9 +90,8 @@
         (if first-transition-in? current-title previous-title)]
        [title
         (not first-transition-in?)
-        (if first-transition-in? previous-title current-title)]
-       ]
-      [box {:mb 2} [back-button]]]
+        (if first-transition-in? previous-title current-title)]]
+      [nav-bar idx-ref on-change-index (count children)]]
      [content-view {:idx-ref         idx-ref
                     :on-change-index on-change-index}
       children]]))

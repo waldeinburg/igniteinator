@@ -5,8 +5,11 @@
             [reagent-mui.material.button :refer [button]]
             [reagent-mui.icons.arrow-back :refer [arrow-back]]))
 
-(defn back-button []
+(defn back-button [{:as button-props}]
   (if (<sub :page-history-not-empty?)
     [tooltip (txt-c :back)
-     [button {:on-click #(>evt :page/pop)}
+     [button (merge
+               {:variant  :outlined
+                :on-click #(>evt :page/pop)}
+               button-props)
       [arrow-back]]]))
