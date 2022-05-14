@@ -6,15 +6,15 @@
 
   :min-lein-version "2.7.1"
 
-  :dependencies [[org.clojure/clojure "1.10.3"]
-                 [org.clojure/clojurescript "1.10.891"]
-                 [funcool/promesa "6.0.2"]
+  :dependencies [[org.clojure/clojure "1.11.1"]
+                 [org.clojure/clojurescript "1.11.4"]
+                 [funcool/promesa "8.0.450"]
                  [cljs-http "0.1.46"]
                  [re-frame "1.2.0"
                   :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server]]
-                 [day8.re-frame/http-fx "0.2.3"]
+                 [day8.re-frame/http-fx "0.2.4"]
                  [akiroz.re-frame/storage "0.1.4"]
-                 [arttuka/reagent-material-ui "5.0.0-0"
+                 [arttuka/reagent-material-ui "5.6.2-0"
                   :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server
                                arttuka/reagent-material-ui-js]]]
 
@@ -49,12 +49,12 @@
                             "--compile-opts" "test.cljs.edn"
                             "-m" "igniteinator.test-runner"]}
 
-  :profiles {:dev {:dependencies   [[com.bhauman/figwheel-main "0.2.15" :exclusions [org.clojure/clojurescript]]
+  :profiles {:dev {:dependencies   [[com.bhauman/figwheel-main "0.2.17" :exclusions [org.clojure/clojurescript]]
                                     [com.bhauman/rebel-readline-cljs "0.1.4"]
                                     [org.clojure/math.combinatorics "0.1.6"]
-                                    [day8.re-frame/tracing      "0.6.2"]
-                                    [day8.re-frame/re-frame-10x "1.2.0"]
-                                    [binaryage/devtools "1.0.4"]]
+                                    [day8.re-frame/tracing "0.6.2"]
+                                    [day8.re-frame/re-frame-10x "1.2.7"]
+                                    [binaryage/devtools "1.0.6"]]
                    :resource-paths ["target"]
                    ;; need to add the compiled assets to the :clean-targets
                    :clean-targets  ^{:protect false} ["target"]}})
