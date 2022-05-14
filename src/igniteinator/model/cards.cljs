@@ -1,9 +1,7 @@
 (ns igniteinator.model.cards
-  (:require [igniteinator.util.filter :refer [filter-multi]]
-            [igniteinator.util.sort :refer [reverse-comparator sort-by-hierarchy]]
-            [igniteinator.model.card-filter :refer [filters]]
+  (:require [igniteinator.model.card-filter :refer [filters]]
             [igniteinator.model.card-sort :refer [sortings]]
-            [reagent.core :as r]))
+            [igniteinator.util.sort :refer [reverse-comparator sort-by-hierarchy]]))
 
 (defn filter-specs->preds [filter-specs]
   (map (fn [spec]
@@ -17,4 +15,3 @@
              :asc c
              :desc (reverse-comparator c))))
     sorting-specs))
-

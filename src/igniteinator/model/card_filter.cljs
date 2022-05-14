@@ -31,4 +31,6 @@
                            ;; the card is not a KS Exclusive card
                            (not (:ks %))
                            ;; or the Kickstarter setting is set for the box.
-                           (= :ks bs)))))})
+                           (= :ks bs)))))
+   :type          (fn [type]
+                    #(contains? (:types %) type))})
