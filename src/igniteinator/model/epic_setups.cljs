@@ -4,8 +4,12 @@
 (defn epic-setups [cards types]
   "Get list of Epic setup types.
   To be called from a subscription."
-  (let [type-fn              (fn [t]
-                               (:id (some #(= t (:name %)) types)))
+  (let [type-fn              (fn [type-name]
+                               (let [type-id (:id (some
+                                                    #(= type-name (:name %))
+                                                    types))]
+                                 (fn [card]
+                                   (contains? (:types card) type-id))))
         cost=                (fn [cost card]
                                (= cost (:cost card)))
         old-wooden-shield-id (:id (some #(= "Old Wooden Shield" (:name %)) cards))
@@ -15,9 +19,20 @@
         war-machine?         (type-fn "War Machine")
         spell?               (type-fn "Spell")
         projectile?          (type-fn "Projectile")]
-    [{:name        "Epic Ignite"
-      :description "As described in the Ignite rule book page ?????."
-      :stacks      []}
+    [{:name           "Epic Ignite"
+      :description    "As described in the Ignite rule book page 23."
+      :stacks         []
+      :stacks-process (fn [stacks]
+                        ;; Split all stacks into two.
+                        (mapcat (fn [stack]
+                                  (let [cards   (:cards stack)
+                                        half    (/ (count cards) 2)
+                                        cards-a (take (js/Math.ceil half) cards)
+                                        cards-b (take (js/Math.floor half) cards)
+                                        stack-a (assoc stack :cards cards-a)
+                                        stack-b (assoc stack :cards cards-b)]
+                                    [stack-a stack-b]))
+                          stacks))}
      {:name        "Even More Epic Ignite"
       :description [:<> "Variant described on "
                     [external-link "https://boardgamegeek.com/thread/2767913/even-more-epic-ignite" "BGG"]

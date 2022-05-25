@@ -5,6 +5,7 @@
             [igniteinator.util.re-frame :refer [reg-sub-db reg-sub-option <sub <sub-ref]]
             [igniteinator.model.cards :as cards]
             [igniteinator.model.setups :as setups]
+            [igniteinator.model.epic-setups :as epic-setups]
             [igniteinator.util.sort :as sort-util]
             [igniteinator.util.filter :as filter-util]
             [re-frame.core :refer [reg-sub reg-sub-raw]]
@@ -426,3 +427,19 @@
 (reg-sub-db :clear-data/dialog-open?)
 
 (reg-sub-db :settings-menu-open?)
+
+(reg-sub-db
+  :types-map
+  [:types])
+(reg-sub
+  :types
+  :<- [:types-map]
+  (fn [types-map _]
+    (vals types-map)))
+
+(reg-sub
+  :epic-setups
+  :<- [:cards]
+  :<- [:types]
+  (fn [[cards types] _]
+    (epic-setups/epic-setups cards types)))

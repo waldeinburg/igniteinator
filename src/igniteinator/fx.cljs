@@ -1,5 +1,6 @@
 (ns igniteinator.fx
   (:require [igniteinator.util.message :as msg]
+            [igniteinator.util.re-frame :refer [>evt]]
             [re-frame.core :refer [reg-fx]]
             [akiroz.re-frame.storage :as storage]
             [promesa.core :as p])
@@ -49,3 +50,9 @@
       (p/let [sw-reg (.-ready sw-cnt)]
         (msg/post (.-active sw-reg) msg-type msg-data))
       (js/console.warn "navigator.serviceWorker not available"))))
+
+(reg-fx
+  :epic/shuffle-stacks
+  (fn [stacks]
+    (let [shuffled-stacks (mapv stacks #(update % :cards shuffle))]
+      (>evt :epic/set-stacks shuffled-stacks))))

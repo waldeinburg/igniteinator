@@ -352,3 +352,34 @@
     {:reload nil}))
 
 (reg-event-db-assoc :set-settings-menu-open?)
+
+(reg-event-fx
+  :epic/create-game
+  (fn [{{:keys [cards epic-setups]} :db
+        :as                         cofx}
+       [setup-idx]]
+    (let [setup      (epic-setups setup-idx)
+          stack-defs (:stacks setup)
+          stacks     (->>
+                       stack-defs
+                       ;; Filter
+                       (map (fn [stack-def]
+                              (let [stack-cards (filter (:filter stack-def) cards)]
+                                (assoc stack-def :cards stack-cards))))
+                       ;; Add copies of each card
+                       (map #(fn [stack-def]
+                               (update stack-def :cards
+                                 (fn [stack-cards]
+                                   (mapcat (fn [card]
+                                             (repeat card (:count card)))
+                                     stack-cards)))))
+                       ;; Cards should only be represented by id
+                       (map #(update % :cards :id))
+                       ;; Do not keep filter (stacks are stored in local storage)
+                       (map #(dissoc % :filter)))]
+      ;; The shuffling is non-deterministic and is delegated to an effect which will dispatch the
+      ;; :epic/set-stacks event to set the stacks.
+      (assoc
+        (assoc-db-and-store cofx [:epic :idx] setup-idx)
+        :epic/shuffle-stacks stacks))))
+(reg-event-db-assoc-store :epic/set-stacks)
