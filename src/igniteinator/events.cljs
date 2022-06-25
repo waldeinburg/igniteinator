@@ -359,6 +359,7 @@
         :as                         cofx}
        [setup-idx]]
     (let [setup      (epic-setups setup-idx)
+          count-fn   (:count-fn setup)
           stack-defs (:stacks setup)
           stacks     (->>
                        stack-defs
@@ -371,7 +372,7 @@
                                (update stack-def :cards
                                  (fn [stack-cards]
                                    (mapcat (fn [card]
-                                             (repeat card (:count card)))
+                                             (repeat card (count-fn card)))
                                      stack-cards)))))
                        ;; Cards should only be represented by id
                        (map #(update % :cards :id))

@@ -1,6 +1,9 @@
 (ns igniteinator.model.epic-setups
   (:require [igniteinator.ui.components.link :refer [external-link]]))
 
+(defn find-card-id-by-name [name cards]
+  (:id (some #(= name (:name %)) cards)))
+
 (defn epic-setups [cards types]
   "Get list of Epic setup types.
   To be called from a subscription."
@@ -12,7 +15,9 @@
                                    (contains? (:types card) type-id))))
         cost=                (fn [cost card]
                                (= cost (:cost card)))
-        old-wooden-shield-id (:id (some #(= "Old Wooden Shield" (:name %)) cards))
+        march-id             (find-card-id-by-name "March" cards)
+        dagger-id            (find-card-id-by-name "Dagger" cards)
+        old-wooden-shield-id (find-card-id-by-name "Old Wooden Shield" cards)
         ability?             (type-fn "Ability")
         event?               (type-fn "Event")
         shield?              (type-fn "Shield")
@@ -21,6 +26,7 @@
         projectile?          (type-fn "Projectile")]
     [{:name           "Epic Ignite"
       :description    "As described in the Ignite rule book page 23."
+      :count-fn       (:count %)
       :stacks         []
       :stacks-process (fn [stacks]
                         ;; Split all stacks into two.
@@ -37,6 +43,11 @@
       :description [:<> "Variant described on "
                     [external-link "https://boardgamegeek.com/thread/2767913/even-more-epic-ignite" "BGG"]
                     "."]
+      :count-fn    (fn [card]
+                     (let [c (:count card)]
+                       (if (#{march-id dagger-id old-wooden-shield-id} (:id card))
+                         c
+                         (/ c 2))))
       :stacks      [{:name        "Actions A"
                      :description "All cards of type Ability or Event and costing 3"
                      :filter      #(and
