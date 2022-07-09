@@ -45,6 +45,8 @@
                          :prev-idx             nil
                          :first-transition-in? true
                          :sortings             nil}
+   :epic                {:setups nil
+                         :stacks nil}
    :card-load-state     {:en nil}
    :cards               nil
    :combos-set          nil})

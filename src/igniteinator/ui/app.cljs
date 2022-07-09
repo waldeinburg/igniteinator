@@ -11,6 +11,7 @@
             [igniteinator.ui.pages.card-details :refer [card-details-page]]
             [igniteinator.ui.pages.setups-page :refer [setups-page]]
             [igniteinator.ui.pages.display-setup-page :refer [display-setup-page]]
+            [igniteinator.ui.pages.epic-page :refer [epic-page]]
             [reagent-mui.material.css-baseline :refer [css-baseline]]
             [reagent-mui.material.container :refer [container]]))
 
@@ -21,7 +22,8 @@
       :cards [cards-page]
       :card-details [card-details-page]
       :setups [setups-page]
-      :display-setup [display-setup-page])))
+      :display-setup [display-setup-page]
+      :epic [epic-page])))
 
 (defn content []
   (let [mode (<sub :mode)]

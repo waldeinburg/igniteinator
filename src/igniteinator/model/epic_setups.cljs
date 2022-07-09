@@ -2,17 +2,20 @@
   (:require [igniteinator.ui.components.link :refer [external-link]]))
 
 (defn find-card-id-by-name [name cards]
-  (:id (some #(= name (:name %)) cards)))
+  (some #(if (= name (:name %))
+           (:id %))
+    cards))
 
 (defn epic-setups [cards types]
   "Get list of Epic setup types.
   To be called from a subscription."
   (let [type-fn              (fn [type-name]
-                               (let [type-id (:id (some
-                                                    #(= type-name (:name %))
-                                                    types))]
+                               (let [type-id (some
+                                               #(if (= type-name (:name %))
+                                                  (:id %))
+                                               types)]
                                  (fn [card]
-                                   (contains? (:types card) type-id))))
+                                   (some #(= type-id %) (:types card)))))
         cost=                (fn [cost card]
                                (= cost (:cost card)))
         march-id             (find-card-id-by-name "March" cards)
@@ -26,7 +29,7 @@
         projectile?          (type-fn "Projectile")]
     [{:name           "Epic Ignite"
       :description    "As described in the Ignite rule book page 23."
-      :count-fn       (:count %)
+      :count-fn       #(:count %)
       :stacks         []
       :stacks-process (fn [stacks]
                         ;; Split all stacks into two.
@@ -52,7 +55,7 @@
                      :description "All cards of type Ability or Event and costing 3"
                      :filter      #(and
                                      (or (ability? %) (event? %))
-                                     (cost= % 3))}
+                                     (cost= 3 %))}
                     {:name        "Actions B"
                      :description "All cards of type Ability or Event and costing 4 or 5"
                      :filter      #(and

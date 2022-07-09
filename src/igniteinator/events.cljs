@@ -3,6 +3,7 @@
             [igniteinator.text :refer [txt]]
             [igniteinator.constants :as constants]
             [igniteinator.model.setups :as setups]
+            [igniteinator.model.epic-setups :as epic-setups]
             [igniteinator.util.re-frame :refer [reg-event-db-assoc reg-event-db-assoc-store reg-event-set-option
                                                 assoc-ins assoc-db-and-store]]
             [clojure.string :as s]
@@ -84,16 +85,18 @@
 
 (defn- load-data-update-db [db result]
   (let [cards (:cards result)
+        types (:types result)
         boxes (add-ks-to-boxes (:boxes result) cards)]
     (->
       db
       (assoc
         :mode :ready
         :boxes (id-map boxes)
-        :types (id-map (:types result))
+        :types (id-map types)
         :cards (id-map cards)
         :combos-set (:combos result)
         :setups (id-map (:setups result)))
+      (assoc-in [:epic :setups] (epic-setups/epic-setups cards types))
       (update-in [:options :boxes]
         (fn [boxes-setting]
           (if (= (count boxes-setting) (count boxes))
@@ -355,10 +358,13 @@
 
 (reg-event-fx
   :epic/create-game
-  (fn [{{:keys [cards epic-setups]} :db
-        :as                         cofx}
-       [setup-idx]]
-    (let [setup      (epic-setups setup-idx)
+  (fn [{{{:keys [setups]} :epic} :db
+        :as                      cofx}
+       ;; We don't want to implement stuff like
+       ;; https://github.com/den1k/re-frame-utils/blob/master/src/vimsical/re_frame/cofx/inject.cljc
+       ;; Instead, require that the component subscribe to :global-cards-unsorted
+       [_ cards setup-idx]]
+    (let [setup      (setups setup-idx)
           count-fn   (:count-fn setup)
           stack-defs (:stacks setup)
           stacks     (->>
@@ -367,15 +373,14 @@
                        (map (fn [stack-def]
                               (let [stack-cards (filter (:filter stack-def) cards)]
                                 (assoc stack-def :cards stack-cards))))
-                       ;; Add copies of each card
-                       (map #(fn [stack-def]
-                               (update stack-def :cards
-                                 (fn [stack-cards]
-                                   (mapcat (fn [card]
-                                             (repeat card (count-fn card)))
-                                     stack-cards)))))
-                       ;; Cards should only be represented by id
-                       (map #(update % :cards :id))
+                       ;; Add copies of each card. Cards should only be represented by id to avoid duplicating objects
+                       ;; in local storage.
+                       (map (fn [stack-def]
+                              (update stack-def :cards
+                                (fn [stack-cards]
+                                  (mapcat (fn [card]
+                                            (repeat (count-fn card) (:id card)))
+                                    stack-cards)))))
                        ;; Do not keep filter (stacks are stored in local storage)
                        (map #(dissoc % :filter)))]
       ;; The shuffling is non-deterministic and is delegated to an effect which will dispatch the

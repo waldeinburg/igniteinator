@@ -5,7 +5,6 @@
             [igniteinator.ui.components.page :refer [page]]
             [igniteinator.ui.components.form-item :refer [form-item]]
             [igniteinator.ui.components.checkbox :refer [checkbox]]
-            [reagent.core :as r]
             [reagent-mui.material.box :refer [box]]
             [reagent-mui.material.list :refer [list]]
             [reagent-mui.material.list-item :refer [list-item]]

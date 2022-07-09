@@ -5,7 +5,6 @@
             [igniteinator.util.re-frame :refer [reg-sub-db reg-sub-option <sub <sub-ref]]
             [igniteinator.model.cards :as cards]
             [igniteinator.model.setups :as setups]
-            [igniteinator.model.epic-setups :as epic-setups]
             [igniteinator.util.sort :as sort-util]
             [igniteinator.util.filter :as filter-util]
             [re-frame.core :refer [reg-sub reg-sub-raw]]
@@ -150,6 +149,12 @@
           filters       (into global-filters search-filter)
           sortings      [{:key :name, :order :asc}]]
       (<sub :cards :all filters sortings))))
+
+(reg-sub
+  :global-cards-unsorted
+  :<- [:global-filters]
+  (fn [global-filters _]
+    (<sub :cards :all global-filters [])))
 
 (reg-sub
   :cards-page.card-selection/item-selected?
@@ -437,9 +442,11 @@
   (fn [types-map _]
     (vals types-map)))
 
+(reg-sub-db :epic/setups)
+(reg-sub-db :epic/stacks)
+
 (reg-sub
-  :epic-setups
-  :<- [:cards]
-  :<- [:types]
-  (fn [[cards types] _]
-    (epic-setups/epic-setups cards types)))
+  :epic/top-cards
+  :<- [:epic/stacks]
+  (fn [stacks _]
+    (<sub :cards-by-ids (mapv #(first (:cards %)) stacks))))

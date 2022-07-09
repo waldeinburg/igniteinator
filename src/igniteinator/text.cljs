@@ -77,6 +77,7 @@
    :settings.default-order/label      {:en "Order by"}      ; As long as there's only this way to order.
    :settings.display-name/label       {:en "Display card name"}
    :settings.display-name/translating {:en "When translating"}
+   :epic-page-title                   {:en "Epic Ignite (BETA!)"}
    })
 
 ;; Convenience functions to minimize the boilerplate retrieving strings.
