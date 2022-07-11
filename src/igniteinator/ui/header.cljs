@@ -20,7 +20,7 @@
 
 (def main-menu-list [[:cards :cards-page-title]
                      [:setups :setups-page-title]
-                     [:epic :epic-page-title]])
+                     [:epic :epic/page-title]])
 
 (defn navigate [page-key]
   (>evt :page/set page-key))

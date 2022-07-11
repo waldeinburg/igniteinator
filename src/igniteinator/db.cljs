@@ -45,8 +45,11 @@
                          :prev-idx             nil
                          :first-transition-in? true
                          :sortings             nil}
-   :epic                {:setups nil
-                         :stacks nil}
+   :epic                {:setups             nil
+                         :reset-dialog-open? false
+                         :active?            false
+                         :setup-idx          nil
+                         :stacks             nil}
    :card-load-state     {:en nil}
    :cards               nil
    :combos-set          nil})

@@ -1,10 +1,9 @@
 (ns igniteinator.ui.components.card-list
-  (:require [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
-            [igniteinator.constants :as constants]
+  (:require [igniteinator.constants :as constants]
             [igniteinator.text :refer [txt txt-c]]
             [igniteinator.ui.components.tooltip :refer [tooltip] :rename {tooltip tooltip-elem}]
             [igniteinator.ui.components.vendor.visibility-sensor :refer [visibility-sensor]]
-            [reagent-mui.util :refer [adapt-react-class]]
+            [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
             [reagent-mui.material.box :refer [box]]
             [reagent-mui.material.grid :refer [grid]]))
 
@@ -69,10 +68,11 @@
 (defn card-container
   ([card]
    [card-container {} card])
-  ([props card]
+  ([{:keys [display-name? content-below] :as props} card]
    [:<>
     [card-image props card]
-    [card-name card (:display-name? props)]
+    [card-name card display-name?]
+    content-below
     [card-debug-data card]]))
 
 (defn card-grid [{:keys [grid-breakpoints-ref component]
@@ -94,7 +94,8 @@
   ([{on-click-prop    :on-click
      on-click-fn-prop :on-click-fn
      tooltip-prop     :tooltip
-     tooltip-fn-prop  :tooltip-fn}
+     tooltip-fn-prop  :tooltip-fn
+     content-below    :content-below}
     cards]
    ;; Default tooltip and on-click is to show card details.
    (let [on-click-fn     (cond
@@ -103,7 +104,7 @@
                            :else (fn [card]
                                    #(>evt :show-card-details cards (:idx card) :page/push)))
          tooltip-fn      (cond
-                           tooltip-prop (fn [_] tooltip-prop)
+                           (not (nil? tooltip-prop)) (fn [_] tooltip-prop)
                            tooltip-fn-prop tooltip-fn-prop
                            :else (fn [card]
                                    (if (not-empty (:combos card))
@@ -118,4 +119,4 @@
             (let [on-click (on-click-fn c)
                   tooltip  (tooltip-fn c)]
               ^{:key (:id c)}                               ; Cf. example on https://reagent-project.github.io/
-              [card-grid {:on-click on-click, :tooltip tooltip} c])))]))))
+              [card-grid {:on-click on-click, :tooltip tooltip, :content-below content-below} c])))]))))

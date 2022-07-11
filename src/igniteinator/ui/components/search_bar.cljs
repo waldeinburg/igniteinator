@@ -1,16 +1,15 @@
 (ns igniteinator.ui.components.search-bar
-  (:require [igniteinator.util.event :as event]
-            [igniteinator.text :refer [txt-c txt]]
-            [igniteinator.constants :as const]
-            [igniteinator.util.string :as ss]
+  (:require [igniteinator.constants :as const]
+            [igniteinator.text :refer [txt txt-c]]
             [igniteinator.ui.components.link :refer [external-link]]
-            [igniteinator.util.re-frame :refer [<sub >evt]]
-            [reagent.core :as r]
-            [reagent-mui.material.text-field :refer [text-field]]
-            [reagent-mui.material.input-adornment :refer [input-adornment]]
-            [reagent-mui.material.icon-button :refer [icon-button]]
+            [igniteinator.util.event :as event]
+            [igniteinator.util.string :as ss]
+            [reagent-mui.icons.clear :refer [clear] :rename {clear clear-icon}]
             [reagent-mui.icons.search :refer [search] :rename {search search-icon}]
-            [reagent-mui.icons.clear :refer [clear] :rename {clear clear-icon}]))
+            [reagent-mui.material.icon-button :refer [icon-button]]
+            [reagent-mui.material.input-adornment :refer [input-adornment]]
+            [reagent-mui.material.text-field :refer [text-field]]
+            [reagent.core :as r]))
 
 (defn clear-search-bar [input-ref on-change]
   (set! (.-value @input-ref))

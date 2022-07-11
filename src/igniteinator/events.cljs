@@ -43,7 +43,8 @@
       {:db (-> db
              ;; Don't put language in options map. We often need to access it in events.
              (update :language #(or (:language store) %))
-             (update :options #(merge % (:options store))))})))
+             (update :options #(merge % (:options store)))
+             (update :epic #(merge % (:epic store))))})))
 (reg-event-db-assoc :set-mode)
 
 (reg-event-db-assoc :set-waiting?)
@@ -356,6 +357,8 @@
 
 (reg-event-db-assoc :set-settings-menu-open?)
 
+(reg-event-db-assoc :epic/set-reset-dialog-open?)
+
 (reg-event-fx
   :epic/create-game
   (fn [{{{:keys [setups]} :epic} :db
@@ -385,7 +388,18 @@
                        (map #(dissoc % :filter)))]
       ;; The shuffling is non-deterministic and is delegated to an effect which will dispatch the
       ;; :epic/set-stacks event to set the stacks.
-      (assoc
-        (assoc-db-and-store cofx [:epic :idx] setup-idx)
-        :epic/shuffle-stacks stacks))))
+      (->
+        cofx
+        (assoc-db-and-store [:epic :active?] true)
+        (assoc-db-and-store [:epic :setup-idx] setup-idx)
+        (assoc :epic/shuffle-stacks stacks)))))
 (reg-event-db-assoc-store :epic/set-stacks)
+
+(reg-event-fx
+  :epic/reset
+  (fn [cofx _]
+    (->
+      cofx
+      (assoc-db-and-store [:epic :active?] false)
+      (assoc-db-and-store [:epic :setup-idx] nil)
+      (assoc-db-and-store [:epic :stacks] nil))))

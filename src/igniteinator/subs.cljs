@@ -443,7 +443,18 @@
     (vals types-map)))
 
 (reg-sub-db :epic/setups)
+(reg-sub-db :epic/reset-dialog-open?)
+(reg-sub-db :epic/active?)
 (reg-sub-db :epic/stacks)
+(reg-sub-db :epic/setup-idx)
+
+(reg-sub
+  :epic/setup
+  :<- [:epic/setups]
+  :<- [:epic/setup-idx]
+  (fn [[setups setup-idx]]
+    (if setup-idx
+      (setups setup-idx))))
 
 (reg-sub
   :epic/top-cards
