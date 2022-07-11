@@ -63,7 +63,7 @@
                           :filter      #(and
                                           (or (ability? %) (event? %))
                                           (or (cost= 4 %) (cost= 5 %)))}
-                         {:name        "Actions B"
+                         {:name        "Actions C"
                           :description "All cards of type Ability or Event and costing 6 or 7"
                           :filter      #(and
                                           (or (ability? %) (event? %))
