@@ -443,6 +443,7 @@
     (vals types-map)))
 
 (reg-sub-db :epic/setups)
+(reg-sub-db :epic/show-stack-info?)
 (reg-sub-db :epic/reset-dialog-open?)
 (reg-sub-db :epic/active?)
 (reg-sub-db :epic/stacks)
@@ -460,4 +461,10 @@
   :epic/top-cards
   :<- [:epic/stacks]
   (fn [stacks _]
-    (<sub :cards-by-ids (mapv #(first (:cards %)) stacks))))
+    (let [top-cards (vec (<sub :cards-by-ids (mapv #(first (:cards %)) stacks)))]
+      (map (fn [idx]
+             (let [stack (get stacks idx)]
+               (assoc (get top-cards idx)
+                 :stack-name (:name stack)
+                 :stack-description (:description stack))))
+        (range (count stacks))))))

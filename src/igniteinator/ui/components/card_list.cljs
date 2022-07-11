@@ -68,20 +68,21 @@
 (defn card-container
   ([card]
    [card-container {} card])
-  ([{:keys [display-name? content-below] :as props} card]
+  ([{:keys [display-name? content-below-fn] :as props} card]
    [:<>
     [card-image props card]
     [card-name card display-name?]
-    content-below
+    (if content-below-fn
+      (content-below-fn card))
     [card-debug-data card]]))
 
 (defn card-grid [{:keys [grid-breakpoints-ref component]
-                  :or {grid-breakpoints-ref (<sub-ref :grid-breakpoints)
-                       component "li"}
-                  :as props}
+                  :or   {grid-breakpoints-ref (<sub-ref :grid-breakpoints)
+                         component            "li"}
+                  :as   props}
                  card]
   (let [grid-breakpoints @grid-breakpoints-ref
-        grid-props (into {:component component, :item true} grid-breakpoints)]
+        grid-props       (into {:component component, :item true} grid-breakpoints)]
     [grid grid-props
      [card-container props card]]))
 
@@ -95,7 +96,7 @@
      on-click-fn-prop :on-click-fn
      tooltip-prop     :tooltip
      tooltip-fn-prop  :tooltip-fn
-     content-below    :content-below}
+     content-below-fn :content-below-fn}
     cards]
    ;; Default tooltip and on-click is to show card details.
    (let [on-click-fn     (cond
@@ -119,4 +120,4 @@
             (let [on-click (on-click-fn c)
                   tooltip  (tooltip-fn c)]
               ^{:key (:id c)}                               ; Cf. example on https://reagent-project.github.io/
-              [card-grid {:on-click on-click, :tooltip tooltip, :content-below content-below} c])))]))))
+              [card-grid {:on-click on-click, :tooltip tooltip, :content-below-fn content-below-fn} c])))]))))

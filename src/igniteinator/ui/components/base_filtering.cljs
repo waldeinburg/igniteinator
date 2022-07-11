@@ -6,7 +6,7 @@
             [igniteinator.ui.components.dialog :refer [dialog]]
             [igniteinator.ui.components.radio-group :refer [radio-group radio]]
             [igniteinator.ui.components.form-item :refer [form-item]]
-            [igniteinator.ui.components.checkbox :refer [checkbox]]
+            [igniteinator.ui.components.bool-input :refer [checkbox]]
             [reagent.core :as r]
             [reagent-mui.material.toolbar :refer [toolbar]]
             [reagent-mui.material.button-group :refer [button-group]]

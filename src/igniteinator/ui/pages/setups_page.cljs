@@ -4,7 +4,7 @@
             [igniteinator.util.event :as event]
             [igniteinator.ui.components.page :refer [page]]
             [igniteinator.ui.components.form-item :refer [form-item]]
-            [igniteinator.ui.components.checkbox :refer [checkbox]]
+            [igniteinator.ui.components.bool-input :refer [checkbox]]
             [reagent-mui.material.box :refer [box]]
             [reagent-mui.material.list :refer [list]]
             [reagent-mui.material.list-item :refer [list-item]]

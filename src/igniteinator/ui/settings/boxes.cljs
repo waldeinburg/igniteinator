@@ -3,7 +3,7 @@
             [igniteinator.util.reagent :refer [add-children]]
             [igniteinator.text :refer [txt]]
             [igniteinator.ui.components.form-item :refer [form-item]]
-            [igniteinator.ui.components.checkbox :refer [checkbox]]
+            [igniteinator.ui.components.bool-input :refer [checkbox]]
             [reagent-mui.material.box :refer [box]]
             [reagent-mui.material.form-group :refer [form-group]]))
 

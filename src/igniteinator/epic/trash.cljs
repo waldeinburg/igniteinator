@@ -8,6 +8,6 @@
   (let [setup (<sub :epic/setup)]
     (if (:trash-to-bottom? setup)
       [button {:variant    :outlined
-               :sx         {:mb 2}
+               :sx         {:mr 2}
                :start-icon (r/as-element [delete-forever])}
        "Trash"])))

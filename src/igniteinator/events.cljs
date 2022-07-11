@@ -403,3 +403,5 @@
       (assoc-db-and-store [:epic :active?] false)
       (assoc-db-and-store [:epic :setup-idx] nil)
       (assoc-db-and-store [:epic :stacks] nil))))
+
+(reg-event-db-assoc-store :epic/set-show-stack-info?)

@@ -12,4 +12,4 @@
     :set-dialog-open-event :epic/set-reset-dialog-open?
     :on-confirm            #(>evt :epic/reset)
     :button-color          :secondary
-    :button-sx             {:mb 2, :mr 2}}])
+    :button-sx             {:mr 2}}])
