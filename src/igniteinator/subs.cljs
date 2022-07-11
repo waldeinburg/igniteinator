@@ -466,5 +466,6 @@
              (let [stack (get stacks idx)]
                (assoc (get top-cards idx)
                  :stack-name (:name stack)
-                 :stack-description (:description stack))))
+                 :stack-description (:description stack)
+                 :stack-count (count (:cards stack)))))
         (range (count stacks))))))

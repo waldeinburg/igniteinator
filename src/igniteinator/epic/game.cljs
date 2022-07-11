@@ -45,10 +45,10 @@
            :on-change    #(>evt :epic/set-show-stack-info? %)
            :label        "Show stack info"}))
 
+;; FIXME: emptying a stack lead to error
 (defn stacks-display []
   (let [top-cards (<sub :epic/top-cards)]
     ;; TODO: Interaction
-    ;; TODO: Show questionmark icon which shows name and description in a popup.
     ;; TODO: Show cards left. Or should that be in the popup to avoid cluttering the screen?
     ;; TODO: In Even More Epic Ignite, trashed cards go to bottom. Popup the search window.
     [card-list
@@ -58,15 +58,18 @@
         [:<>
          [box {:display :flex, :justify-content :center}
           [button-group
-           [card-button {:color :primary
-                         :icon  [file-upload]}
+           [card-button {:color    :primary
+                         :icon     [file-upload]
+                         :on-click #(>evt :epic/take-card (:idx card))}
             "Take"]
            [card-button {:color :secondary
-                         :icon  [low-priority]}
+                         :icon  [low-priority]
+                         :on-click #(>evt :epic/cycle-card (:idx card))}
             "Cycle"]]]
          (if (<sub :epic/show-stack-info?)
            [box {:mt 1}
-            [:strong (:stack-name card) ": "]
+            [:strong (:stack-name card)]
+            " (" (:stack-count card) "): "
             [box {:component :span, :color "text.secondary"} (:stack-description card)]])])}
      top-cards]))
 

@@ -361,6 +361,7 @@
 
 (reg-event-fx
   :epic/create-game
+  [(inject-cofx :store)]
   (fn [{{{:keys [setups]} :epic} :db
         :as                      cofx}
        ;; We don't want to implement stuff like
@@ -397,6 +398,7 @@
 
 (reg-event-fx
   :epic/reset
+  [(inject-cofx :store)]
   (fn [cofx _]
     (->
       cofx
@@ -405,3 +407,24 @@
       (assoc-db-and-store [:epic :stacks] nil))))
 
 (reg-event-db-assoc-store :epic/set-show-stack-info?)
+
+(reg-event-fx
+  :epic/take-card
+  [(inject-cofx :store)]
+  (fn [{{{:keys [stacks]} :epic} :db
+        :as                      cofx}
+       [_ stack-idx]]
+    ;; TODO: history
+    (assoc-db-and-store cofx [:epic :stacks]
+      (update stacks stack-idx #(update % :cards rest)))))
+
+(reg-event-fx
+  :epic/cycle-card
+  [(inject-cofx :store)]
+  (fn [{{{:keys [stacks]} :epic} :db
+        :as                      cofx}
+       [_ stack-idx]]
+    ;; TODO: history
+    (assoc-db-and-store cofx [:epic :stacks]
+      (update stacks stack-idx #(update % :cards (fn [cards]
+                                                   (conj (vec (rest cards)) (first cards))))))))
