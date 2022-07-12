@@ -1,14 +1,14 @@
 (ns igniteinator.events
-  (:require [igniteinator.db :refer [default-db]]
-            [igniteinator.text :refer [txt]]
-            [igniteinator.constants :as constants]
-            [igniteinator.model.setups :as setups]
-            [igniteinator.model.epic-setups :as epic-setups]
-            [igniteinator.util.re-frame :refer [reg-event-db-assoc reg-event-db-assoc-store reg-event-set-option
-                                                assoc-ins assoc-db-and-store]]
+  (:require [ajax.core :as ajax]
             [clojure.string :as s]
-            [re-frame.core :refer [reg-event-fx reg-event-db inject-cofx]]
-            [ajax.core :as ajax]))
+            [igniteinator.constants :as constants]
+            [igniteinator.db :refer [default-db]]
+            [igniteinator.model.epic-setups :as epic-setups]
+            [igniteinator.model.setups :as setups]
+            [igniteinator.text :refer [txt]]
+            [igniteinator.util.re-frame :refer [assoc-db-and-store assoc-ins reg-event-db-assoc
+                                                reg-event-db-assoc-store reg-event-set-option]]
+            [re-frame.core :refer [inject-cofx reg-event-db reg-event-fx]]))
 
 (defn- reg-nav-page-event-set-idx [name root]
   (reg-event-db
@@ -404,19 +404,28 @@
       cofx
       (assoc-db-and-store [:epic :active?] false)
       (assoc-db-and-store [:epic :setup-idx] nil)
-      (assoc-db-and-store [:epic :stacks] nil))))
+      (assoc-db-and-store [:epic :stacks] nil)
+      (assoc-db-and-store [:epic :cards-taken] nil))))
 
 (reg-event-db-assoc-store :epic/set-show-stack-info?)
 
 (reg-event-fx
   :epic/take-card
   [(inject-cofx :store)]
-  (fn [{{{:keys [stacks]} :epic} :db
-        :as                      cofx}
+  (fn [{{:keys                        [cards]
+         {:keys [stacks cards-taken]} :epic} :db
+        :as                                  cofx}
        [_ stack-idx]]
     ;; TODO: history
-    (assoc-db-and-store cofx [:epic :stacks]
-      (update stacks stack-idx #(update % :cards rest)))))
+    (->
+      cofx
+      (assoc-db-and-store [:epic :stacks]
+        (update stacks stack-idx #(update % :cards rest)))
+      ;; cards-taken holds a map of id -> count
+      (assoc-db-and-store [:epic :cards-taken]
+        (update cards-taken
+          (-> stack-idx stacks :cards first cards :id)
+          #(inc (or % 0)))))))
 
 (reg-event-fx
   :epic/cycle-card
@@ -428,3 +437,22 @@
     (assoc-db-and-store cofx [:epic :stacks]
       (update stacks stack-idx #(update % :cards (fn [cards]
                                                    (conj (vec (rest cards)) (first cards))))))))
+
+(reg-event-db-assoc :epic/set-trash-dialog-open?)
+(reg-event-db-assoc :epic/set-trash-search-str)
+
+(reg-event-fx
+  :epic/trash-card
+  [(inject-cofx :store)]
+  (fn [{{{:keys [cards-taken]} :epic} :db
+        :as                           cofx}
+       [_ card-id]]
+    (->
+      cofx
+      ;; TODO: setup should build a map of card-id -> stack-idx
+      (assoc-db-and-store [:epic :cards-taken]
+        (let [cnt (get cards-taken card-id)]
+          (if (= 1 cnt)
+            (dissoc cards-taken card-id)
+            (update cards-taken card-id dec))))
+      (assoc :dispatch [:epic/set-trash-dialog-open? false]))))

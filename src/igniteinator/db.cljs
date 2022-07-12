@@ -50,7 +50,10 @@
                          :reset-dialog-open? false
                          :active?            false
                          :setup-idx          nil
-                         :stacks             nil}
+                         :stacks             nil
+                         :cards-taken        nil
+                         :trash-dialog-open? false
+                         :trash-search-str   ""}
    :card-load-state     {:en nil}
    :cards               nil
    :combos-set          nil})

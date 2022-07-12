@@ -7,8 +7,8 @@
             [reagent-mui.material.dialog-actions :refer [dialog-actions]]
             [reagent-mui.material.button :refer [button]]))
 
-(defn dialog [{:keys [title button-text open?-ref top? on-close button-props buttons]
-               :or   {top? false, button-text (txt-c :ok)}
+(defn dialog [{:keys [title button-text button-color open?-ref top? on-close button-props buttons]
+               :or   {top? false, button-text (txt-c :ok), button-color :primary}
                :as   props}
               & children]
   (let [open?        @open?-ref
@@ -17,12 +17,12 @@
                             ;; when filtering by name. Fix dialog at the top instead of center.
                             ;; https://stackoverflow.com/a/61094451
                             :sx   (if top? {"& .MuiDialog-container" {:align-items :baseline}})}
-                       (dissoc props :open?-ref :top? :button-text))]
+                       (dissoc props :open?-ref :top? :button-text :button-color))]
     [mui-dialog dialog-props
      [dialog-title title]
      [dialog-content (add-children children)]
      [dialog-actions
       (if buttons
         (add-children buttons)
-        [button (merge {:on-click on-close, :variant :contained} button-props)
+        [button (merge {:on-click on-close, :variant :contained, :color button-color} button-props)
          button-text])]]))

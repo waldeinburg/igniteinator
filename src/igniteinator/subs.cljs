@@ -1,15 +1,15 @@
 (ns igniteinator.subs
-  (:require [igniteinator.text :as text]
+  (:require-macros [reagent.ratom :as ra])
+  (:require [clojure.string :as s]
             [igniteinator.constants :as constants]
-            [igniteinator.util.image-path :refer [image-path]]
-            [igniteinator.util.re-frame :refer [reg-sub-db reg-sub-option <sub <sub-ref]]
             [igniteinator.model.cards :as cards]
             [igniteinator.model.setups :as setups]
-            [igniteinator.util.sort :as sort-util]
+            [igniteinator.text :as text]
             [igniteinator.util.filter :as filter-util]
-            [re-frame.core :refer [reg-sub reg-sub-raw]]
-            [clojure.string :as s])
-  (:require-macros [reagent.ratom :as ra]))
+            [igniteinator.util.image-path :refer [image-path]]
+            [igniteinator.util.re-frame :refer [<sub <sub-ref reg-sub-db reg-sub-option]]
+            [igniteinator.util.sort :as sort-util]
+            [re-frame.core :refer [reg-sub reg-sub-raw]]))
 
 (reg-sub-db :debug/show-card-data)
 
@@ -469,3 +469,25 @@
                  :stack-description (:description stack)
                  :stack-count (count (:cards stack)))))
         (range (count stacks))))))
+
+(reg-sub-db :epic/cards-taken)
+
+(reg-sub
+  :epic/trash-button-disabled?
+  :<- [:epic/cards-taken]
+  (fn [cards-taken _]
+    (empty? cards-taken)))
+
+(reg-sub-db :epic/trash-dialog-open?)
+(reg-sub-db :epic/trash-search-str)
+
+(reg-sub
+  :epic/trash-dialog-cards
+  :<- [:epic/cards-taken]
+  :<- [:epic/trash-search-str]
+  (fn [[cards-taken search-str] _]
+    (let [card-ids (keys cards-taken)
+          filters  (if (not-empty search-str)
+                     [{:key :name-contains, :args [search-str]}]
+                     [])]
+      (<sub :cards card-ids filters [{:key :name, :order :asc}]))))
