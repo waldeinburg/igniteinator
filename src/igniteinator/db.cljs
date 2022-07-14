@@ -1,6 +1,5 @@
 (ns igniteinator.db
-  (:require [igniteinator.constants :as constants]
-            [re-frame.core :refer [reg-cofx]]))
+  (:require [igniteinator.constants :as constants]))
 
 (def default-db
   {
@@ -50,10 +49,17 @@
                          :reset-dialog-open? false
                          :active?            false
                          :setup-idx          nil
+                         :cards-stack-idx    nil
                          :stacks             nil
                          :cards-taken        nil
+                         :trashing?          false
+                         :trash-mode         :page
                          :trash-dialog-open? false
-                         :trash-search-str   ""}
+                         :trash-search-str   ""
+                         :snackbar-1-message ""
+                         :snackbar-2-message ""
+                         :snackbar-1-open?   false
+                         :snackbar-2-open?   false}
    :card-load-state     {:en nil}
    :cards               nil
    :combos-set          nil})

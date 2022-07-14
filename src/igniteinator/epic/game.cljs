@@ -1,5 +1,6 @@
 (ns igniteinator.epic.game
-  (:require [igniteinator.epic.reset-button :refer [reset-button]]
+  (:require [igniteinator.epic.game-toolbar :refer [game-toolbar]]
+            [igniteinator.epic.reset-button :refer [reset-button]]
             [igniteinator.epic.trash :refer [trash-button]]
             [igniteinator.ui.components.bool-input :refer [switch]]
             [igniteinator.ui.components.card-list :refer [card-list]]
@@ -48,9 +49,6 @@
 ;; FIXME: emptying a stack lead to error
 (defn stacks-display []
   (let [top-cards (<sub :epic/top-cards)]
-    ;; TODO: Interaction
-    ;; TODO: Show cards left. Or should that be in the popup to avoid cluttering the screen?
-    ;; TODO: In Even More Epic Ignite, trashed cards go to bottom. Popup the search window.
     [card-list
      {:tooltip false                                        ;; Tooltip covers buttons
       :content-below-fn
@@ -62,8 +60,8 @@
                          :icon     [file-upload]
                          :on-click #(>evt :epic/take-card (:idx card))}
             "Take"]
-           [card-button {:color :secondary
-                         :icon  [low-priority]
+           [card-button {:color    :secondary
+                         :icon     [low-priority]
                          :on-click #(>evt :epic/cycle-card (:idx card))}
             "Cycle"]]]
          (if (<sub :epic/show-stack-info?)
@@ -80,4 +78,5 @@
       [reset-button]
       [trash-button]
       [toggle-stack-info-switch]]
-     [stacks-display]]))
+     [stacks-display]
+     [game-toolbar]]))

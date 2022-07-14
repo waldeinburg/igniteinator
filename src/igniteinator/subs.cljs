@@ -448,6 +448,7 @@
 (reg-sub-db :epic/active?)
 (reg-sub-db :epic/stacks)
 (reg-sub-db :epic/setup-idx)
+(reg-sub-db :epic/trash-mode)
 
 (reg-sub
   :epic/setup
@@ -491,3 +492,15 @@
                      [{:key :name-contains, :args [search-str]}]
                      [])]
       (<sub :cards card-ids filters [{:key :name, :order :asc}]))))
+
+;; Just the same as the dialog, though we might want to allow changing the order.
+(reg-sub
+  :epic/trash-page-cards
+  :<- [:epic/trash-dialog-cards]
+  (fn [cards _]
+    cards))
+
+(reg-sub-db :epic/snackbar-1-message)
+(reg-sub-db :epic/snackbar-2-message)
+(reg-sub-db :epic/snackbar-1-open?)
+(reg-sub-db :epic/snackbar-2-open?)

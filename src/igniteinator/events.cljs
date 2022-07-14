@@ -1,6 +1,7 @@
 (ns igniteinator.events
   (:require [ajax.core :as ajax]
             [clojure.string :as s]
+            [clojure.string :as str]
             [igniteinator.constants :as constants]
             [igniteinator.db :refer [default-db]]
             [igniteinator.model.epic-setups :as epic-setups]
@@ -368,31 +369,44 @@
        ;; https://github.com/den1k/re-frame-utils/blob/master/src/vimsical/re_frame/cofx/inject.cljc
        ;; Instead, require that the component subscribe to :global-cards-unsorted
        [_ cards setup-idx]]
-    (let [setup      (setups setup-idx)
-          count-fn   (:count-fn setup)
-          stack-defs (:stacks setup)
-          stacks     (->>
-                       stack-defs
-                       ;; Filter
-                       (map (fn [stack-def]
-                              (let [stack-cards (filter (:filter stack-def) cards)]
-                                (assoc stack-def :cards stack-cards))))
-                       ;; Add copies of each card. Cards should only be represented by id to avoid duplicating objects
-                       ;; in local storage.
-                       (map (fn [stack-def]
-                              (update stack-def :cards
-                                (fn [stack-cards]
-                                  (mapcat (fn [card]
-                                            (repeat (count-fn card) (:id card)))
-                                    stack-cards)))))
-                       ;; Do not keep filter (stacks are stored in local storage)
-                       (map #(dissoc % :filter)))]
+    (let [setup             (setups setup-idx)
+          count-fn          (:count-fn setup)
+          stack-defs        (:stacks setup)
+          stacks-with-cards (->>
+                              stack-defs
+                              ;; Filter
+                              (map (fn [stack-def]
+                                     (let [stack-cards (filter (:filter stack-def) cards)]
+                                       (assoc stack-def :cards stack-cards)))))
+          cards-stack-idx   (reduce-kv
+                              (fn [csi idx stack]
+                                (into csi
+                                  (reduce
+                                    (fn [m card]
+                                      (assoc m (:id card) idx))
+                                    {}
+                                    (:cards stack))))
+                              {}
+                              (vec stacks-with-cards))
+          stacks            (->>
+                              stacks-with-cards
+                              ;; Add copies of each card. Cards should only be represented by id to avoid duplicating objects
+                              ;; in local storage.
+                              (map (fn [stack-def]
+                                     (update stack-def :cards
+                                       (fn [stack-cards]
+                                         (mapcat (fn [card]
+                                                   (repeat (count-fn card) (:id card)))
+                                           stack-cards)))))
+                              ;; Do not keep filter (stacks are stored in local storage)
+                              (map #(dissoc % :filter)))]
       ;; The shuffling is non-deterministic and is delegated to an effect which will dispatch the
       ;; :epic/set-stacks event to set the stacks.
       (->
         cofx
         (assoc-db-and-store [:epic :active?] true)
         (assoc-db-and-store [:epic :setup-idx] setup-idx)
+        (assoc-db-and-store [:epic :cards-stack-idx] cards-stack-idx)
         (assoc :epic/shuffle-stacks stacks)))))
 (reg-event-db-assoc-store :epic/set-stacks)
 
@@ -404,10 +418,14 @@
       cofx
       (assoc-db-and-store [:epic :active?] false)
       (assoc-db-and-store [:epic :setup-idx] nil)
+      (assoc-db-and-store [:epic :cards-stack-idx] nil)
       (assoc-db-and-store [:epic :stacks] nil)
       (assoc-db-and-store [:epic :cards-taken] nil))))
 
 (reg-event-db-assoc-store :epic/set-show-stack-info?)
+
+(defn epic-snackbar-message [verb card preposition stacks stack-idx]
+  [:<> (str/capitalize verb) " " [:strong (:name card)] " " preposition " " [:strong (-> stack-idx stacks :name)]])
 
 (reg-event-fx
   :epic/take-card
@@ -417,42 +435,96 @@
         :as                                  cofx}
        [_ stack-idx]]
     ;; TODO: history
-    (->
-      cofx
-      (assoc-db-and-store [:epic :stacks]
-        (update stacks stack-idx #(update % :cards rest)))
-      ;; cards-taken holds a map of id -> count
-      (assoc-db-and-store [:epic :cards-taken]
-        (update cards-taken
-          (-> stack-idx stacks :cards first cards :id)
-          #(inc (or % 0)))))))
+    (let [card (-> stack-idx stacks :cards first cards)]
+      (->
+        cofx
+        (assoc-db-and-store [:epic :stacks]
+          (update stacks stack-idx #(update % :cards (comp vec rest))))
+        ;; cards-taken holds a map of id -> count
+        (assoc-db-and-store [:epic :cards-taken]
+          (update cards-taken
+            (:id card)
+            #(inc (or % 0))))
+        (assoc :dispatch [:epic/set-snackbar
+                          (epic-snackbar-message "took" card "from" stacks stack-idx)])))))
 
 (reg-event-fx
   :epic/cycle-card
   [(inject-cofx :store)]
-  (fn [{{{:keys [stacks]} :epic} :db
+  (fn [{{:keys            [cards]
+         {:keys [stacks]} :epic} :db
         :as                      cofx}
        [_ stack-idx]]
     ;; TODO: history
-    (assoc-db-and-store cofx [:epic :stacks]
-      (update stacks stack-idx #(update % :cards (fn [cards]
-                                                   (conj (vec (rest cards)) (first cards))))))))
+    (let [stack-cards (-> stack-idx stacks :cards)
+          card-id     (first stack-cards)]
+      (->
+        cofx
+        (assoc-db-and-store [:epic :stacks stack-idx :cards] (conj (-> stack-cards rest vec) card-id))
+        (assoc :dispatch [:epic/set-snackbar
+                          (epic-snackbar-message "cycled" (cards card-id) "in" stacks stack-idx)])))))
 
+(reg-event-db-assoc :epic/set-trashing?)
 (reg-event-db-assoc :epic/set-trash-dialog-open?)
 (reg-event-db-assoc :epic/set-trash-search-str)
 
 (reg-event-fx
   :epic/trash-card
   [(inject-cofx :store)]
-  (fn [{{{:keys [cards-taken]} :epic} :db
-        :as                           cofx}
+  (fn [{{:keys                                        [cards]
+         {:keys [cards-taken cards-stack-idx stacks]} :epic} :db
+        :as                                                  cofx}
        [_ card-id]]
-    (->
-      cofx
-      ;; TODO: setup should build a map of card-id -> stack-idx
-      (assoc-db-and-store [:epic :cards-taken]
-        (let [cnt (get cards-taken card-id)]
-          (if (= 1 cnt)
-            (dissoc cards-taken card-id)
-            (update cards-taken card-id dec))))
-      (assoc :dispatch [:epic/set-trash-dialog-open? false]))))
+    ;; TODO: history
+    (let [stack-idx (cards-stack-idx card-id)]
+      (->
+        cofx
+        (assoc-db-and-store [:epic :stacks]
+          (update stacks stack-idx #(update % :cards (fn [stack-cards]
+                                                       (conj stack-cards card-id)))))
+        (assoc-db-and-store [:epic :cards-taken]
+          (let [cnt (get cards-taken card-id)]
+            (if (= 1 cnt)
+              (dissoc cards-taken card-id)
+              (update cards-taken card-id dec))))
+        (assoc :fx [[:dispatch [:epic/close-trash-menu]]
+                    [:dispatch [:epic/set-snackbar
+                                (epic-snackbar-message "trashed" (cards card-id) "to" stacks stack-idx)]]])))))
+
+(reg-event-fx
+  :epic/set-trash-mode
+  [(inject-cofx :store)]
+  (fn [{{{:keys [trashing? trash-mode]} :epic} :db :as cofx} [_ new-mode]]
+    (if (and trashing? (not= trash-mode new-mode))
+      {:fx [[:dispatch [:set-settings-menu-open? false]]
+            [:dispatch [:epic/close-trash-menu]]
+            [:dispatch [:epic/set-trash-mode new-mode]]
+            [:dispatch [:epic/open-trash-menu]]]}
+      (assoc-db-and-store cofx [:epic :trash-mode] new-mode))))
+
+(reg-event-fx
+  :epic/open-trash-menu
+  (fn [{{{:keys [trash-mode]} :epic} :db}]
+    ;; Reset search string here to avoid doing it during close animation.
+    {:fx [[:dispatch [:epic/set-trash-search-str ""]]
+          [:dispatch [:epic/set-trashing? true]]
+          [:dispatch (case trash-mode
+                       :page [:page/push :epic/trash]
+                       :dialog [:epic/set-trash-dialog-open? true])]]}))
+
+(reg-event-fx
+  :epic/close-trash-menu
+  (fn [{{{:keys [trash-mode]} :epic} :db}]
+    {:fx [[:dispatch [:epic/set-trashing? false]]
+          [:dispatch (case trash-mode
+                       :page [:page/pop]
+                       :dialog [:epic/set-trash-dialog-open? false])]]}))
+
+(reg-event-db
+  :epic/set-snackbar
+  (fn [{{:keys [snackbar-1-open? snackbar-2-open?]} :epic :as db} [_ message]]
+    (update db :epic (fn [epic]
+                       (assoc epic
+                         (if snackbar-1-open? :snackbar-2-message :snackbar-1-message) message
+                         :snackbar-1-open? (not snackbar-1-open?) ; state is false false initially
+                         :snackbar-2-open? snackbar-1-open?)))))
