@@ -31,8 +31,10 @@
    ;; the card list changes. The present solution is way more simple and also handles nicely
    ;; skipping images due to rapid scrolling.
    (fn [{:keys [on-click tooltip]} card]
-     (let [src             (<sub :image-path card)
-           load-state      (<sub :card-load-state card)
+     (let [normal?         (not (:image-path card))
+           src             (or (:image-path card) (<sub :image-path card))
+           load-state      (if normal? (<sub :card-load-state card)
+                                       :loaded)
            name            (:name card)
            ;; The placeholder has the exact scale of the images.
            placeholder-img [:img {:src   placeholder-img-src, :alt name

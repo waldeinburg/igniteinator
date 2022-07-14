@@ -462,7 +462,13 @@
   :epic/top-cards
   :<- [:epic/stacks]
   (fn [stacks _]
-    (let [top-cards (vec (<sub :cards-by-ids (mapv #(first (:cards %)) stacks)))]
+    (let [top-cards (vec (map-indexed (fn [idx stack]
+                                        (if-let [card-ids (not-empty (:cards stack))]
+                                          (<sub :card (first card-ids))
+                                          {:id           (str "empty-" idx) ; Must have unique id for React.
+                                           :name         "Empty stack"
+                                           :image-path   (str constants/img-base-path "/empty-stack.png")}))
+                           stacks))]
       (map (fn [idx]
              (let [stack (get stacks idx)]
                (assoc (get top-cards idx)

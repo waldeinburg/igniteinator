@@ -6,6 +6,7 @@
             [igniteinator.ui.components.form-item :refer [form-item]]
             [igniteinator.ui.components.page :refer [page]]
             [igniteinator.ui.components.search-bar :refer [search-bar]]
+            [igniteinator.ui.components.tooltip :refer [tooltip]]
             [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
             [reagent-mui.icons.delete-forever :refer [delete-forever]]
             [reagent-mui.material.button :refer [button]]
@@ -59,9 +60,10 @@
     (if (:trash-to-bottom? setup)
       [:<>
        [select-cards-dialog]
-       [button {:variant    :outlined
-                :sx         {:mr 2}
-                :disabled   disabled?
-                :start-icon (r/as-element [delete-forever])
-                :on-click   #(>evt :epic/open-trash-menu)}
-        "Trash"]])))
+       [tooltip "Trash a card from your hand"
+        [button {:variant    :outlined
+                 :sx         {:mr 2}
+                 :disabled   disabled?
+                 :start-icon (r/as-element [delete-forever])
+                 :on-click   #(>evt :epic/open-trash-menu)}
+         "Trash"]]])))

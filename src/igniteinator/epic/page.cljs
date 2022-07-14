@@ -8,6 +8,6 @@
 (defn epic-page []
   [page (txt :epic/page-title)
    [prepare-game]
-   ;; TODO: Questionmark icon with help on how to use the interface.
-   ;; TODO: Undo/redo and display last action.
+   ;; TODO: Maybe questionmark icon with help on how to use the interface.
+   ;; TODO: Undo/redo
    [epic-game]])
