@@ -22,9 +22,9 @@
 ;; Presuppose default breakpoints: sm: 600px, md: 900px, lg: 1200px
 (defn card-button-media-query [xs-min-width sm-min-width md-min-width lg-min-width]
   (min-max-media-query [(if xs-min-width [xs-min-width 599])
-                        [sm-min-width 899]
-                        [md-min-width 1199]
-                        [lg-min-width]]))
+                        (if sm-min-width [sm-min-width 899])
+                        (if md-min-width [md-min-width 1199])
+                        (if lg-min-width [lg-min-width])]))
 
 (defn card-button [{:keys [tooltip-str disabled? color icon on-click]} label]
   [:f>
