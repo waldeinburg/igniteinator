@@ -56,14 +56,16 @@
 
 (defn trash-button []
   (let [setup     (<sub :epic/setup)
-        disabled? (<sub :epic/trash-button-disabled?)]
+        disabled? (<sub :epic/trash-button-disabled?)
+        btn [button {:variant    :outlined
+                     :sx         {:mr 2}
+                     :disabled   disabled?
+                     :start-icon (r/as-element [delete-forever])
+                     :on-click   #(>evt :epic/open-trash-menu)}
+             "Trash"]]
     (if (:trash-to-bottom? setup)
       [:<>
        [select-cards-dialog]
-       [tooltip "Trash a card from your hand"
-        [button {:variant    :outlined
-                 :sx         {:mr 2}
-                 :disabled   disabled?
-                 :start-icon (r/as-element [delete-forever])
-                 :on-click   #(>evt :epic/open-trash-menu)}
-         "Trash"]]])))
+       (if disabled?
+         btn
+         [tooltip "Trash a card from your hand" btn])])))

@@ -275,15 +275,16 @@
 (reg-sub-db :card-details-page/initial-idx)
 (reg-sub-db :card-details-page/sortings)
 
-(defn- reg-card-details-page-card-name [name idx-sub]
-  (reg-sub
-    name
-    :<- [:card-details-page/card-ids]
-    :<- [idx-sub]
-    (fn [[card-ids idx] _]
-      (:name (<sub :card (get card-ids idx))))))
-(reg-card-details-page-card-name :card-details-page/current-card-name :card-details-page/idx)
-(reg-card-details-page-card-name :card-details-page/previous-card-name :card-details-page/prev-idx)
+(let [reg-card-details-page-card-name
+      (fn [name idx-sub]
+        (reg-sub
+          name
+          :<- [:card-details-page/card-ids]
+          :<- [idx-sub]
+          (fn [[card-ids idx] _]
+            (:name (<sub :card (get card-ids idx))))))]
+  (reg-card-details-page-card-name :card-details-page/current-card-name :card-details-page/idx)
+  (reg-card-details-page-card-name :card-details-page/previous-card-name :card-details-page/prev-idx))
 (reg-sub
   :card-details-page/combos
   :<- [:default-order-sortings]
@@ -462,20 +463,34 @@
   :epic/top-cards
   :<- [:epic/stacks]
   (fn [stacks _]
-    (let [top-cards (vec (map-indexed (fn [idx stack]
-                                        (if-let [card-ids (not-empty (:cards stack))]
-                                          (<sub :card (first card-ids))
-                                          {:id           (str "empty-" idx) ; Must have unique id for React.
-                                           :name         "Empty stack"
-                                           :image-path   (str constants/img-base-path "/empty-stack.png")}))
-                           stacks))]
-      (map (fn [idx]
-             (let [stack (get stacks idx)]
-               (assoc (get top-cards idx)
-                 :stack-name (:name stack)
-                 :stack-description (:description stack)
-                 :stack-count (count (:cards stack)))))
-        (range (count stacks))))))
+    (let [top-cards-raw      (map-indexed
+                               (fn [idx stack]
+                                 (if-let [card-ids (not-empty (:cards stack))]
+                                   (<sub :card (first card-ids))
+                                   {:id         (str "empty-" idx) ; Must have unique id for React.
+                                    :name       "Empty stack"
+                                    :image-path (str constants/img-base-path "/empty-stack.png")}))
+                               stacks)
+          top-cards-w-stacks (map
+                               (fn [card stack]
+                                 (assoc card :stack stack))
+                               top-cards-raw stacks)
+          relevant-cards-map (reduce
+                               (fn [m card]
+                                 (let [stack (:stack card)]
+                                   (if (or (:placeholder? stack) (= 0 (count (:cards stack))))
+                                     m
+                                     (assoc m (:id card)
+                                              (assoc card :nav-stack-idx (count m))))))
+                               {}
+                               top-cards-w-stacks)
+          top-cards          (map (fn [card]
+                                    (if-let [relevant-card (-> card :id relevant-cards-map)]
+                                      relevant-card
+                                      card))
+                               top-cards-w-stacks)
+          relevant-cards     (vals relevant-cards-map)]
+      [top-cards relevant-cards])))
 
 (reg-sub-db :epic/cards-taken)
 

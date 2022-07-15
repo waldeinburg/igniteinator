@@ -1,8 +1,8 @@
 (ns igniteinator.epic.prepare
-  (:require [igniteinator.util.re-frame :refer [<sub >evt]]
-            [reagent-mui.material.button :refer [button]]
-            [igniteinator.ui.components.link :refer [external-link]]
-            [reagent-mui.material.alert :refer [alert]]))
+  (:require [igniteinator.ui.components.link :refer [external-link]]
+            [igniteinator.util.re-frame :refer [<sub >evt]]
+            [reagent-mui.material.alert :refer [alert]]
+            [reagent-mui.material.button :refer [button]]))
 
 (defn shuffle-button []
   (if (not (<sub :epic/active?))
@@ -30,8 +30,9 @@
        [shuffle-button]
        [:h3 "How to play"]
        [:ul
-        [:li "The app will display the top card of each stack in the market. Take these from the box and place them "
-         "on the table."]
+        [:li "The app will display the top card of each randomized stack (i.e., except stacks with just March, Dagger, "
+         "or Old Wooden Shield) in the market. Take these from the box and place them on the table instead of full "
+         "stacks."]
         [:li "Tell the app when you are taking a card from the market, cycling a card to the bottom of the stack or "]
         "trashing a card to the bottom of the stack (Even More Epic Ignite only)."
         [:li "When a new top card is displayed, take the new card from the box and put it on the appropriate stack."]

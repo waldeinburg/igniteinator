@@ -27,23 +27,25 @@
      (let [size               (<sub :size)
            s-labeled-buttons? (card-button-media-query nil 875 nil nil)
            m-labeled-buttons? (card-button-media-query 440 660 900 nil)
-           l-labeled-buttons? (card-button-media-query 235 600 900 1200)]
-       [tooltip tooltip-str
-        (if (or
-              (and (= 0 size) s-labeled-buttons?)
-              (and (= 1 size) m-labeled-buttons?)
-              (and (<= 2 size) l-labeled-buttons?))
-          [button {:disabled   disabled?
-                   :variant    :contained
-                   :color      color
-                   :start-icon (r/as-element icon)
-                   :on-click   on-click}
-           label]
-          [button {:disabled disabled?
-                   :variant  :contained
-                   :color    color
-                   :on-click on-click}
-           icon])]))])
+           l-labeled-buttons? (card-button-media-query 235 600 900 1200)
+           btn                (if (or
+                                    (and (= 0 size) s-labeled-buttons?)
+                                    (and (= 1 size) m-labeled-buttons?)
+                                    (and (<= 2 size) l-labeled-buttons?))
+                                [button {:disabled   disabled?
+                                         :variant    :contained
+                                         :color      color
+                                         :start-icon (r/as-element icon)
+                                         :on-click   on-click}
+                                 label]
+                                [button {:disabled disabled?
+                                         :variant  :contained
+                                         :color    color
+                                         :on-click on-click}
+                                 icon])]
+       (if disabled?
+         btn
+         [tooltip tooltip-str btn])))])
 
 (defn toggle-stack-info-switch []
   (switch {:checked?-ref (<sub-ref :epic/show-stack-info?)
@@ -51,31 +53,42 @@
            :label        "Show stack info"}))
 
 (defn stacks-display []
-  (let [top-cards (<sub :epic/top-cards)]
+  (let [[top-cards relevant-cards] (<sub :epic/top-cards)]
     [card-list
-     {:tooltip false                                        ;; Tooltip covers buttons
+     {:tooltip     false                                    ;; Tooltip covers buttons
+      :on-click-fn (fn [card]
+                     (let [stack (:stack card)]
+                       (if (or (:placeholder? stack) (= 0 (count (:cards stack))))
+                         nil
+                         #(>evt :show-card-details relevant-cards (:nav-stack-idx card) :page/push))))
       :content-below-fn
       (fn [card]
-        [:<>
-         [box {:display :flex, :justify-content :center}
-          [button-group
-           {:disabled (= 0 (:stack-count card))}
-           [card-button {:tooltip-str (str "Take " (:name card) " from the stack")
-                         :color       :primary
-                         :icon        [file-upload]
-                         :on-click    #(>evt :epic/take-card (:idx card))}
-            "Take"]
-           [card-button {:tooltip-str (str "Cycle " (:name card) " to the bottom of the stack")
-                         :disabled?   (= 1 (:stack-count card))
-                         :color       :secondary
-                         :icon        [low-priority]
-                         :on-click    #(>evt :epic/cycle-card (:idx card))}
-            "Cycle"]]]
-         (if (<sub :epic/show-stack-info?)
-           [box {:mt 1}
-            [:strong (:stack-name card)]
-            " (" (:stack-count card) "): "
-            [box {:component :span, :color "text.secondary"} (:stack-description card)]])])}
+        (let [stack       (:stack card)
+              stack-count (count (:cards stack))]
+          ;; The :placeholder? property allows us to merge ind dummy decks with March, Dagger, Old Wooden Shield and
+          ;; even Hex. This should be an opt-in, though.
+          [:<>
+           [box {:display :flex, :justify-content :center}
+            [button-group
+             {:disabled (or (:placeholder? stack) (= 0 stack-count))}
+             [card-button {:tooltip-str (str "Take " (:name card) " from the stack")
+                           :color       :primary
+                           :icon        [file-upload]
+                           :on-click    #(>evt :epic/take-card (:idx card))}
+              "Take"]
+             [card-button {:tooltip-str (str "Cycle " (:name card) " to the bottom of the stack")
+                           :disabled?   (= 1 stack-count)
+                           :color       :secondary
+                           :icon        [low-priority]
+                           :on-click    #(>evt :epic/cycle-card (:idx card))}
+              "Cycle"]]]
+           (if (<sub :epic/show-stack-info?)
+             [box {:mt 1}
+              [:strong (:name stack)]
+              (if (not (:placeholder? stack))
+                (str " (" stack-count ")"))
+              ": "
+              [box {:component :span, :color "text.secondary"} (:description stack)]])]))}
      top-cards]))
 
 (defn epic-game []
