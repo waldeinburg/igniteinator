@@ -69,6 +69,9 @@
      (fn [db [_ val]]
        (assoc-in db path val)))))
 
+(defn assoc-db [{:keys [db]} path val]
+  {:db    (assoc-in db path val)})
+
 (defn assoc-db-and-store [{:keys [db store]} path val]
   {:db    (assoc-in db path val)
    :store (assoc-in store path val)})

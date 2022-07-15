@@ -7,7 +7,7 @@
             [igniteinator.model.epic-setups :as epic-setups]
             [igniteinator.model.setups :as setups]
             [igniteinator.text :refer [txt]]
-            [igniteinator.util.re-frame :refer [assoc-db-and-store assoc-ins reg-event-db-assoc
+            [igniteinator.util.re-frame :refer [assoc-db assoc-db-and-store assoc-ins reg-event-db-assoc
                                                 reg-event-db-assoc-store reg-event-set-option]]
             [re-frame.core :refer [inject-cofx reg-event-db reg-event-fx]]))
 
@@ -416,6 +416,10 @@
   (fn [cofx _]
     (->
       cofx
+      (assoc-db [:epic :snackbar-1-message] "")
+      (assoc-db [:epic :snackbar-2-message] "")
+      (assoc-db [:epic :snackbar-1-open?] false)
+      (assoc-db [:epic :snackbar-2-open?] false)
       (assoc-db-and-store [:epic :active?] false)
       (assoc-db-and-store [:epic :setup-idx] nil)
       (assoc-db-and-store [:epic :cards-stack-idx] nil)

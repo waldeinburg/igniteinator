@@ -1,5 +1,6 @@
 (ns igniteinator.epic.game
-  (:require [igniteinator.epic.game-toolbar :refer [game-toolbar]]
+  (:require [clojure.string :as s]
+            [igniteinator.epic.game-toolbar :refer [game-toolbar]]
             [igniteinator.epic.reset-button :refer [reset-button]]
             [igniteinator.epic.trash :refer [trash-button]]
             [igniteinator.ui.components.bool-input :refer [switch]]
@@ -13,6 +14,10 @@
             [reagent-mui.material.button :refer [button]]
             [reagent-mui.material.button-group :refer [button-group]]
             [reagent.core :as r]))
+
+(defn debug-copy-stack-cards [card-ids]
+  (.navigator.clipboard.writeText js/self
+    (str "https://localhost:9533/?ids=" (s/join "," (sort card-ids)))))
 
 ;; Presuppose default breakpoints: sm: 600px, md: 900px, lg: 1200px
 (defn card-button-media-query [xs-min-width sm-min-width md-min-width lg-min-width]

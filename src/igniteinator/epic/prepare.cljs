@@ -25,14 +25,19 @@
         [:p "To be implemented:"]
         [:ul
          [:li "Choose between Even More Epic Ignite and Epic Ignite as described in the Ignite rule book page 23."]
-         [:li "Show last action + undo/redo."]
-         [:li "Take actions on the card display page (when clicking a card)"]]]
+         [:li "Undo/redo."]
+         [:li "Take actions on the card display page (when clicking a card)."]
+         [:li "Optional handling of Title cards."]
+         [:li "Option to also show the March, Dagger and Old Wooden Shield stacks."]]]
+       [:p "This feature lets you play Epic Ignite without sorting all of your cards before and after the game."]
        [shuffle-button]
        [:h3 "How to play"]
        [:ul
-        [:li "The app will display the top card of each randomized stack (i.e., except stacks with just March, Dagger, "
-         "or Old Wooden Shield) in the market. Take these from the box and place them on the table instead of full "
-         "stacks."]
+        [:li "The app will display the top card of each randomized stack in the market. Take these from the box and "
+         "place them on the table instead of full stacks."]
+        [:li "Stacks with just March, Dagger, or Old Wooden Shield are left out because app interaction is not "
+         "necessary for these stacks. Also, the Title stacks are not implemented (will be optional when implemented "
+         "because handling the Title cards does not require non-standard setup and cleanup)"]
         [:li "Tell the app when you are taking a card from the market, cycling a card to the bottom of the stack or "]
         "trashing a card to the bottom of the stack (Even More Epic Ignite only)."
         [:li "When a new top card is displayed, take the new card from the box and put it on the appropriate stack."]
