@@ -475,21 +475,24 @@
                                (fn [card stack]
                                  (assoc card :stack stack))
                                top-cards-raw stacks)
-          relevant-cards-map (reduce
-                               (fn [m card]
+          relevant-cards     (reduce
+                               (fn [res card]
                                  (let [stack (:stack card)]
                                    (if (or (:placeholder? stack) (= 0 (count (:cards stack))))
-                                     m
-                                     (assoc m (:id card)
-                                              (assoc card :nav-stack-idx (count m))))))
-                               {}
+                                     res
+                                     (conj res (assoc card :nav-stack-idx (count res))))))
+                               []
                                top-cards-w-stacks)
+          relevant-cards-map (reduce
+                               (fn [m card]
+                                 (assoc m (:id card) card))
+                               {}
+                               relevant-cards)
           top-cards          (map (fn [card]
                                     (if-let [relevant-card (-> card :id relevant-cards-map)]
                                       relevant-card
                                       card))
-                               top-cards-w-stacks)
-          relevant-cards     (vals relevant-cards-map)]
+                               top-cards-w-stacks)]
       [top-cards relevant-cards])))
 
 (reg-sub-db :epic/cards-taken)
