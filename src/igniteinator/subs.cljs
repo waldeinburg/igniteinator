@@ -279,10 +279,11 @@
       (fn [name idx-sub]
         (reg-sub
           name
+          :<- [:cards-map]
           :<- [:card-details-page/card-ids]
           :<- [idx-sub]
-          (fn [[card-ids idx] _]
-            (:name (<sub :card (get card-ids idx))))))]
+          (fn [[cards-map card-ids idx] _]
+            (-> card-ids (get idx) cards-map :name))))]
   (reg-card-details-page-card-name :card-details-page/current-card-name :card-details-page/idx)
   (reg-card-details-page-card-name :card-details-page/previous-card-name :card-details-page/prev-idx))
 (reg-sub
@@ -461,12 +462,13 @@
 
 (reg-sub
   :epic/top-cards
+  :<- [:cards-map]
   :<- [:epic/stacks]
-  (fn [stacks _]
+  (fn [[cards-map stacks] _]
     (let [top-cards-raw      (map-indexed
                                (fn [idx stack]
                                  (if-let [card-ids (not-empty (:cards stack))]
-                                   (<sub :card (first card-ids))
+                                   (get cards-map (first card-ids))
                                    {:id         (str "empty-" idx) ; Must have unique id for React.
                                     :name       "Empty stack"
                                     :image-path (str constants/img-base-path "/empty-stack.png")}))
