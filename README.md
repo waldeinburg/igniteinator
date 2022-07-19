@@ -1,7 +1,7 @@
 # Igniteinator
 
 Source code for the [Igniteinator](https://igniteinator.waldeinburg.dk) – an unoffical app for the
-board game [Ignite](http://gingersnapgaming.com).
+board game [Ignite](https://gingersnapgaming.com).
 
 ## Overview
 
@@ -9,15 +9,15 @@ The Igniteinator is a fan-made app for Ignite, a deck builder board game. The co
 abstracted and made into a library (which I shall call Deckbuildinator) but for now it's all about
 Ignite.
 
-The aim of the project is to implement all features of the official app, just better, and to add a
-deck randomizer mechanism.
+The data are originally based on a now non-existent official app (cf. the `gen-data/archive` source
+folder for how the data was processed and developed). Images have been kindly provided by [Ginger
+Snap Gaming](https://gingersnapgaming.com).
 
 ## Development setup
 
-_It is not possible to set up a development environment from scratch after downloading images was
-replaced with processing images provided by Ginger Snap Gaming. If you want to contribute, please
-contact me and I will create scripts for downloading the data from the currently deployed
-Igniteinator._
+_It is not possible to set up a development environment from scratch because the images are not
+included in the repository. If you want to contribute, please contact me and I will create scripts
+for downloading the data from the currently deployed Igniteinator._
 
 ### Install npm packages
 
@@ -68,12 +68,11 @@ To test out doing a production build:
 
 ### Data and images
 
-All data and images are Copyright © 2021, [Ginger Snap Gaming](http://gingersnapgaming.com). Used in
-the [Igniteinator](https://igniteinator.waldeinburg.dk) by permission.
+All data and images are Copyright © 2021, [Ginger Snap Gaming](https://gingersnapgaming.com). Used
+in the [Igniteinator](https://igniteinator.waldeinburg.dk) by permission.
 
-Thus, even though the scripts in the code fetches data and images, forking the project does not give
-you permission to publish another version of the app. You will need to get permission
-from [Ginger Snap Gaming](http://gingersnapgaming.com).
+Thus, forking the project does not give you permission to publish another version of the app. You
+will need to get permission from [Ginger Snap Gaming](http://gingersnapgaming.com).
 
 ### Source code
 
