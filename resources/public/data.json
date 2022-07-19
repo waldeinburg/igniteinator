@@ -1,0 +1,2858 @@
+{
+  "boxes": [
+    {
+      "id": 1,
+      "name": "Base"
+    },
+    {
+      "id": 2,
+      "name": "The Freeze"
+    },
+    {
+      "id": 3,
+      "name": "A New Enemy"
+    }
+  ],
+  "types": [
+    {
+      "id": 1,
+      "name": "Title"
+    },
+    {
+      "id": 2,
+      "name": "Ability"
+    },
+    {
+      "id": 3,
+      "name": "AoE"
+    },
+    {
+      "id": 4,
+      "name": "Blade"
+    },
+    {
+      "id": 5,
+      "name": "Bow"
+    },
+    {
+      "id": 6,
+      "name": "Equipment"
+    },
+    {
+      "id": 7,
+      "name": "Event"
+    },
+    {
+      "id": 8,
+      "name": "Fire"
+    },
+    {
+      "id": 9,
+      "name": "Freeze"
+    },
+    {
+      "id": 10,
+      "name": "Healing"
+    },
+    {
+      "id": 11,
+      "name": "Immovable"
+    },
+    {
+      "id": 12,
+      "name": "Impassable Terrain"
+    },
+    {
+      "id": 13,
+      "name": "Item"
+    },
+    {
+      "id": 14,
+      "name": "Lightning"
+    },
+    {
+      "id": 15,
+      "name": "Melee"
+    },
+    {
+      "id": 16,
+      "name": "Minion"
+    },
+    {
+      "id": 17,
+      "name": "Mount"
+    },
+    {
+      "id": 18,
+      "name": "Movement"
+    },
+    {
+      "id": 19,
+      "name": "Nature"
+    },
+    {
+      "id": 20,
+      "name": "Passable Terrain"
+    },
+    {
+      "id": 21,
+      "name": "Projectile"
+    },
+    {
+      "id": 22,
+      "name": "Ranged"
+    },
+    {
+      "id": 23,
+      "name": "Shield"
+    },
+    {
+      "id": 24,
+      "name": "Small"
+    },
+    {
+      "id": 25,
+      "name": "Special"
+    },
+    {
+      "id": 26,
+      "name": "Spell"
+    },
+    {
+      "id": 27,
+      "name": "Terrain"
+    },
+    {
+      "id": 28,
+      "name": "Weapon"
+    },
+    {
+      "id": 29,
+      "name": "Dark"
+    },
+    {
+      "id": 30,
+      "name": "Fly"
+    },
+    {
+      "id": 31,
+      "name": "Modifier"
+    },
+    {
+      "id": 32,
+      "name": "Monetary"
+    },
+    {
+      "id": 33,
+      "name": "War Machine"
+    },
+    {
+      "id": 34,
+      "name": "Transformation"
+    }
+  ],
+  "setups": [
+    {
+      "id": 0,
+      "name": "Recommended starter set",
+      "requires": [
+        1
+      ],
+      "cards": [
+        6,
+        11,
+        20,
+        34,
+        35,
+        37,
+        38,
+        51,
+        57,
+        59,
+        61,
+        71,
+        84,
+        113,
+        115,
+        122
+      ]
+    },
+    {
+      "id": 1,
+      "name": "A Deep Freeze",
+      "requires": [
+        1,
+        2
+      ],
+      "cards": [
+        5,
+        9,
+        25,
+        36,
+        48,
+        50,
+        51,
+        64,
+        65,
+        67,
+        84,
+        87,
+        88,
+        99,
+        100,
+        101,
+        114
+      ]
+    },
+    {
+      "id": 2,
+      "name": "All the Cards",
+      "requires": [
+        1,
+        2
+      ],
+      "cards": [
+        4,
+        11,
+        12,
+        31,
+        41,
+        46,
+        47,
+        58,
+        60,
+        82,
+        91,
+        94,
+        96,
+        105,
+        107,
+        115,
+        120,
+        121
+      ]
+    },
+    {
+      "id": 3,
+      "name": "All the Tokens",
+      "requires": [
+        1
+      ],
+      "cards": [
+        2,
+        6,
+        34,
+        38,
+        46,
+        48,
+        51,
+        55,
+        64,
+        65,
+        73,
+        88,
+        95,
+        108,
+        117,
+        120,
+        122
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Alliances Broken",
+      "requires": [
+        1,
+        2
+      ],
+      "cards": [
+        15,
+        17,
+        25,
+        29,
+        42,
+        48,
+        55,
+        58,
+        71,
+        76,
+        79,
+        80,
+        83,
+        99,
+        114,
+        120
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Axe You a Question",
+      "requires": [
+        1
+      ],
+      "cards": [
+        2,
+        3,
+        6,
+        8,
+        11,
+        13,
+        37,
+        48,
+        52,
+        57,
+        59,
+        63,
+        70,
+        84,
+        88,
+        113,
+        120
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Beware the Water",
+      "requires": [
+        1
+      ],
+      "cards": [
+        8,
+        22,
+        31,
+        36,
+        38,
+        48,
+        55,
+        59,
+        68,
+        95,
+        96,
+        99,
+        106,
+        108,
+        113,
+        120,
+        121
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Don't Push Me Away",
+      "requires": [
+        1,
+        2
+      ],
+      "cards": [
+        4,
+        5,
+        8,
+        25,
+        51,
+        61,
+        65,
+        77,
+        99,
+        104,
+        109,
+        115,
+        117,
+        118,
+        120,
+        123
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Down for the Count",
+      "requires": [
+        1,
+        2
+      ],
+      "cards": [
+        33,
+        46,
+        48,
+        49,
+        51,
+        54,
+        56,
+        57,
+        74,
+        77,
+        88,
+        103,
+        107,
+        115,
+        116,
+        119,
+        123
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Fire!",
+      "requires": [
+        1,
+        2
+      ],
+      "cards": [
+        3,
+        6,
+        16,
+        34,
+        40,
+        53,
+        57,
+        71,
+        72,
+        76,
+        91,
+        95,
+        99,
+        102,
+        111,
+        114,
+        121
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Going to the Range",
+      "requires": [
+        1
+      ],
+      "cards": [
+        1,
+        6,
+        23,
+        27,
+        48,
+        52,
+        57,
+        61,
+        64,
+        71,
+        84,
+        85,
+        115,
+        121,
+        122,
+        123
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Hex or Be Hexed",
+      "requires": [
+        1,
+        2
+      ],
+      "cards": [
+        9,
+        21,
+        24,
+        25,
+        42,
+        43,
+        44,
+        48,
+        72,
+        78,
+        82,
+        87,
+        92,
+        93,
+        97,
+        100,
+        102,
+        116
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Illegal Possession",
+      "requires": [
+        1,
+        2
+      ],
+      "cards": [
+        4,
+        9,
+        13,
+        15,
+        20,
+        21,
+        35,
+        38,
+        43,
+        55,
+        64,
+        74,
+        83,
+        90,
+        108,
+        111
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Just Wait a Second",
+      "requires": [
+        1
+      ],
+      "cards": [
+        4,
+        16,
+        30,
+        35,
+        37,
+        38,
+        64,
+        71,
+        73,
+        77,
+        85,
+        91,
+        105,
+        106,
+        115,
+        119,
+        122
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Let's Modify",
+      "requires": [
+        1,
+        2
+      ],
+      "cards": [
+        5,
+        35,
+        37,
+        48,
+        50,
+        74,
+        77,
+        79,
+        80,
+        83,
+        86,
+        88,
+        107,
+        115,
+        116
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Let's Switch",
+      "requires": [
+        1,
+        2
+      ],
+      "cards": [
+        1,
+        3,
+        14,
+        36,
+        44,
+        47,
+        52,
+        65,
+        73,
+        79,
+        88,
+        91,
+        99,
+        104,
+        115,
+        122
+      ]
+    },
+    {
+      "id": 16,
+      "name": "Let's Trade",
+      "requires": [
+        1,
+        2
+      ],
+      "cards": [
+        6,
+        11,
+        13,
+        30,
+        31,
+        44,
+        51,
+        52,
+        65,
+        67,
+        72,
+        76,
+        90,
+        95,
+        102,
+        112
+      ]
+    },
+    {
+      "id": 17,
+      "name": "Magical Evening",
+      "requires": [
+        1,
+        2
+      ],
+      "cards": [
+        2,
+        8,
+        20,
+        22,
+        51,
+        52,
+        55,
+        59,
+        64,
+        71,
+        91,
+        99,
+        104,
+        108,
+        117,
+        120,
+        121
+      ]
+    },
+    {
+      "id": 18,
+      "name": "Medieval Times",
+      "requires": [
+        1
+      ],
+      "cards": [
+        3,
+        4,
+        16,
+        30,
+        35,
+        38,
+        48,
+        52,
+        63,
+        73,
+        77,
+        96,
+        106,
+        113,
+        119,
+        122
+      ]
+    },
+    {
+      "id": 19,
+      "name": "Melee Mayhem",
+      "requires": [
+        1
+      ],
+      "cards": [
+        2,
+        3,
+        11,
+        13,
+        20,
+        30,
+        35,
+        37,
+        52,
+        60,
+        63,
+        70,
+        77,
+        84,
+        85,
+        106,
+        113,
+        114
+      ]
+    },
+    {
+      "id": 20,
+      "name": "Move the Cheese",
+      "requires": [
+        1,
+        2
+      ],
+      "cards": [
+        8,
+        10,
+        14,
+        15,
+        20,
+        23,
+        41,
+        43,
+        55,
+        58,
+        60,
+        76,
+        101,
+        102,
+        104,
+        117,
+        120
+      ]
+    },
+    {
+      "id": 21,
+      "name": "Open Fire",
+      "requires": [
+        1
+      ],
+      "cards": [
+        6,
+        34,
+        38,
+        48,
+        51,
+        53,
+        55,
+        59,
+        60,
+        61,
+        64,
+        65,
+        70,
+        71,
+        85,
+        88,
+        99,
+        108
+      ]
+    },
+    {
+      "id": 22,
+      "name": "Poison Apple",
+      "requires": [
+        1,
+        2
+      ],
+      "cards": [
+        4,
+        16,
+        20,
+        27,
+        29,
+        39,
+        40,
+        61,
+        65,
+        69,
+        79,
+        80,
+        81,
+        82,
+        84
+      ]
+    },
+    {
+      "id": 23,
+      "name": "Raining Arrows",
+      "requires": [
+        1,
+        2
+      ],
+      "cards": [
+        1,
+        6,
+        7,
+        11,
+        15,
+        27,
+        34,
+        53,
+        54,
+        61,
+        65,
+        72,
+        86,
+        108,
+        115,
+        119
+      ]
+    },
+    {
+      "id": 24,
+      "name": "Tag, You're It!",
+      "requires": [
+        1
+      ],
+      "cards": [
+        2,
+        3,
+        11,
+        16,
+        20,
+        30,
+        35,
+        36,
+        38,
+        48,
+        53,
+        69,
+        70,
+        85,
+        99,
+        104,
+        106,
+        117
+      ]
+    },
+    {
+      "id": 25,
+      "name": "The Dark Night",
+      "requires": [
+        1,
+        2
+      ],
+      "cards": [
+        6,
+        20,
+        21,
+        24,
+        43,
+        44,
+        45,
+        57,
+        61,
+        78,
+        79,
+        82,
+        83,
+        97,
+        111,
+        112,
+        115,
+        116
+      ]
+    },
+    {
+      "id": 26,
+      "name": "The Elemental",
+      "requires": [
+        1
+      ],
+      "cards": [
+        4,
+        8,
+        22,
+        23,
+        34,
+        36,
+        48,
+        51,
+        55,
+        57,
+        61,
+        91,
+        108,
+        117,
+        121,
+        123
+      ]
+    },
+    {
+      "id": 27,
+      "name": "Time to Go",
+      "requires": [
+        1,
+        2
+      ],
+      "cards": [
+        1,
+        6,
+        37,
+        40,
+        46,
+        51,
+        57,
+        58,
+        59,
+        61,
+        70,
+        85,
+        94,
+        109,
+        122
+      ]
+    },
+    {
+      "id": 28,
+      "name": "We Get Knocked Down",
+      "requires": [
+        1
+      ],
+      "cards": [
+        4,
+        11,
+        12,
+        46,
+        59,
+        63,
+        68,
+        70,
+        77,
+        88,
+        91,
+        104,
+        108,
+        115,
+        119,
+        120
+      ]
+    },
+    {
+      "id": 29,
+      "name": "You Sunk My Battleship",
+      "requires": [
+        1,
+        2
+      ],
+      "cards": [
+        2,
+        4,
+        6,
+        12,
+        14,
+        35,
+        38,
+        48,
+        51,
+        53,
+        63,
+        71,
+        85,
+        88,
+        100,
+        101,
+        111
+      ]
+    }
+  ],
+  "combos": [
+    3,
+    10,
+    11,
+    14,
+    16,
+    21,
+    23,
+    27,
+    36,
+    55,
+    56,
+    59,
+    64,
+    71,
+    77,
+    80,
+    83,
+    86,
+    94,
+    95,
+    97,
+    101,
+    103,
+    107,
+    117,
+    119
+  ],
+  "cards": [
+    {
+      "id": 1,
+      "name": "Acid Arrow",
+      "box": 1,
+      "count": 10,
+      "cost": 7,
+      "honor": 2,
+      "types": [
+        21
+      ],
+      "combos": []
+    },
+    {
+      "id": 2,
+      "name": "Adept Trickster",
+      "box": 1,
+      "count": 1,
+      "cost": [
+        5,
+        7,
+        9,
+        11,
+        13,
+        15,
+        17,
+        20
+      ],
+      "types": [
+        1
+      ],
+      "combos": [
+        10,
+        14
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Adrenaline",
+      "box": 1,
+      "count": 10,
+      "cost": 5,
+      "honor": 2,
+      "types": [
+        2
+      ],
+      "combos": [
+        84,
+        86,
+        120
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Advanced Planning",
+      "box": 1,
+      "count": 10,
+      "cost": 3,
+      "honor": 1,
+      "types": [
+        7
+      ],
+      "combos": []
+    },
+    {
+      "id": 5,
+      "name": "Air Shield",
+      "box": 2,
+      "count": 10,
+      "cost": 7,
+      "honor": 2,
+      "types": [
+        23
+      ],
+      "combos": []
+    },
+    {
+      "id": 6,
+      "name": "Arrow",
+      "box": 1,
+      "count": 20,
+      "cost": 3,
+      "honor": 1,
+      "types": [
+        21
+      ],
+      "combos": []
+    },
+    {
+      "id": 7,
+      "name": "Arrow Storm",
+      "box": 2,
+      "count": 10,
+      "cost": 8,
+      "honor": 3,
+      "types": [
+        2
+      ],
+      "combos": [
+        86,
+        94
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Aura Blast",
+      "box": 1,
+      "count": 10,
+      "cost": 3,
+      "honor": 1,
+      "types": [
+        7
+      ],
+      "combos": [
+        64
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Avalanche",
+      "box": 2,
+      "ks": true,
+      "count": 10,
+      "cost": 4,
+      "honor": 0,
+      "types": [
+        26,
+        19
+      ],
+      "combos": [
+        117
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Ballista",
+      "box": 2,
+      "count": 10,
+      "cost": 9,
+      "honor": 1,
+      "types": [
+        33,
+        11
+      ],
+      "combos": [
+        2,
+        15,
+        17,
+        29,
+        71,
+        95,
+        101,
+        104,
+        111
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Berserk",
+      "box": 1,
+      "count": 10,
+      "cost": 7,
+      "honor": 2,
+      "types": [
+        2
+      ],
+      "combos": [
+        42,
+        69,
+        116
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Blessed Spear",
+      "box": 1,
+      "count": 10,
+      "cost": 5,
+      "honor": 2,
+      "types": [
+        28,
+        15,
+        4
+      ],
+      "combos": []
+    },
+    {
+      "id": 13,
+      "name": "Bone Crusher",
+      "box": 1,
+      "count": 10,
+      "cost": 6,
+      "honor": 2,
+      "types": [
+        2
+      ],
+      "combos": []
+    },
+    {
+      "id": 14,
+      "name": "Catapult",
+      "box": 2,
+      "count": 10,
+      "cost": 9,
+      "honor": 1,
+      "types": [
+        33,
+        11
+      ],
+      "combos": [
+        2,
+        15,
+        17,
+        29,
+        71,
+        95,
+        101,
+        104,
+        111
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Change of Heart",
+      "box": 2,
+      "count": 10,
+      "cost": 7,
+      "honor": 2,
+      "types": [
+        7
+      ],
+      "combos": [
+        10,
+        14
+      ]
+    },
+    {
+      "id": 16,
+      "name": "Chariot",
+      "box": 1,
+      "count": 10,
+      "cost": 6,
+      "honor": 3,
+      "types": [
+        18,
+        17
+      ],
+      "combos": [
+        56,
+        59,
+        77,
+        119
+      ]
+    },
+    {
+      "id": 17,
+      "name": "Charm",
+      "box": 2,
+      "count": 10,
+      "cost": 9,
+      "honor": 0,
+      "types": [
+        26
+      ],
+      "combos": [
+        10,
+        14,
+        55
+      ]
+    },
+    {
+      "id": 19,
+      "name": "Close Range Master",
+      "box": 2,
+      "count": 10,
+      "cost": 3,
+      "honor": 1,
+      "types": [
+        2
+      ],
+      "combos": []
+    },
+    {
+      "id": 20,
+      "name": "Conditioning",
+      "box": 1,
+      "count": 10,
+      "cost": 5,
+      "honor": 1,
+      "types": [
+        18
+      ],
+      "combos": []
+    },
+    {
+      "id": 21,
+      "name": "Consume Energy",
+      "box": 2,
+      "count": 10,
+      "cost": 7,
+      "honor": 0,
+      "types": [
+        26,
+        29
+      ],
+      "combos": [
+        44,
+        45,
+        97
+      ]
+    },
+    {
+      "id": 22,
+      "name": "Counter Spell",
+      "box": 1,
+      "count": 10,
+      "cost": 4,
+      "honor": 0,
+      "types": [
+        26
+      ],
+      "combos": []
+    },
+    {
+      "id": 23,
+      "name": "Crystal Shard",
+      "box": 1,
+      "count": 10,
+      "cost": 9,
+      "honor": 2,
+      "types": [
+        13,
+        24
+      ],
+      "combos": [
+        25,
+        55,
+        95,
+        104,
+        117
+      ]
+    },
+    {
+      "id": 24,
+      "name": "Cursed Blade",
+      "box": 2,
+      "count": 10,
+      "cost": 8,
+      "honor": 3,
+      "types": [
+        28,
+        15,
+        4,
+        24
+      ],
+      "combos": [
+        97,
+        107
+      ]
+    },
+    {
+      "id": 25,
+      "name": "Cyclone",
+      "box": 2,
+      "count": 10,
+      "cost": 5,
+      "honor": 0,
+      "types": [
+        26,
+        19
+      ],
+      "combos": [
+        23,
+        55,
+        64
+      ]
+    },
+    {
+      "id": 26,
+      "name": "Dagger",
+      "box": 1,
+      "count": 33,
+      "cost": 3,
+      "honor": 1,
+      "types": [
+        28,
+        15,
+        4,
+        24
+      ],
+      "combos": []
+    },
+    {
+      "id": 27,
+      "name": "Dead Aim",
+      "box": 1,
+      "count": 10,
+      "cost": 5,
+      "honor": 2,
+      "types": [
+        2
+      ],
+      "combos": [
+        61,
+        64,
+        72,
+        88,
+        106
+      ]
+    },
+    {
+      "id": 28,
+      "name": "Deadly Arrow",
+      "box": 2,
+      "count": 10,
+      "cost": 10,
+      "honor": 3,
+      "types": [
+        21
+      ],
+      "combos": []
+    },
+    {
+      "id": 29,
+      "name": "Diplomacy",
+      "box": 2,
+      "count": 10,
+      "cost": 7,
+      "honor": 2,
+      "types": [
+        2
+      ],
+      "combos": [
+        10,
+        14,
+        80
+      ]
+    },
+    {
+      "id": 30,
+      "name": "Disarm",
+      "box": 1,
+      "count": 10,
+      "cost": 7,
+      "honor": 2,
+      "types": [
+        7
+      ],
+      "combos": []
+    },
+    {
+      "id": 31,
+      "name": "Divine Shield",
+      "box": 2,
+      "count": 10,
+      "cost": 9,
+      "honor": 2,
+      "types": [
+        23
+      ],
+      "combos": []
+    },
+    {
+      "id": 32,
+      "name": "Dragon Potion",
+      "box": 3,
+      "count": 10,
+      "cost": 11,
+      "honor": 1,
+      "types": [
+        13,
+        34,
+        8,
+        30
+      ],
+      "combos": []
+    },
+    {
+      "id": 33,
+      "name": "Earthquake",
+      "box": 2,
+      "count": 10,
+      "cost": 4,
+      "honor": 0,
+      "types": [
+        26,
+        19,
+        3
+      ],
+      "combos": [
+        103,
+        119
+      ]
+    },
+    {
+      "id": 34,
+      "name": "Fire Arrow",
+      "box": 1,
+      "count": 10,
+      "cost": 5,
+      "honor": 2,
+      "types": [
+        21,
+        26,
+        8
+      ],
+      "combos": []
+    },
+    {
+      "id": 35,
+      "name": "Flail",
+      "box": 1,
+      "count": 10,
+      "cost": 4,
+      "honor": 2,
+      "types": [
+        28,
+        15,
+        25
+      ],
+      "combos": []
+    },
+    {
+      "id": 36,
+      "name": "Freeze",
+      "box": 1,
+      "count": 10,
+      "cost": 8,
+      "honor": 0,
+      "types": [
+        26,
+        19,
+        9
+      ],
+      "combos": [
+        64,
+        71
+      ]
+    },
+    {
+      "id": 37,
+      "name": "Full Moon Axe",
+      "box": 1,
+      "count": 10,
+      "cost": 7,
+      "honor": 2,
+      "types": [
+        28,
+        15,
+        4
+      ],
+      "combos": []
+    },
+    {
+      "id": 38,
+      "name": "Gladiator Net",
+      "box": 1,
+      "count": 10,
+      "cost": 4,
+      "honor": 2,
+      "types": [
+        13,
+        6
+      ],
+      "combos": [
+        71
+      ]
+    },
+    {
+      "id": 39,
+      "name": "Gold Stash",
+      "box": 2,
+      "count": 10,
+      "cost": 6,
+      "honor": 4,
+      "types": [
+        13,
+        32
+      ],
+      "combos": []
+    },
+    {
+      "id": 40,
+      "name": "Grand Finale",
+      "box": 2,
+      "count": 10,
+      "cost": 6,
+      "honor": 1,
+      "types": [
+        7
+      ],
+      "combos": []
+    },
+    {
+      "id": 41,
+      "name": "Hatchet",
+      "box": 2,
+      "count": 10,
+      "cost": 5,
+      "honor": 2,
+      "types": [
+        28,
+        15,
+        4,
+        24
+      ],
+      "combos": [
+        107
+      ]
+    },
+    {
+      "id": 42,
+      "name": "Healing Spell",
+      "box": 2,
+      "count": 10,
+      "cost": 8,
+      "honor": 0,
+      "types": [
+        26,
+        10
+      ],
+      "combos": [
+        11
+      ]
+    },
+    {
+      "id": 43,
+      "name": "Hex Bomb",
+      "box": 2,
+      "count": 10,
+      "cost": 6,
+      "honor": 2,
+      "types": [
+        13,
+        24,
+        26,
+        3
+      ],
+      "combos": []
+    },
+    {
+      "id": 44,
+      "name": "Hexed Arrow",
+      "box": 2,
+      "count": 10,
+      "cost": 6,
+      "honor": 2,
+      "types": [
+        21,
+        26
+      ],
+      "combos": [
+        21,
+        97
+      ]
+    },
+    {
+      "id": 45,
+      "name": "Hexing",
+      "box": 2,
+      "count": 10,
+      "cost": 7,
+      "honor": 0,
+      "types": [
+        26,
+        29
+      ],
+      "combos": [
+        21
+      ]
+    },
+    {
+      "id": 46,
+      "name": "Hideaway",
+      "box": 1,
+      "count": 10,
+      "cost": 4,
+      "honor": 1,
+      "types": [
+        7
+      ],
+      "combos": []
+    },
+    {
+      "id": 47,
+      "name": "Hoarding",
+      "box": 2,
+      "count": 10,
+      "cost": 5,
+      "honor": 1,
+      "types": [
+        7
+      ],
+      "combos": []
+    },
+    {
+      "id": 48,
+      "name": "Horse",
+      "box": 1,
+      "count": 10,
+      "cost": 7,
+      "honor": 2,
+      "types": [
+        18,
+        17
+      ],
+      "combos": [
+        56,
+        77,
+        119
+      ]
+    },
+    {
+      "id": 49,
+      "name": "Hydro Necromancer",
+      "box": 1,
+      "ks": true,
+      "count": 1,
+      "cost": [
+        5,
+        7,
+        9,
+        11,
+        13,
+        15,
+        17,
+        20
+      ],
+      "types": [
+        1
+      ],
+      "combos": []
+    },
+    {
+      "id": 50,
+      "name": "Ice Arrow",
+      "box": 2,
+      "count": 10,
+      "cost": 7,
+      "honor": 2,
+      "types": [
+        21,
+        26,
+        9
+      ],
+      "combos": [
+        64,
+        71
+      ]
+    },
+    {
+      "id": 51,
+      "name": "Ice Wall",
+      "box": 1,
+      "count": 10,
+      "cost": 6,
+      "honor": 0,
+      "types": [
+        26,
+        12,
+        3
+      ],
+      "combos": [
+        64
+      ]
+    },
+    {
+      "id": 52,
+      "name": "Javelin",
+      "box": 1,
+      "count": 10,
+      "cost": 8,
+      "honor": 3,
+      "types": [
+        28,
+        15,
+        22,
+        4
+      ],
+      "combos": []
+    },
+    {
+      "id": 53,
+      "name": "King of the Jungle",
+      "box": 1,
+      "count": 1,
+      "cost": [
+        5,
+        7,
+        9,
+        11,
+        13,
+        15,
+        17,
+        20
+      ],
+      "types": [
+        1
+      ],
+      "combos": []
+    },
+    {
+      "id": 54,
+      "name": "Kneecapped",
+      "box": 2,
+      "count": 10,
+      "cost": 3,
+      "honor": 1,
+      "types": [
+        2
+      ],
+      "combos": [
+        103,
+        119
+      ]
+    },
+    {
+      "id": 55,
+      "name": "Kraken",
+      "box": 1,
+      "count": 10,
+      "cost": 9,
+      "honor": 0,
+      "types": [
+        26,
+        16,
+        11
+      ],
+      "combos": [
+        17,
+        23,
+        25,
+        59,
+        64,
+        83,
+        104,
+        120
+      ]
+    },
+    {
+      "id": 56,
+      "name": "Lance",
+      "box": 2,
+      "count": 10,
+      "cost": 7,
+      "honor": 2,
+      "types": [
+        28,
+        15,
+        4
+      ],
+      "combos": [
+        16,
+        48,
+        74,
+        80,
+        108,
+        115,
+        116
+      ]
+    },
+    {
+      "id": 57,
+      "name": "Large Quiver",
+      "box": 1,
+      "count": 10,
+      "cost": 8,
+      "honor": 3,
+      "types": [
+        13,
+        6
+      ],
+      "combos": [
+        86,
+        94
+      ]
+    },
+    {
+      "id": 58,
+      "name": "Lesser Eagle",
+      "box": 2,
+      "count": 10,
+      "cost": 10,
+      "honor": 2,
+      "types": [
+        18,
+        17,
+        30
+      ],
+      "combos": []
+    },
+    {
+      "id": 59,
+      "name": "Lightning Bolt",
+      "box": 1,
+      "count": 10,
+      "cost": 8,
+      "honor": 0,
+      "types": [
+        26,
+        19,
+        14
+      ],
+      "combos": [
+        16,
+        55,
+        120,
+        121
+      ]
+    },
+    {
+      "id": 60,
+      "name": "Little Helper",
+      "box": 1,
+      "count": 1,
+      "cost": [
+        5,
+        7,
+        9,
+        11,
+        13,
+        15,
+        17,
+        20
+      ],
+      "types": [
+        1
+      ],
+      "combos": []
+    },
+    {
+      "id": 61,
+      "name": "Long Bow",
+      "box": 1,
+      "count": 10,
+      "cost": 8,
+      "honor": 3,
+      "types": [
+        28,
+        22,
+        5
+      ],
+      "combos": [
+        27,
+        94,
+        101
+      ]
+    },
+    {
+      "id": 62,
+      "name": "Long-Range Arrow",
+      "box": 2,
+      "count": 10,
+      "cost": 6,
+      "honor": 2,
+      "types": [
+        21
+      ],
+      "combos": []
+    },
+    {
+      "id": 63,
+      "name": "Loving Squire",
+      "box": 1,
+      "count": 10,
+      "cost": 7,
+      "honor": 0,
+      "types": [
+        7
+      ],
+      "combos": []
+    },
+    {
+      "id": 64,
+      "name": "Magic Potion Bomb",
+      "box": 1,
+      "count": 10,
+      "cost": 5,
+      "honor": 2,
+      "types": [
+        13,
+        24,
+        26,
+        3
+      ],
+      "combos": [
+        8,
+        25,
+        27,
+        36,
+        50,
+        51,
+        55,
+        92,
+        104,
+        123
+      ]
+    },
+    {
+      "id": 65,
+      "name": "Magic Quiver",
+      "box": 1,
+      "count": 10,
+      "cost": 9,
+      "honor": 0,
+      "types": [
+        13,
+        6
+      ],
+      "combos": [
+        86
+      ]
+    },
+    {
+      "id": 66,
+      "name": "March",
+      "box": 1,
+      "count": 41,
+      "cost": 3,
+      "honor": 1,
+      "types": [
+        18
+      ],
+      "combos": []
+    },
+    {
+      "id": 67,
+      "name": "Massive Blizzard",
+      "box": 2,
+      "count": 10,
+      "cost": 10,
+      "honor": 0,
+      "types": [
+        26,
+        19
+      ],
+      "combos": []
+    },
+    {
+      "id": 68,
+      "name": "Master of the Sea",
+      "box": 1,
+      "ks": true,
+      "count": 1,
+      "cost": [
+        5,
+        7,
+        9,
+        11,
+        13,
+        15,
+        17,
+        20
+      ],
+      "types": [
+        1
+      ],
+      "combos": []
+    },
+    {
+      "id": 69,
+      "name": "Medicine",
+      "box": 1,
+      "count": 10,
+      "cost": 4,
+      "honor": 1,
+      "types": [
+        13,
+        10
+      ],
+      "combos": [
+        11
+      ]
+    },
+    {
+      "id": 70,
+      "name": "Metal Shield",
+      "box": 1,
+      "count": 10,
+      "cost": 6,
+      "honor": 2,
+      "types": [
+        23
+      ],
+      "combos": []
+    },
+    {
+      "id": 71,
+      "name": "Meteor Strike",
+      "box": 1,
+      "count": 10,
+      "cost": 9,
+      "honor": 0,
+      "types": [
+        26,
+        19,
+        3
+      ],
+      "combos": [
+        10,
+        14,
+        36,
+        38,
+        50,
+        92
+      ]
+    },
+    {
+      "id": 72,
+      "name": "Modified Bow",
+      "box": 2,
+      "count": 10,
+      "cost": 10,
+      "honor": 3,
+      "types": [
+        28,
+        15,
+        22,
+        4,
+        5
+      ],
+      "combos": [
+        27,
+        94,
+        101
+      ]
+    },
+    {
+      "id": 73,
+      "name": "Monopoly",
+      "box": 1,
+      "count": 10,
+      "cost": 3,
+      "honor": 0,
+      "types": [
+        2
+      ],
+      "combos": []
+    },
+    {
+      "id": 74,
+      "name": "Morale Boost",
+      "box": 2,
+      "count": 10,
+      "cost": 8,
+      "honor": 2,
+      "types": [
+        7,
+        31
+      ],
+      "combos": [
+        56
+      ]
+    },
+    {
+      "id": 75,
+      "name": "Old Wooden Shield",
+      "box": 1,
+      "count": 25,
+      "cost": 3,
+      "honor": 0,
+      "types": [
+        23
+      ],
+      "combos": []
+    },
+    {
+      "id": 76,
+      "name": "Pickpocket",
+      "box": 2,
+      "count": 10,
+      "cost": 10,
+      "honor": 2,
+      "types": [
+        7
+      ],
+      "combos": []
+    },
+    {
+      "id": 77,
+      "name": "Pike",
+      "box": 1,
+      "count": 10,
+      "cost": 6,
+      "honor": 2,
+      "types": [
+        28,
+        15,
+        4
+      ],
+      "combos": [
+        16,
+        48,
+        108,
+        115
+      ]
+    },
+    {
+      "id": 78,
+      "name": "Plagued Rats",
+      "box": 2,
+      "count": 10,
+      "cost": 6,
+      "honor": 1,
+      "types": [
+        13,
+        6
+      ],
+      "combos": []
+    },
+    {
+      "id": 79,
+      "name": "Pocket Change",
+      "box": 2,
+      "count": 10,
+      "cost": 3,
+      "honor": 0,
+      "types": [
+        13,
+        32
+      ],
+      "combos": []
+    },
+    {
+      "id": 80,
+      "name": "Poison",
+      "box": 2,
+      "count": 10,
+      "cost": 5,
+      "honor": 2,
+      "types": [
+        13,
+        31
+      ],
+      "combos": [
+        29,
+        56
+      ]
+    },
+    {
+      "id": 81,
+      "name": "Poison Arrow",
+      "box": 2,
+      "count": 10,
+      "cost": 9,
+      "honor": 3,
+      "types": [
+        21
+      ],
+      "combos": []
+    },
+    {
+      "id": 82,
+      "name": "Poison Blade",
+      "box": 2,
+      "count": 10,
+      "cost": 9,
+      "honor": 3,
+      "types": [
+        28,
+        15,
+        4,
+        24
+      ],
+      "combos": []
+    },
+    {
+      "id": 83,
+      "name": "Possess",
+      "box": 2,
+      "count": 10,
+      "cost": 7,
+      "honor": 0,
+      "types": [
+        26,
+        29
+      ],
+      "combos": [
+        55,
+        84,
+        86
+      ]
+    },
+    {
+      "id": 84,
+      "name": "Quick Hands",
+      "box": 1,
+      "count": 10,
+      "cost": 11,
+      "honor": 3,
+      "types": [
+        2
+      ],
+      "combos": [
+        3,
+        83
+      ]
+    },
+    {
+      "id": 85,
+      "name": "Quick Reflexes",
+      "box": 1,
+      "count": 10,
+      "cost": 9,
+      "honor": 2,
+      "types": [
+        18
+      ],
+      "combos": []
+    },
+    {
+      "id": 86,
+      "name": "Quick Shot",
+      "box": 2,
+      "count": 10,
+      "cost": 7,
+      "honor": 2,
+      "types": [
+        2
+      ],
+      "combos": [
+        3,
+        7,
+        57,
+        65,
+        83
+      ]
+    },
+    {
+      "id": 87,
+      "name": "Raiders of the North",
+      "box": 1,
+      "ks": true,
+      "count": 1,
+      "cost": [
+        5,
+        7,
+        9,
+        11,
+        13,
+        15,
+        17,
+        20
+      ],
+      "types": [
+        1
+      ],
+      "combos": []
+    },
+    {
+      "id": 88,
+      "name": "Recurve Bow",
+      "box": 1,
+      "count": 10,
+      "cost": 6,
+      "honor": 2,
+      "types": [
+        28,
+        22,
+        5
+      ],
+      "combos": [
+        27,
+        94,
+        101
+      ]
+    },
+    {
+      "id": 89,
+      "name": "Reinforcements",
+      "box": 2,
+      "count": 10,
+      "cost": 10,
+      "honor": 1,
+      "types": [
+        7
+      ],
+      "combos": []
+    },
+    {
+      "id": 90,
+      "name": "Ring Blade",
+      "box": 2,
+      "count": 10,
+      "cost": 7,
+      "honor": 3,
+      "types": [
+        28,
+        15,
+        4
+      ],
+      "combos": []
+    },
+    {
+      "id": 91,
+      "name": "Ring of Fire",
+      "box": 1,
+      "count": 10,
+      "cost": 9,
+      "honor": 0,
+      "types": [
+        26,
+        19,
+        8,
+        3
+      ],
+      "combos": []
+    },
+    {
+      "id": 92,
+      "name": "Rooted",
+      "box": 2,
+      "count": 10,
+      "cost": 10,
+      "honor": 0,
+      "types": [
+        26,
+        19,
+        3
+      ],
+      "combos": [
+        64,
+        71
+      ]
+    },
+    {
+      "id": 93,
+      "name": "Sabotage",
+      "box": 2,
+      "count": 10,
+      "cost": 5,
+      "honor": 2,
+      "types": [
+        7
+      ],
+      "combos": []
+    },
+    {
+      "id": 94,
+      "name": "Scavenger",
+      "box": 2,
+      "count": 10,
+      "cost": 8,
+      "honor": 1,
+      "types": [
+        7
+      ],
+      "combos": [
+        7,
+        57,
+        61,
+        72,
+        88
+      ]
+    },
+    {
+      "id": 95,
+      "name": "Scorched Earth",
+      "box": 1,
+      "count": 10,
+      "cost": 6,
+      "honor": 0,
+      "types": [
+        26,
+        20,
+        3
+      ],
+      "combos": [
+        10,
+        14,
+        23
+      ]
+    },
+    {
+      "id": 96,
+      "name": "Servant's Loyalty",
+      "box": 1,
+      "count": 10,
+      "cost": 7,
+      "honor": 2,
+      "types": [
+        7
+      ],
+      "combos": []
+    },
+    {
+      "id": 97,
+      "name": "Shaman Chieftain",
+      "box": 2,
+      "ks": true,
+      "count": 1,
+      "cost": [
+        5,
+        7,
+        9,
+        11,
+        13,
+        15,
+        17,
+        20
+      ],
+      "types": [
+        1
+      ],
+      "combos": [
+        21,
+        24,
+        44
+      ]
+    },
+    {
+      "id": 99,
+      "name": "Short Sword",
+      "box": 1,
+      "count": 10,
+      "cost": 4,
+      "honor": 2,
+      "types": [
+        28,
+        15,
+        4
+      ],
+      "combos": []
+    },
+    {
+      "id": 100,
+      "name": "Sled Dogs",
+      "box": 2,
+      "count": 10,
+      "cost": 5,
+      "honor": 2,
+      "types": [
+        18,
+        17
+      ],
+      "combos": []
+    },
+    {
+      "id": 101,
+      "name": "Smoke Screen",
+      "box": 2,
+      "count": 10,
+      "cost": 4,
+      "honor": 2,
+      "types": [
+        13,
+        6
+      ],
+      "combos": [
+        10,
+        14,
+        61,
+        72,
+        88
+      ]
+    },
+    {
+      "id": 102,
+      "name": "Stealth Tactics",
+      "box": 2,
+      "count": 10,
+      "cost": 3,
+      "honor": 1,
+      "types": [
+        7
+      ],
+      "combos": []
+    },
+    {
+      "id": 103,
+      "name": "Sure Footed",
+      "box": 2,
+      "count": 10,
+      "cost": 3,
+      "honor": 1,
+      "types": [
+        2
+      ],
+      "combos": [
+        33,
+        54,
+        119
+      ]
+    },
+    {
+      "id": 104,
+      "name": "Teleport",
+      "box": 1,
+      "count": 10,
+      "cost": 8,
+      "honor": 0,
+      "types": [
+        26,
+        18,
+        3
+      ],
+      "combos": [
+        10,
+        14,
+        23,
+        55,
+        64
+      ]
+    },
+    {
+      "id": 105,
+      "name": "The Blessed One",
+      "box": 1,
+      "count": 1,
+      "cost": [
+        5,
+        7,
+        9,
+        11,
+        13,
+        15,
+        17,
+        20
+      ],
+      "types": [
+        1
+      ],
+      "combos": []
+    },
+    {
+      "id": 106,
+      "name": "Throw Weapon",
+      "box": 1,
+      "count": 10,
+      "cost": 4,
+      "honor": 1,
+      "types": [
+        2
+      ],
+      "combos": [
+        27
+      ]
+    },
+    {
+      "id": 107,
+      "name": "Throwing Star",
+      "box": 2,
+      "count": 10,
+      "cost": 6,
+      "honor": 2,
+      "types": [
+        28,
+        22,
+        4,
+        24
+      ],
+      "combos": [
+        24,
+        41
+      ]
+    },
+    {
+      "id": 108,
+      "name": "Tiger Mount",
+      "box": 1,
+      "count": 10,
+      "cost": 9,
+      "honor": 2,
+      "types": [
+        18,
+        17
+      ],
+      "combos": [
+        56,
+        77,
+        119
+      ]
+    },
+    {
+      "id": 109,
+      "name": "Time Bend",
+      "box": 2,
+      "count": 10,
+      "cost": 4,
+      "honor": 0,
+      "types": [
+        26,
+        19
+      ],
+      "combos": []
+    },
+    {
+      "id": 111,
+      "name": "Torch",
+      "box": 2,
+      "count": 10,
+      "cost": 6,
+      "honor": 2,
+      "types": [
+        13,
+        6,
+        8
+      ],
+      "combos": [
+        10,
+        14
+      ]
+    },
+    {
+      "id": 112,
+      "name": "Trading Up",
+      "box": 2,
+      "count": 10,
+      "cost": 5,
+      "honor": 2,
+      "types": [
+        7
+      ],
+      "combos": []
+    },
+    {
+      "id": 113,
+      "name": "Triple Sheath",
+      "box": 1,
+      "count": 10,
+      "cost": 3,
+      "honor": 1,
+      "types": [
+        13,
+        6
+      ],
+      "combos": []
+    },
+    {
+      "id": 114,
+      "name": "Troop March",
+      "box": 2,
+      "count": 10,
+      "cost": 5,
+      "honor": 2,
+      "types": [
+        18
+      ],
+      "combos": []
+    },
+    {
+      "id": 115,
+      "name": "Unicorn",
+      "box": 1,
+      "count": 10,
+      "cost": 10,
+      "honor": 2,
+      "types": [
+        18,
+        17
+      ],
+      "combos": [
+        56,
+        77,
+        119
+      ]
+    },
+    {
+      "id": 116,
+      "name": "Vampire's Curse",
+      "box": 2,
+      "count": 10,
+      "cost": 7,
+      "honor": 2,
+      "types": [
+        7,
+        31
+      ],
+      "combos": [
+        11,
+        56
+      ]
+    },
+    {
+      "id": 117,
+      "name": "Vine Pull",
+      "box": 1,
+      "count": 10,
+      "cost": 4,
+      "honor": 0,
+      "types": [
+        26,
+        19
+      ],
+      "combos": [
+        9,
+        23,
+        118
+      ]
+    },
+    {
+      "id": 118,
+      "name": "Voodoo Doll",
+      "box": 2,
+      "count": 10,
+      "cost": 10,
+      "honor": 0,
+      "types": [
+        26,
+        29
+      ],
+      "combos": [
+        117
+      ]
+    },
+    {
+      "id": 119,
+      "name": "Warhammer",
+      "box": 1,
+      "count": 10,
+      "cost": 8,
+      "honor": 3,
+      "types": [
+        28,
+        15,
+        25
+      ],
+      "combos": [
+        16,
+        33,
+        48,
+        54,
+        103,
+        108,
+        115
+      ]
+    },
+    {
+      "id": 120,
+      "name": "Water Minion",
+      "box": 1,
+      "count": 10,
+      "cost": 10,
+      "honor": 0,
+      "types": [
+        26,
+        16
+      ],
+      "combos": [
+        3,
+        55,
+        59
+      ]
+    },
+    {
+      "id": 121,
+      "name": "Water Missile",
+      "box": 1,
+      "count": 10,
+      "cost": 11,
+      "honor": 0,
+      "types": [
+        26,
+        19
+      ],
+      "combos": [
+        59
+      ]
+    },
+    {
+      "id": 122,
+      "name": "Weapon Dealer",
+      "box": 1,
+      "count": 10,
+      "cost": 5,
+      "honor": 1,
+      "types": [
+        7
+      ],
+      "combos": []
+    },
+    {
+      "id": 123,
+      "name": "Wind Arrow",
+      "box": 1,
+      "count": 10,
+      "cost": 4,
+      "honor": 1,
+      "types": [
+        21,
+        26
+      ],
+      "combos": [
+        64
+      ]
+    }
+  ]
+}

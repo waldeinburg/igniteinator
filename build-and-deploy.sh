@@ -8,7 +8,8 @@ source common.inc.sh
 # Sets REMOTE_HOST, REMOTE_DIR, and REMOTE_TEST_DIR.
 source private.inc.sh
 
-SRC_DIR=target/final
+BUILD_DIR=target
+SRC_DIR="$BUILD_DIR/final"
 
 TEST=
 CLEAR_TEST=
@@ -135,6 +136,9 @@ function build_static() {
   (
   shopt -s dotglob
   cp -ra resources/public/* "$SRC_DIR"
+  # Minify data.json
+  jq -c . "$SRC_DIR/data.json" > "$BUILD_DIR/data.json"
+  mv "$BUILD_DIR/data.json" "$SRC_DIR/data.json"
   )
 }
 

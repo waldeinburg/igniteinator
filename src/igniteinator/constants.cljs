@@ -4,7 +4,7 @@
 (def page-url "https://igniteinator.waldeinburg.dk")
 (def github-url "https://github.com/waldeinburg/igniteinator")
 (def img-base-path "/img")
-(def data-file-path "/generated/data.json")
+(def data-file-path "/data.json")
 (def gen-img-base-path "/generated/img")
 (def gen-img-ext ".png")
 (def default-language :en)
