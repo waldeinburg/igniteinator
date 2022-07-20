@@ -359,6 +359,7 @@
 (reg-event-db-assoc :set-settings-menu-open?)
 
 (reg-event-db-assoc :epic/set-reset-dialog-open?)
+(reg-event-db-assoc :epic/set-setup-idx)
 
 (reg-event-fx
   :epic/create-game
@@ -408,7 +409,37 @@
         (assoc-db-and-store [:epic :setup-idx] setup-idx)
         (assoc-db-and-store [:epic :cards-stack-idx] cards-stack-idx)
         (assoc :epic/shuffle-stacks stacks)))))
-(reg-event-db-assoc-store :epic/set-stacks)
+
+(reg-event-fx
+  :epic/shuffled-stacks
+  (fn [cofx [_ stacks]]
+    (let [processed-stacks
+          (->>
+            stacks
+            (mapcat
+              (fn [stack]
+                (if (not (:split? stack))
+                  [stack]
+                  (loop [sub-stacks (:sub-stacks stack)
+                         cards      (:cards stack)
+                         res        []]
+                    (if (empty? sub-stacks)
+                      res
+                      (let [[sub-stack & remaining-substacks] sub-stacks
+                            take-fn (:take-fn sub-stack)
+                            [cards-taken cards-left] (take-fn cards)]
+                        (recur remaining-substacks cards-left
+                          (conj res (->
+                                      sub-stack
+                                      (dissoc :take-fn)
+                                      (assoc
+                                        :description (or (:description sub-stack) (:description stack))
+                                        :cards cards-taken))))))))))
+            (map-indexed
+              (fn [idx stack]
+                (assoc stack :idx idx)))
+            vec)]
+      (assoc-db-and-store cofx [:epic :stacks] processed-stacks))))
 
 (reg-event-fx
   :epic/reset
@@ -421,7 +452,6 @@
       (assoc-db [:epic :snackbar-1-open?] false)
       (assoc-db [:epic :snackbar-2-open?] false)
       (assoc-db-and-store [:epic :active?] false)
-      (assoc-db-and-store [:epic :setup-idx] nil)
       (assoc-db-and-store [:epic :cards-stack-idx] nil)
       (assoc-db-and-store [:epic :stacks] nil)
       (assoc-db-and-store [:epic :cards-taken] nil))))
@@ -526,7 +556,7 @@
 
 (reg-event-db
   :epic/set-snackbar
-  (fn [{{:keys [snackbar-1-open? snackbar-2-open?]} :epic :as db} [_ message]]
+  (fn [{{:keys [snackbar-1-open?]} :epic :as db} [_ message]]
     (update db :epic (fn [epic]
                        (assoc epic
                          (if snackbar-1-open? :snackbar-2-message :snackbar-1-message) message

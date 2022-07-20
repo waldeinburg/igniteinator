@@ -55,4 +55,4 @@
   :epic/shuffle-stacks
   (fn [stacks]
     (let [shuffled-stacks (mapv #(update % :cards shuffle) stacks)]
-      (>evt :epic/set-stacks shuffled-stacks))))
+      (>evt :epic/shuffled-stacks shuffled-stacks))))

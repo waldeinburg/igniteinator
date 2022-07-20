@@ -465,36 +465,36 @@
   :<- [:cards-map]
   :<- [:epic/stacks]
   (fn [[cards-map stacks] _]
-    (let [top-cards-raw      (map-indexed
-                               (fn [idx stack]
-                                 (if-let [card-ids (not-empty (:cards stack))]
-                                   (get cards-map (first card-ids))
-                                   {:id         (str "empty-" idx) ; Must have unique id for React.
-                                    :name       "Empty stack"
-                                    :image-path (str constants/img-base-path "/empty-stack.png")}))
-                               stacks)
-          top-cards-w-stacks (map
-                               (fn [card stack]
-                                 (assoc card :stack stack))
-                               top-cards-raw stacks)
-          relevant-cards     (reduce
-                               (fn [res card]
-                                 (let [stack (:stack card)]
-                                   (if (or (:placeholder? stack) (= 0 (count (:cards stack))))
-                                     res
-                                     (conj res (assoc card :nav-stack-idx (count res))))))
-                               []
-                               top-cards-w-stacks)
-          relevant-cards-map (reduce
-                               (fn [m card]
-                                 (assoc m (:id card) card))
-                               {}
-                               relevant-cards)
-          top-cards          (map (fn [card]
-                                    (if-let [relevant-card (-> card :id relevant-cards-map)]
-                                      relevant-card
-                                      card))
-                               top-cards-w-stacks)]
+    (let [top-cards-raw            (map
+                                     (fn [stack]
+                                       (if-let [card-ids (not-empty (:cards stack))]
+                                         (get cards-map (first card-ids))
+                                         {:name       "Empty stack"
+                                          :image-path (str constants/img-base-path "/empty-stack.png")}))
+                                     stacks)
+          top-cards-w-stacks       (map
+                                     (fn [card stack idx]
+                                       (assoc card :stack (assoc stack :stack-idx idx)))
+                                     top-cards-raw stacks (range))
+          relevant-cards           (reduce
+                                     (fn [res card]
+                                       (let [stack (:stack card)]
+                                         (if (or (:placeholder? stack) (= 0 (count (:cards stack))))
+                                           res
+                                           (conj res (assoc card :nav-stack-idx (count res))))))
+                                     []
+                                     top-cards-w-stacks)
+          stack-idx->relevant-card (reduce
+                                     (fn [m card]
+                                       (assoc m (-> card :stack :idx) card))
+                                     {}
+                                     relevant-cards)
+          top-cards                (map (fn [card]
+                                          (if-let [relevant-card
+                                                   (-> card :stack :idx stack-idx->relevant-card)]
+                                            relevant-card
+                                            card))
+                                     top-cards-w-stacks)]
       [top-cards relevant-cards])))
 
 (reg-sub-db :epic/cards-taken)

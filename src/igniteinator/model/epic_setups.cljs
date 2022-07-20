@@ -4,7 +4,14 @@
 (defn epic-setups [cards types]
   "Get list of Epic setup types.
   To be called from a subscription."
-  (let [find-card-id-by-name (fn [name]
+  (let [split-50-50-stacks   (fn [name]
+                               [{:name    (str name " A")
+                                 :take-fn (fn [cards]
+                                            (let [half (js/Math.ceil (/ (count cards) 2))]
+                                              (partition half half nil cards)))}
+                                {:name    (str name " B")
+                                 :take-fn #(list % nil)}])
+        find-card-id-by-name (fn [name]
                                (some #(if (= name (:name %))
                                         (:id %))
                                  cards))
@@ -25,6 +32,10 @@
                                (= cost (:cost card)))
         cost>=<              (fn [cost-from cost-to card]
                                (<= cost-from (:cost card) cost-to))
+        cost<=               (fn [cost card]
+                               (>= cost (:cost card)))
+        cost>=               (fn [cost card]
+                               (<= cost (:cost card)))
         march-id             (find-card-id-by-name "March")
         dagger-id            (find-card-id-by-name "Dagger")
         old-wooden-shield-id (find-card-id-by-name "Old Wooden Shield")
@@ -38,24 +49,70 @@
         war-machine?         (is-type-fn "War Machine")
         projectile?          (is-type-fn "Projectile")
         spell?               (is-type-fn "Spell")
-        item?                (is-type-fn "Item")]
+        item?                (is-type-fn "Item")
+        title?               (is-type-fn "Title")]
     ;; TODO: Allow stack groups to allow normal Epic Ignite and title cards in Even More Epic Ignite.
     [{:name             "Epic Ignite"
       :description      "As described in the Ignite rule book page 23."
       :trash-to-bottom? false
       :count-fn         #(:count %)
-      :stacks           []
-      :stacks-process   (fn [stacks]
-                          ;; Split all stacks into two.
-                          (mapcat (fn [stack]
-                                    (let [cards   (:cards stack)
-                                          half    (/ (count cards) 2)
-                                          cards-a (take (js/Math.ceil half) cards)
-                                          cards-b (take (js/Math.floor half) cards)
-                                          stack-a (assoc stack :cards cards-a)
-                                          stack-b (assoc stack :cards cards-b)]
-                                      [stack-a stack-b]))
-                            stacks))}
+      :stacks           [{:split?      true
+                          :description "Weapon, Shield, and Projectile cards costing 5 and below"
+                          :filter      #(and
+                                          (or
+                                            (weapon? %)
+                                            (shield? %)
+                                            (projectile? %))
+                                          (not= dagger-id (:id %))
+                                          (not= old-wooden-shield-id (:id %))
+                                          (cost<= 5 %))
+                          :sub-stacks  (split-50-50-stacks "Cheap arms")}
+                         {:split?      true
+                          :description "Weapon, Shield, and Projectile cards costing 6 and above"
+                          :filter      #(and
+                                          (or
+                                            (weapon? %)
+                                            (shield? %)
+                                            (projectile? %))
+                                          (cost>= 6 %))
+                          :sub-stacks  (split-50-50-stacks "Expensive arms")}
+                         {:split?      true
+                          :description "Item, Event, and Ability cards costing 4 and below"
+                          :filter      #(and
+                                          (or
+                                            (item? %)
+                                            (event? %)
+                                            (ability? %))
+                                          (cost<= 4 %))
+                          :sub-stacks  (split-50-50-stacks "Cheap aids")}
+                         {:split?      true
+                          :description "Item, Event, and Ability cards costing 5 and above"
+                          :filter      #(and
+                                          (or
+                                            (item? %)
+                                            (event? %)
+                                            (ability? %))
+                                          (cost>= 5 %))
+                          :sub-stacks  (split-50-50-stacks "Expensive aids")}
+                         {:split?      true
+                          :description "Spell cards costing 7 and below"
+                          :filter      #(and
+                                          (spell? %)
+                                          (cost<= 7 %))
+                          :sub-stacks  (split-50-50-stacks "Cheap spells")}
+                         {:split?      true
+                          :description "Spell cards costing 8 and above"
+                          :filter      #(and
+                                          (spell? %)
+                                          (cost>= 8 %))
+                          :sub-stacks  (split-50-50-stacks "Expensive spells")}
+                         {:split?      true
+                          :description "Movement cards"
+                          :filter      #(and
+                                          (movement? %)
+                                          (not= old-wooden-shield-id (:id %))
+                                          (cost>= 8 %))
+                          :sub-stacks  (split-50-50-stacks "Movement")}]}
      {:name             "Even More Epic Ignite"
       :description      [:<> "Variant described on "
                          [external-link "https://boardgamegeek.com/thread/2767913/even-more-epic-ignite" "BGG"]
@@ -144,4 +201,15 @@
                           :description "All cards of type Item and costing from 6 to 9"
                           :filter      #(and
                                           (item? %)
-                                          (cost>=< 6 9 %))}]}]))
+                                          (cost>=< 6 9 %))}
+                         ;; Place the titles last so that they can be ignored if unwanted.
+                         {:split?     true
+                          :filter     #(title? %)
+                          :sub-stacks [{:name         "Title A"
+                                        :description  "First of two title cards"
+                                        :placeholder? true
+                                        :take-fn      #(list [(first %)] (rest %))}
+                                       {:name         "Title B"
+                                        :description  "Second of two title cards"
+                                        :placeholder? true
+                                        :take-fn      #(list [(first %)] nil)}]}]}]))

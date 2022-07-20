@@ -48,7 +48,7 @@
                          :show-stack-info?   false
                          :reset-dialog-open? false
                          :active?            false
-                         :setup-idx          nil
+                         :setup-idx          0
                          :cards-stack-idx    nil
                          :stacks             nil
                          :cards-taken        nil

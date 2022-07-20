@@ -121,5 +121,6 @@
           (for [c cards-with-idxs]
             (let [on-click (on-click-fn c)
                   tooltip  (tooltip-fn c)]
-              ^{:key (:id c)}                               ; Cf. example on https://reagent-project.github.io/
+              ;; Use index instead of id because Epic Ignite needs to be able to show the same card twice.
+              ^{:key (:idx c)}                              ; Cf. example on https://reagent-project.github.io/
               [card-grid {:on-click on-click, :tooltip tooltip, :content-below-fn content-below-fn} c])))]))))
