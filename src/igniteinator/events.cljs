@@ -412,6 +412,7 @@
 
 (reg-event-fx
   :epic/shuffled-stacks
+  [(inject-cofx :store)]
   (fn [cofx [_ stacks]]
     (let [processed-stacks
           (->>
