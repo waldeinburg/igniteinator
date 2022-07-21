@@ -461,6 +461,12 @@
       (setups setup-idx))))
 
 (reg-sub
+  :epic/trash-to-bottom?
+  :<- [:epic/setup]
+  (fn [setup _]
+    (:trash-to-bottom? setup)))
+
+(reg-sub
   :epic/top-cards
   :<- [:cards-map]
   :<- [:epic/stacks]

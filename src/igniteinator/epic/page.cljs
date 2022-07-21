@@ -3,11 +3,10 @@
             [igniteinator.epic.prepare :refer [prepare-game]]
             [igniteinator.text :refer [txt]]
             [igniteinator.ui.components.page :refer [page]]
-            [igniteinator.util.re-frame :refer [<sub >evt]]))
+            [igniteinator.util.re-frame :refer [<sub]]))
 
 (defn epic-page []
   [page (txt :epic/page-title)
-   [prepare-game]
-   ;; TODO: Maybe questionmark icon with help on how to use the interface.
-   ;; TODO: Undo/redo
-   [epic-game]])
+   (if (<sub :epic/active?)
+     [epic-game]
+     [prepare-game])])

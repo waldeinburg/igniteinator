@@ -2,7 +2,6 @@
   (:require [clojure.string :as s]
             [igniteinator.epic.game-toolbar :refer [game-toolbar]]
             [igniteinator.epic.reset-button :refer [reset-button]]
-            [igniteinator.epic.trash :refer [trash-button]]
             [igniteinator.ui.components.bool-input :refer [switch]]
             [igniteinator.ui.components.card-list :refer [card-list]]
             [igniteinator.ui.components.tooltip :refer [tooltip]]
@@ -97,11 +96,9 @@
      top-cards]))
 
 (defn epic-game []
-  (if (<sub :epic/active?)
-    [:<>
-     [box {:mb 2}
-      [reset-button]
-      [trash-button]
-      [toggle-stack-info-switch]]
-     [stacks-display]
-     [game-toolbar]]))
+  [:<>
+   [box {:mb 2}
+    [reset-button]
+    [toggle-stack-info-switch]]
+   [stacks-display]
+   [game-toolbar]])

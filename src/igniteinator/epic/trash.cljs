@@ -10,9 +10,9 @@
             [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
             [reagent-mui.icons.delete-forever :refer [delete-forever]]
             [reagent-mui.material.button :refer [button]]
+            [reagent-mui.material.fab :refer [fab]]
             [reagent-mui.material.form-group :refer [form-group]]
-            [reagent-mui.material.toolbar :refer [toolbar]]
-            [reagent.core :as r]))
+            [reagent-mui.material.toolbar :refer [toolbar]]))
 
 (defn trash-search-bar []
   [search-bar (<sub-ref :epic/trash-search-str) #(>evt :epic/set-trash-search-str %)])
@@ -55,17 +55,17 @@
            [dialog-card-item c]))]]]))
 
 (defn trash-button []
-  (let [setup     (<sub :epic/setup)
-        disabled? (<sub :epic/trash-button-disabled?)
-        btn [button {:variant    :outlined
-                     :sx         {:mr 2}
-                     :disabled   disabled?
-                     :start-icon (r/as-element [delete-forever])
-                     :on-click   #(>evt :epic/open-trash-menu)}
-             "Trash"]]
-    (if (:trash-to-bottom? setup)
-      [:<>
-       [select-cards-dialog]
-       (if disabled?
-         btn
-         [tooltip "Trash a card from your hand" btn])])))
+  (let [disabled? (<sub :epic/trash-button-disabled?)
+        btn       [fab {:variant  :extended
+                        :sx       {:position :fixed
+                                   :right    24
+                                   :bottom   {:xs 64, :sm 24}}
+                        :disabled disabled?
+                        :on-click #(>evt :epic/open-trash-menu)}
+                   [delete-forever {:sx {:mr 1}}]
+                   "Trash"]]
+    [:<>
+     [select-cards-dialog]
+     (if disabled?
+       btn
+       [tooltip "Trash a card from your hand" btn])]))
