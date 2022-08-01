@@ -4,7 +4,6 @@
             [clojure.string :as str]
             [igniteinator.constants :as constants]
             [igniteinator.db :refer [default-db]]
-            [igniteinator.model.epic-setups :as epic-setups]
             [igniteinator.model.setups :as setups]
             [igniteinator.text :refer [txt]]
             [igniteinator.util.re-frame :refer [assoc-db assoc-db-and-store assoc-ins reg-event-db-assoc
@@ -98,7 +97,6 @@
         :cards (id-map cards)
         :combos-set (:combos result)
         :setups (id-map (:setups result)))
-      (assoc-in [:epic :setups] (epic-setups/epic-setups cards types))
       (update-in [:options :boxes]
         (fn [boxes-setting]
           (if (= (count boxes-setting) (count boxes))
@@ -364,14 +362,12 @@
 (reg-event-fx
   :epic/create-game
   [(inject-cofx :store)]
-  (fn [{{{:keys [setups]} :epic} :db
-        :as                      cofx}
+  (fn [cofx
        ;; We don't want to implement stuff like
        ;; https://github.com/den1k/re-frame-utils/blob/master/src/vimsical/re_frame/cofx/inject.cljc
-       ;; Instead, require that the component subscribe to :global-cards-unsorted
-       [_ cards setup-idx]]
-    (let [setup             (setups setup-idx)
-          count-fn          (:count-fn setup)
+       ;; Instead, require that the component subscribe to :global-cards-unsorted and :epic/setup
+       [_ cards setup]]
+    (let [count-fn          (:count-fn setup)
           stack-defs        (:stacks setup)
           stacks-with-cards (->>
                               stack-defs
@@ -406,7 +402,6 @@
       (->
         cofx
         (assoc-db-and-store [:epic :active?] true)
-        (assoc-db-and-store [:epic :setup-idx] setup-idx)
         (assoc-db-and-store [:epic :cards-stack-idx] cards-stack-idx)
         (assoc :epic/shuffle-stacks stacks)))))
 

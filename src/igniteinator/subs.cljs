@@ -3,6 +3,7 @@
   (:require [clojure.string :as s]
             [igniteinator.constants :as constants]
             [igniteinator.model.cards :as cards]
+            [igniteinator.model.epic-setups :refer [epic-setups]]
             [igniteinator.model.setups :as setups]
             [igniteinator.text :as text]
             [igniteinator.util.filter :as filter-util]
@@ -439,18 +440,26 @@
   :types-map
   [:types])
 (reg-sub
-  :types
+  :all-types
   :<- [:types-map]
   (fn [types-map _]
     (vals types-map)))
 
-(reg-sub-db :epic/setups)
 (reg-sub-db :epic/show-stack-info?)
 (reg-sub-db :epic/reset-dialog-open?)
 (reg-sub-db :epic/active?)
 (reg-sub-db :epic/stacks)
 (reg-sub-db :epic/setup-idx)
 (reg-sub-db :epic/trash-mode)
+
+(reg-sub :epic/setups
+  :<- [:all-cards]
+  :<- [:all-types]
+  :<- [:boxes-setting/box? {:id 2}]
+  :<- [:boxes-setting/box? {:id 3}]
+  (fn [args _]
+    (apply epic-setups args)))
+
 
 (reg-sub
   :epic/setup

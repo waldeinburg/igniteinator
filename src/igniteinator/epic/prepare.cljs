@@ -9,9 +9,9 @@
 
 (defn shuffle-button []
   (if (not (<sub :epic/active?))
-    (let [cards     (<sub :global-cards-unsorted)
-          setup-idx (<sub :epic/setup-idx)]
-      [button {:on-click #(>evt :epic/create-game cards setup-idx)
+    (let [cards (<sub :global-cards-unsorted)
+          setup (<sub :epic/setup)]
+      [button {:on-click #(>evt :epic/create-game cards setup)
                :variant  :contained
                :sx       {:mb 2}}
        "Shuffle"])))
