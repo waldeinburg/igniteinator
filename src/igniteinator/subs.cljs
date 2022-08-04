@@ -480,37 +480,37 @@
   :<- [:cards-map]
   :<- [:epic/stacks]
   (fn [[cards-map stacks] _]
-    (let [top-cards-raw            (map
-                                     (fn [stack]
-                                       (if-let [card-ids (not-empty (:cards stack))]
-                                         (get cards-map (first card-ids))
-                                         {:name       "Empty stack"
-                                          :image-path (str constants/img-base-path "/empty-stack.png")}))
-                                     stacks)
-          top-cards-w-stacks       (map
-                                     (fn [card stack idx]
-                                       (assoc card :stack (assoc stack :stack-idx idx)))
-                                     top-cards-raw stacks (range))
-          relevant-cards           (reduce
-                                     (fn [res card]
-                                       (let [stack (:stack card)]
-                                         (if (or (:placeholder? stack) (= 0 (count (:cards stack))))
-                                           res
-                                           (conj res (assoc card :nav-stack-idx (count res))))))
-                                     []
-                                     top-cards-w-stacks)
-          stack-idx->relevant-card (reduce
-                                     (fn [m card]
-                                       (assoc m (-> card :stack :idx) card))
-                                     {}
-                                     relevant-cards)
-          top-cards                (map (fn [card]
-                                          (if-let [relevant-card
-                                                   (-> card :stack :idx stack-idx->relevant-card)]
-                                            relevant-card
-                                            card))
-                                     top-cards-w-stacks)]
-      [top-cards relevant-cards])))
+    (let [empty-stack-card {:name       "Empty stack"
+                            :image-path (str constants/img-base-path "/empty-stack.png")}
+          top-cards        (map-indexed
+                             (fn [idx stack]
+                               (let [top-card (if-let [card-ids (not-empty (:cards stack))]
+                                                (get cards-map (first card-ids))
+                                                empty-stack-card)]
+                                 ;; Add stack info
+                                 (assoc top-card :stack (assoc stack :idx idx))))
+                             stacks)]
+      ;; Add index if the stack can be displayed.
+      (loop [cards top-cards
+             res   []
+             idx   0]
+        (if (empty? cards)
+          res
+          (let [[card & remaining-cards] cards
+                stack (:stack card)
+                [new-card new-idx] (if (or
+                                         (:placeholder? stack)
+                                         (= 0 (count (:cards stack))))
+                                     [card idx]
+                                     [(assoc card :nav-stack-idx idx) (inc idx)])]
+
+            (recur remaining-cards (conj res new-card) new-idx)))))))
+
+(reg-sub
+  :epic/relevant-top-cards
+  :<- [:epic/top-cards]
+  (fn [top-cards _]
+    (vec (filter :nav-stack-idx top-cards))))
 
 (reg-sub-db :epic/cards-taken)
 
@@ -545,3 +545,17 @@
 (reg-sub-db :epic/snackbar-2-message)
 (reg-sub-db :epic/snackbar-1-open?)
 (reg-sub-db :epic/snackbar-2-open?)
+
+(reg-sub-db :epic-display-stack-page/idx)
+(reg-sub-db :epic-display-stack-page/prev-idx)
+(reg-sub-db :epic-display-stack-page/first-transition-in?)
+(let [reg-stack-page-title-sub
+      (fn [name idx-sub]
+        (reg-sub
+          name
+          :<- [:epic/relevant-top-cards]
+          :<- [idx-sub]
+          (fn [[relevant-top-cards idx] _]
+            (-> relevant-top-cards (get idx) :name))))]
+  (reg-stack-page-title-sub :epic-display-stack-page/current-title :epic-display-stack-page/idx)
+  (reg-stack-page-title-sub :epic-display-stack-page/previous-title :epic-display-stack-page/prev-idx))

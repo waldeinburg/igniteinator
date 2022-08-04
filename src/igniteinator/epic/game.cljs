@@ -2,6 +2,7 @@
   (:require [clojure.string :as s]
             [igniteinator.epic.game-toolbar :refer [game-toolbar]]
             [igniteinator.epic.reset-button :refer [reset-button]]
+            [igniteinator.text :refer [txt]]
             [igniteinator.ui.components.bool-input :refer [switch]]
             [igniteinator.ui.components.card-list :refer [card-list]]
             [igniteinator.ui.components.tooltip :refer [tooltip]]
@@ -51,48 +52,49 @@
          btn
          [tooltip tooltip-str btn])))])
 
+(defn card-content-below [card]
+  (let [stack       (:stack card)
+        stack-count (count (:cards stack))]
+    ;; The :placeholder? property allows us to merge ind dummy decks with March, Dagger, Old Wooden Shield and
+    ;; even Hex. This should be an opt-in, though.
+    [:<>
+     [box {:display :flex, :justify-content :center}
+      [button-group
+       {:disabled (or (:placeholder? stack) (= 0 stack-count))}
+       [card-button {:tooltip-str (txt :epic/take-button-tooltip {:name (:name card)})
+                     :color       :primary
+                     :icon        [file-upload]
+                     :on-click    #(>evt :epic/take-card (:idx stack))}
+        (txt :epic/take-button-text)]
+       [card-button {:tooltip-str (txt :epic/cycle-button-tooltip {:name (:name card)})
+                     :disabled?   (= 1 stack-count)
+                     :color       :secondary
+                     :icon        [low-priority]
+                     :on-click    #(>evt :epic/cycle-card (:idx stack))}
+        (txt :epic/cycle-button-text)]]]
+     (if (<sub :epic/show-stack-info?)
+       [box {:mt 1}
+        [:strong (:name stack)]
+        (if (not (:placeholder? stack))
+          (str " (" stack-count ")"))
+        ": "
+        [box {:component :span, :color "text.secondary"} (:description stack)]])]))
+
 (defn toggle-stack-info-switch []
   (switch {:checked?-ref (<sub-ref :epic/show-stack-info?)
            :on-change    #(>evt :epic/set-show-stack-info? %)
            :label        "Show stack info"}))
 
 (defn stacks-display []
-  (let [[top-cards relevant-cards] (<sub :epic/top-cards)]
+  (let [top-cards (<sub :epic/top-cards)]
     [card-list
-     {:tooltip     false                                    ;; Tooltip covers buttons
-      :on-click-fn (fn [card]
-                     (let [stack (:stack card)]
-                       (if (or (:placeholder? stack) (= 0 (count (:cards stack))))
-                         nil
-                         #(>evt :show-card-details relevant-cards (:nav-stack-idx card) :page/push))))
-      :content-below-fn
-      (fn [card]
-        (let [stack       (:stack card)
-              stack-count (count (:cards stack))]
-          ;; The :placeholder? property allows us to merge ind dummy decks with March, Dagger, Old Wooden Shield and
-          ;; even Hex. This should be an opt-in, though.
-          [:<>
-           [box {:display :flex, :justify-content :center}
-            [button-group
-             {:disabled (or (:placeholder? stack) (= 0 stack-count))}
-             [card-button {:tooltip-str (str "Take " (:name card) " from the stack")
-                           :color       :primary
-                           :icon        [file-upload]
-                           :on-click    #(>evt :epic/take-card (:idx card))}
-              "Take"]
-             [card-button {:tooltip-str (str "Cycle " (:name card) " to the bottom of the stack")
-                           :disabled?   (= 1 stack-count)
-                           :color       :secondary
-                           :icon        [low-priority]
-                           :on-click    #(>evt :epic/cycle-card (:idx card))}
-              "Cycle"]]]
-           (if (<sub :epic/show-stack-info?)
-             [box {:mt 1}
-              [:strong (:name stack)]
-              (if (not (:placeholder? stack))
-                (str " (" stack-count ")"))
-              ": "
-              [box {:component :span, :color "text.secondary"} (:description stack)]])]))}
+     {:tooltip          false                               ;; Tooltip covers buttons
+      :on-click-fn      (fn [card]
+                          (let [stack (:stack card)]
+                            (if (or (:placeholder? stack) (= 0 (count (:cards stack))))
+                              nil
+                              #(>evt :epic/show-stack (:nav-stack-idx card)))))
+      :content-below-fn card-content-below}
      top-cards]))
 
 (defn epic-game []

@@ -1,7 +1,6 @@
 (ns igniteinator.text
   (:require [igniteinator.util.re-frame :refer [<sub]]
-            [igniteinator.util.string :as ss]
-            [clojure.string :as s]))
+            [igniteinator.util.string :as ss]))
 
 (def strings
   {
@@ -81,6 +80,10 @@
    :epic/reset-button-text            {:en "Reset"}
    :epic/reset-dialog-title           {:en "Reset game?"}
    :epic/reset-dialog-text            {:en "Are you sure you want to reset the current game?"}
+   :epic/take-button-text             {:en "Take"}
+   :epic/cycle-button-text            {:en "Cycle"}
+   :epic/take-button-tooltip          {:en "Take {name} from the stack"}
+   :epic/cycle-button-tooltip         {:en "Cycle {name} to the bottom of the stack"}
    })
 
 ;; Convenience functions to minimize the boilerplate retrieving strings.

@@ -38,8 +38,7 @@
     [:p "This is a beta version to get community feedback on the interaction with the cards."]
     [:p "To be implemented:"]
     [:ul
-     [:li "Undo/redo."]
-     [:li "Take actions on the card display page (when clicking a card)."]]]
+     [:li "Undo/redo."]]]
    [:p "This feature lets you play Epic Ignite without sorting all of your cards before and after the game."]
    [select-variant-radios]
    [box {:mt 2} [shuffle-button]]

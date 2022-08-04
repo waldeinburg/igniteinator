@@ -558,3 +558,20 @@
                          (if snackbar-1-open? :snackbar-2-message :snackbar-1-message) message
                          :snackbar-1-open? (not snackbar-1-open?) ; state is false false initially
                          :snackbar-2-open? snackbar-1-open?)))))
+
+(reg-event-fx
+  :epic/show-stack
+  (fn [{:keys [db]} [_ idx]]
+    {:db       (nav-page-assoc-init db :epic-display-stack-page idx)
+     :dispatch [:page/push :epic/display-stack]}))
+(reg-nav-page-event-set-idx :epic-display-stack-page/set-idx :epic-display-stack-page)
+(let [reg-button-event
+      (fn [name event]
+        (reg-event-fx
+          name
+          (fn [_ [_ idx]]
+            {:fx [[:dispatch [event idx]]
+                  [:dispatch [:page/pop]]]})))]
+  (reg-button-event :epic-display-stack-page/take-card :epic/take-card)
+  (reg-button-event :epic-display-stack-page/cycle-card :epic/cycle-card))
+

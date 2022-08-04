@@ -1,14 +1,13 @@
 (ns igniteinator.ui.app
-  (:require [igniteinator.epic.trash :refer [trash-page]]
-            [igniteinator.ui.components.loading-progress :refer [loading-progress]]
+  (:require [igniteinator.ui.components.loading-progress :refer [loading-progress]]
             [igniteinator.ui.components.wait-modal :refer [waiting-modal]]
             [igniteinator.ui.footer :refer [footer]]
             [igniteinator.ui.header :refer [header]]
             [igniteinator.ui.hooks :refer [desktop-menu?-hook]]
-            [igniteinator.ui.pages.card-details :refer [card-details-page]]
+            [igniteinator.ui.pages.card-details-page :refer [card-details-page]]
             [igniteinator.ui.pages.cards-page :refer [cards-page]]
             [igniteinator.ui.pages.display-setup-page :refer [display-setup-page]]
-            [igniteinator.ui.pages.epic-page :refer [epic-page]]
+            [igniteinator.ui.pages.epic-pages :refer [display-stack-page epic-page trash-page]]
             [igniteinator.ui.pages.setups-page :refer [setups-page]]
             [igniteinator.ui.singletons.caching-progress :refer [caching-progress]]
             [igniteinator.ui.singletons.reload-snackbar :refer [reload-snackbar]]
@@ -25,6 +24,7 @@
       :setups [setups-page]
       :display-setup [display-setup-page]
       :epic [epic-page]
+      :epic/display-stack [display-stack-page]
       :epic/trash [trash-page])))
 
 (defn content []
