@@ -1,6 +1,6 @@
 (ns igniteinator.util.re-frame
-  (:require [re-frame.core :as rf]
-            [clojure.string :as s]))
+  (:require [clojure.string :as s]
+            [re-frame.core :as rf]))
 
 (defn <sub-ref [name & args]
   (rf/subscribe (into [name] args)))
@@ -69,12 +69,24 @@
      (fn [db [_ val]]
        (assoc-in db path val)))))
 
+;; Assoc functions for use with cofx map.
 (defn assoc-db [{:keys [db]} path val]
-  {:db    (assoc-in db path val)})
+  {:db (assoc-in db path val)})
 
 (defn assoc-db-and-store [{:keys [db store]} path val]
   {:db    (assoc-in db path val)
    :store (assoc-in store path val)})
+
+(defn assoc-ins-db [{:keys [db]} & path-vs]
+  {:db (apply assoc-ins (into [db] path-vs))})
+
+(defn assoc-ins-db-and-store [{:keys [db store]} & path-vs]
+  {:db    (apply assoc-ins (into [db] path-vs))
+   :store (apply assoc-ins (into [store] path-vs))})
+
+(defn update-in-db-and-store [{:keys [db store]} path f]
+  {:db    (update-in db path f)
+   :store (update-in store path f)})
 
 (defn reg-event-db-assoc-store
   "As reg-event-db-assoc but also with local storage."

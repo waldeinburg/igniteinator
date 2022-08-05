@@ -6,8 +6,9 @@
             [igniteinator.db :refer [default-db]]
             [igniteinator.model.setups :as setups]
             [igniteinator.text :refer [txt]]
-            [igniteinator.util.re-frame :refer [assoc-db assoc-db-and-store assoc-ins reg-event-db-assoc
-                                                reg-event-db-assoc-store reg-event-set-option]]
+            [igniteinator.util.re-frame :refer [assoc-db assoc-db-and-store assoc-ins assoc-ins-db
+                                                assoc-ins-db-and-store reg-event-db-assoc
+                                                reg-event-db-assoc-store reg-event-set-option update-in-db-and-store]]
             [re-frame.core :refer [inject-cofx reg-event-db reg-event-fx]]))
 
 (defn- reg-nav-page-event-set-idx [name root]
@@ -443,19 +444,47 @@
   (fn [cofx _]
     (->
       cofx
-      (assoc-db [:epic :snackbar-1-message] "")
-      (assoc-db [:epic :snackbar-2-message] "")
-      (assoc-db [:epic :snackbar-1-open?] false)
-      (assoc-db [:epic :snackbar-2-open?] false)
-      (assoc-db-and-store [:epic :active?] false)
-      (assoc-db-and-store [:epic :cards-stack-idx] nil)
-      (assoc-db-and-store [:epic :stacks] nil)
-      (assoc-db-and-store [:epic :cards-taken] nil))))
+      (assoc-ins-db
+        [:epic :snackbar-1-message] ""
+        [:epic :snackbar-2-message] ""
+        [:epic :snackbar-1-open?] true
+        [:epic :snackbar-2-open?] false)
+      (assoc-ins-db-and-store
+        [:epic :active?] false
+        [:epic :undo-history] nil
+        [:epic :redo-history] nil
+        [:epic :cards-stack-idx] nil
+        [:epic :stacks] nil
+        [:epic :cards-taken] nil))))
 
 (reg-event-db-assoc-store :epic/set-show-stack-info?)
 
-(defn epic-snackbar-message [verb card preposition stacks stack-idx]
-  [:<> (str/capitalize verb) " " [:strong (:name card)] " " preposition " " [:strong (-> stack-idx stacks :name)]])
+(defn epic-snackbar-message [verb cards card-id preposition stacks stack-idx]
+  (let [card  (cards card-id)
+        stack (stacks stack-idx)]
+    [:<> (str/capitalize verb) " " [:strong (:name card)] " " preposition " " [:strong (:name stack)]]))
+
+(defn epic-event [cofx action card-id stack-idx]
+  (let [state (-> cofx :db :epic)]
+    {:action    action
+     :card-id   card-id
+     :stack-idx stack-idx
+     :state     (select-keys state
+                  [:stacks
+                   :cards-taken
+                   :cards-stack-idx
+                   :snackbar-1-message
+                   :snackbar-2-message
+                   :snackbar-1-open?
+                   :snackbar-2-open?])}))
+
+(defn- add-epic-event [cofx action card-id stack-idx]
+  (let [state        (-> cofx :db :epic)
+        undo-history (:undo-history state)
+        event        (epic-event cofx action card-id stack-idx)]
+    (assoc-ins-db-and-store cofx
+      [:epic :undo-history] (cons event undo-history)
+      [:epic :redo-history] nil)))
 
 (reg-event-fx
   :epic/take-card
@@ -464,19 +493,16 @@
          {:keys [stacks cards-taken]} :epic} :db
         :as                                  cofx}
        [_ stack-idx]]
-    ;; TODO: history
-    (let [card (-> stack-idx stacks :cards first cards)]
+    (let [card-id (-> stack-idx stacks :cards first)]
       (->
         cofx
-        (assoc-db-and-store [:epic :stacks]
-          (update stacks stack-idx #(update % :cards (comp vec rest))))
-        ;; cards-taken holds a map of id -> count
-        (assoc-db-and-store [:epic :cards-taken]
-          (update cards-taken
-            (:id card)
-            #(inc (or % 0))))
+        (add-epic-event :take card-id stack-idx)
+        (assoc-ins-db-and-store
+          [:epic :stacks] (update stacks stack-idx #(update % :cards (comp vec rest)))
+          ;; cards-taken holds a map of id -> count
+          [:epic :cards-taken] (update cards-taken card-id #(inc (or % 0))))
         (assoc :dispatch [:epic/set-snackbar
-                          (epic-snackbar-message "took" card "from" stacks stack-idx)])))))
+                          (epic-snackbar-message "took" cards card-id "from" stacks stack-idx)])))))
 
 (reg-event-fx
   :epic/cycle-card
@@ -485,14 +511,14 @@
          {:keys [stacks]} :epic} :db
         :as                      cofx}
        [_ stack-idx]]
-    ;; TODO: history
     (let [stack-cards (-> stack-idx stacks :cards)
           card-id     (first stack-cards)]
       (->
         cofx
+        (add-epic-event :cycle card-id stack-idx)
         (assoc-db-and-store [:epic :stacks stack-idx :cards] (conj (-> stack-cards rest vec) card-id))
         (assoc :dispatch [:epic/set-snackbar
-                          (epic-snackbar-message "cycled" (cards card-id) "in" stacks stack-idx)])))))
+                          (epic-snackbar-message "cycled" cards card-id "in" stacks stack-idx)])))))
 
 (reg-event-db-assoc :epic/set-trashing?)
 (reg-event-db-assoc :epic/set-trash-dialog-open?)
@@ -505,21 +531,22 @@
          {:keys [cards-taken cards-stack-idx stacks]} :epic} :db
         :as                                                  cofx}
        [_ card-id]]
-    ;; TODO: history
     (let [stack-idx (cards-stack-idx card-id)]
       (->
         cofx
-        (assoc-db-and-store [:epic :stacks]
+        (add-epic-event :trash card-id stack-idx)
+        (assoc-ins-db-and-store
+          [:epic :stacks]
           (update stacks stack-idx #(update % :cards (fn [stack-cards]
-                                                       (conj stack-cards card-id)))))
-        (assoc-db-and-store [:epic :cards-taken]
+                                                       (conj stack-cards card-id))))
+          [:epic :cards-taken]
           (let [cnt (get cards-taken card-id)]
             (if (= 1 cnt)
               (dissoc cards-taken card-id)
               (update cards-taken card-id dec))))
         (assoc :fx [[:dispatch [:epic/close-trash-menu]]
                     [:dispatch [:epic/set-snackbar
-                                (epic-snackbar-message "trashed" (cards card-id) "to" stacks stack-idx)]]])))))
+                                (epic-snackbar-message "trashed" cards card-id "to" stacks stack-idx)]]])))))
 
 (reg-event-fx
   :epic/set-trash-mode
@@ -575,3 +602,20 @@
   (reg-button-event :epic-display-stack-page/take-card :epic/take-card)
   (reg-button-event :epic-display-stack-page/cycle-card :epic/cycle-card))
 
+(let [reg-history-event
+      (fn [name history-key reverse-history-key]
+        (reg-event-fx
+          name
+          [(inject-cofx :store)]
+          (fn [{{:keys [epic]} :db
+                :as            cofx}]
+            (let [history       (epic history-key)
+                  [{:keys [state action card-id stack-idx]} & rest-history] history
+                  reverse-event (epic-event cofx action card-id stack-idx)]
+              (->
+                cofx
+                (update-in-db-and-store [:epic] #(merge % state))
+                (assoc-db-and-store [:epic history-key] rest-history)
+                (update-in-db-and-store [:epic reverse-history-key] #(cons reverse-event %)))))))]
+  (reg-history-event :epic/undo :undo-history :redo-history)
+  (reg-history-event :epic/redo :redo-history :undo-history))

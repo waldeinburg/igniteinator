@@ -48,17 +48,19 @@
                              :show-stack-info?   false
                              :reset-dialog-open? false
                              :active?            false
+                             :undo-history       nil
+                             :redo-history       nil
                              :setup-idx          0
-                             :cards-stack-idx    nil
                              :stacks             nil
                              :cards-taken        nil
+                             :cards-stack-idx    nil
                              :trashing?          false
                              :trash-mode         :page
                              :trash-dialog-open? false
                              :trash-search-str   ""
                              :snackbar-1-message ""
                              :snackbar-2-message ""
-                             :snackbar-1-open?   false
+                             :snackbar-1-open?   true
                              :snackbar-2-open?   false}
    ;; Must be in root, not under :epic (and not with "epic."), for nav-page functions to work.
    :epic-display-stack-page {:idx                  nil

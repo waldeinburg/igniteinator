@@ -559,3 +559,24 @@
             (-> relevant-top-cards (get idx) :name))))]
   (reg-stack-page-title-sub :epic-display-stack-page/current-title :epic-display-stack-page/idx)
   (reg-stack-page-title-sub :epic-display-stack-page/previous-title :epic-display-stack-page/prev-idx))
+
+(let [reg-history-title-sub
+      (fn [name history-key]
+        (reg-sub
+          name
+          (fn [{:keys [cards epic]} _]
+            (if-let [history (epic history-key)]
+              (let [stacks      (:stacks epic)
+                    {:keys [action card-id stack-idx]} (first history)
+                    verb        (case action
+                                  :take "take"
+                                  :cycle "cycle"
+                                  :trash "trash")
+                    preposition (case action
+                                  :take "from"
+                                  :cycle "in"
+                                  :trash "to")]
+                (str (s/capitalize verb) " " (-> card-id cards :name) " "
+                  preposition " " (-> stack-idx stacks :name)))))))]
+  (reg-history-title-sub :epic/undo-title :undo-history)
+  (reg-history-title-sub :epic/redo-title :redo-history))

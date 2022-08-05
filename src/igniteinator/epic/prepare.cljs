@@ -32,6 +32,8 @@
          epic-setups))]))
 
 (defn prepare-game []
+  ;; TODO: show box settings
+  ;; TODO: remove beta notice and but how to play in info alert
   [:<>
    [alert {:severity :info
            :sx       {:mb 2}}
