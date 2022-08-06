@@ -8,6 +8,7 @@
             [reagent-mui.material.box :refer [box]]
             [reagent-mui.material.icon-button :refer [icon-button]]
             [reagent-mui.material.snackbar :refer [snackbar]]
+            [reagent-mui.material.snackbar-content :refer [snackbar-content]]
             [reagent.core :as r]))
 
 (defn history-button [on-click-evt-key title-sub-key verb icon]
@@ -21,14 +22,17 @@
       btn)))
 
 (defn game-snackbar [open?-sub message-sub]
-  [snackbar
-   {:open    (<sub open?-sub)
-    :message (r/as-element
-               [:<>
-                [box {:component :span, :mr 2}
-                 [history-button :epic/undo :epic/undo-title "undo" undo-icon]
-                 [history-button :epic/redo :epic/redo-title "redo" redo-icon]]
-                [:span (<sub message-sub)]])}])
+  [snackbar {:sx   {:z-index 1050}                          ; Same as floating button (we are misusing snackbar)
+             :open (<sub open?-sub)}
+   [snackbar-content
+    {:sx      {".MuiSnackbarContent-message" {:py 0}}
+     :role    :menubar
+     :message (r/as-element
+                [:<>
+                 [box {:component :span, :mr 2}
+                  [history-button :epic/undo :epic/undo-title "undo" undo-icon]
+                  [history-button :epic/redo :epic/redo-title "redo" redo-icon]]
+                 [:span (<sub message-sub)]])}]])
 
 (defn game-toolbar []
   (let [trash-to-bottom? (<sub :epic/trash-to-bottom?)]

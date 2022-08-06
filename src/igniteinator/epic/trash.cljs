@@ -58,8 +58,8 @@
   (let [disabled? (<sub :epic/trash-button-disabled?)
         btn       [fab {:variant  :extended
                         :sx       {:position :fixed
-                                   :right    24
-                                   :bottom   {:xs 64, :sm 24}}
+                                   :right    {:xs 8, :sm 24}
+                                   :bottom   {:xs 72, :sm 24}}
                         :disabled disabled?
                         :on-click #(>evt :epic/open-trash-menu)}
                    [delete-forever {:sx {:mr 1}}]

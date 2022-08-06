@@ -358,7 +358,7 @@
 (reg-event-db-assoc :set-settings-menu-open?)
 
 (reg-event-db-assoc :epic/set-reset-dialog-open?)
-(reg-event-db-assoc :epic/set-setup-idx)
+(reg-event-db-assoc-store :epic/set-setup-idx)
 
 (reg-event-fx
   :epic/create-game
@@ -402,8 +402,9 @@
       ;; :epic/set-stacks event to set the stacks.
       (->
         cofx
-        (assoc-db-and-store [:epic :active?] true)
-        (assoc-db-and-store [:epic :cards-stack-idx] cards-stack-idx)
+        (assoc-ins-db-and-store
+          [:epic :active?] true
+          [:epic :cards-stack-idx] cards-stack-idx)
         (assoc :epic/shuffle-stacks stacks)))))
 
 (reg-event-fx
@@ -577,14 +578,16 @@
                        :page [:page/pop]
                        :dialog [:epic/set-trash-dialog-open? false])]]}))
 
-(reg-event-db
+(reg-event-fx
   :epic/set-snackbar
-  (fn [{{:keys [snackbar-1-open?]} :epic :as db} [_ message]]
-    (update db :epic (fn [epic]
-                       (assoc epic
-                         (if snackbar-1-open? :snackbar-2-message :snackbar-1-message) message
-                         :snackbar-1-open? (not snackbar-1-open?) ; state is false false initially
-                         :snackbar-2-open? snackbar-1-open?)))))
+  [(inject-cofx :store)]
+  (fn [{{{:keys [snackbar-1-open?]} :epic} :db :as cofx} [_ message]]
+    (update-in-db-and-store cofx [:epic]
+      (fn [epic]
+        (assoc epic
+          (if snackbar-1-open? :snackbar-2-message :snackbar-1-message) message
+          :snackbar-1-open? (not snackbar-1-open?)          ; If state is false false
+          :snackbar-2-open? snackbar-1-open?)))))
 
 (reg-event-fx
   :epic/show-stack
