@@ -76,7 +76,7 @@
    :settings.default-order/label      {:en "Order by"}      ; As long as there's only this way to order.
    :settings.display-name/label       {:en "Display card name"}
    :settings.display-name/translating {:en "When translating"}
-   :epic/page-title                   {:en "Epic Ignite (BETA!)"}
+   :epic/page-title                   {:en "Epic Ignite"}
    :epic/reset-button-text            {:en "Reset"}
    :epic/reset-dialog-title           {:en "Reset game?"}
    :epic/reset-dialog-text            {:en "Are you sure you want to reset the current game?"}
