@@ -151,6 +151,16 @@
       "name": "Transformation"
     }
   ],
+  "traits": [
+    {
+      "id": 1,
+      "name": "damage"
+    },
+    {
+      "id": 2,
+      "name": "knock-down"
+    }
+  ],
   "setups": [
     {
       "id": 0,
@@ -979,7 +989,14 @@
       "types": [
         21
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [
+        5
+      ],
+      "provides": [
+        1
+      ]
     },
     {
       "id": 2,
@@ -1002,7 +1019,10 @@
       "combos": [
         10,
         14
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 3,
@@ -1018,7 +1038,10 @@
         84,
         86,
         120
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 4,
@@ -1030,7 +1053,10 @@
       "types": [
         7
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 5,
@@ -1042,7 +1068,12 @@
       "types": [
         23
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        2
+      ]
     },
     {
       "id": 6,
@@ -1054,7 +1085,14 @@
       "types": [
         21
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [
+        5
+      ],
+      "provides": [
+        1
+      ]
     },
     {
       "id": 7,
@@ -1069,7 +1107,10 @@
       "combos": [
         86,
         94
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 8,
@@ -1083,7 +1124,10 @@
       ],
       "combos": [
         64
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 9,
@@ -1099,7 +1143,10 @@
       ],
       "combos": [
         117
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 10,
@@ -1122,6 +1169,11 @@
         101,
         104,
         111
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        1
       ]
     },
     {
@@ -1138,7 +1190,10 @@
         42,
         69,
         116
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 12,
@@ -1152,7 +1207,12 @@
         15,
         4
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        1
+      ]
     },
     {
       "id": 13,
@@ -1164,7 +1224,10 @@
       "types": [
         2
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 14,
@@ -1187,6 +1250,11 @@
         101,
         104,
         111
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        1
       ]
     },
     {
@@ -1202,7 +1270,10 @@
       "combos": [
         10,
         14
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 16,
@@ -1220,7 +1291,10 @@
         59,
         77,
         119
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 17,
@@ -1236,7 +1310,10 @@
         10,
         14,
         55
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 19,
@@ -1248,7 +1325,10 @@
       "types": [
         2
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 20,
@@ -1260,7 +1340,10 @@
       "types": [
         18
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 21,
@@ -1277,7 +1360,10 @@
         44,
         45,
         97
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 22,
@@ -1289,7 +1375,10 @@
       "types": [
         26
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 23,
@@ -1308,7 +1397,10 @@
         95,
         104,
         117
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 24,
@@ -1326,6 +1418,11 @@
       "combos": [
         97,
         107
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        1
       ]
     },
     {
@@ -1343,7 +1440,10 @@
         23,
         55,
         64
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 26,
@@ -1358,7 +1458,12 @@
         4,
         24
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        1
+      ]
     },
     {
       "id": 27,
@@ -1376,7 +1481,10 @@
         72,
         88,
         106
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 28,
@@ -1388,7 +1496,14 @@
       "types": [
         21
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [
+        5
+      ],
+      "provides": [
+        1
+      ]
     },
     {
       "id": 29,
@@ -1404,7 +1519,10 @@
         10,
         14,
         80
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 30,
@@ -1416,7 +1534,10 @@
       "types": [
         7
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 31,
@@ -1428,7 +1549,12 @@
       "types": [
         23
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        2
+      ]
     },
     {
       "id": 32,
@@ -1443,7 +1569,10 @@
         8,
         30
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 33,
@@ -1460,7 +1589,10 @@
       "combos": [
         103,
         119
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 34,
@@ -1474,7 +1606,14 @@
         26,
         8
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [
+        5
+      ],
+      "provides": [
+        1
+      ]
     },
     {
       "id": 35,
@@ -1488,7 +1627,12 @@
         15,
         25
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        1
+      ]
     },
     {
       "id": 36,
@@ -1505,7 +1649,10 @@
       "combos": [
         64,
         71
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 37,
@@ -1519,7 +1666,12 @@
         15,
         4
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        1
+      ]
     },
     {
       "id": 38,
@@ -1534,7 +1686,10 @@
       ],
       "combos": [
         71
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 39,
@@ -1547,7 +1702,10 @@
         13,
         32
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 40,
@@ -1559,7 +1717,10 @@
       "types": [
         7
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 41,
@@ -1576,6 +1737,11 @@
       ],
       "combos": [
         107
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        1
       ]
     },
     {
@@ -1591,7 +1757,10 @@
       ],
       "combos": [
         11
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 43,
@@ -1606,7 +1775,10 @@
         26,
         3
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 44,
@@ -1622,6 +1794,13 @@
       "combos": [
         21,
         97
+      ],
+      "requires": [],
+      "requires-types": [
+        5
+      ],
+      "provides": [
+        1
       ]
     },
     {
@@ -1637,7 +1816,10 @@
       ],
       "combos": [
         21
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 46,
@@ -1649,7 +1831,10 @@
       "types": [
         7
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 47,
@@ -1661,7 +1846,10 @@
       "types": [
         7
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 48,
@@ -1678,7 +1866,10 @@
         56,
         77,
         119
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 49,
@@ -1699,7 +1890,10 @@
       "types": [
         1
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 50,
@@ -1716,6 +1910,13 @@
       "combos": [
         64,
         71
+      ],
+      "requires": [],
+      "requires-types": [
+        5
+      ],
+      "provides": [
+        1
       ]
     },
     {
@@ -1732,7 +1933,10 @@
       ],
       "combos": [
         64
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 52,
@@ -1747,7 +1951,12 @@
         22,
         4
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        1
+      ]
     },
     {
       "id": 53,
@@ -1767,7 +1976,10 @@
       "types": [
         1
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 54,
@@ -1782,7 +1994,10 @@
       "combos": [
         103,
         119
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 55,
@@ -1805,7 +2020,10 @@
         83,
         104,
         120
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 56,
@@ -1827,6 +2045,11 @@
         108,
         115,
         116
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        1
       ]
     },
     {
@@ -1843,7 +2066,10 @@
       "combos": [
         86,
         94
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 58,
@@ -1857,7 +2083,10 @@
         17,
         30
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 59,
@@ -1876,7 +2105,10 @@
         55,
         120,
         121
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 60,
@@ -1896,7 +2128,10 @@
       "types": [
         1
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 61,
@@ -1914,6 +2149,13 @@
         27,
         94,
         101
+      ],
+      "requires": [],
+      "requires-types": [
+        21
+      ],
+      "provides": [
+        1
       ]
     },
     {
@@ -1926,7 +2168,14 @@
       "types": [
         21
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [
+        5
+      ],
+      "provides": [
+        1
+      ]
     },
     {
       "id": 63,
@@ -1938,7 +2187,10 @@
       "types": [
         7
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 64,
@@ -1964,7 +2216,10 @@
         92,
         104,
         123
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 65,
@@ -1979,7 +2234,10 @@
       ],
       "combos": [
         86
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 66,
@@ -1991,7 +2249,10 @@
       "types": [
         18
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 67,
@@ -2004,7 +2265,10 @@
         26,
         19
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 68,
@@ -2025,7 +2289,10 @@
       "types": [
         1
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 69,
@@ -2040,7 +2307,10 @@
       ],
       "combos": [
         11
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 70,
@@ -2052,7 +2322,12 @@
       "types": [
         23
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        2
+      ]
     },
     {
       "id": 71,
@@ -2073,7 +2348,10 @@
         38,
         50,
         92
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 72,
@@ -2093,6 +2371,13 @@
         27,
         94,
         101
+      ],
+      "requires": [],
+      "requires-types": [
+        21
+      ],
+      "provides": [
+        1
       ]
     },
     {
@@ -2105,7 +2390,10 @@
       "types": [
         2
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 74,
@@ -2120,7 +2408,10 @@
       ],
       "combos": [
         56
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 75,
@@ -2132,7 +2423,10 @@
       "types": [
         23
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 76,
@@ -2144,7 +2438,10 @@
       "types": [
         7
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 77,
@@ -2163,6 +2460,11 @@
         48,
         108,
         115
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        1
       ]
     },
     {
@@ -2176,7 +2478,10 @@
         13,
         6
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 79,
@@ -2189,7 +2494,10 @@
         13,
         32
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 80,
@@ -2205,7 +2513,10 @@
       "combos": [
         29,
         56
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 81,
@@ -2217,7 +2528,14 @@
       "types": [
         21
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [
+        5
+      ],
+      "provides": [
+        1
+      ]
     },
     {
       "id": 82,
@@ -2232,7 +2550,12 @@
         4,
         24
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        1
+      ]
     },
     {
       "id": 83,
@@ -2249,7 +2572,10 @@
         55,
         84,
         86
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 84,
@@ -2264,7 +2590,10 @@
       "combos": [
         3,
         83
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 85,
@@ -2276,7 +2605,10 @@
       "types": [
         18
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 86,
@@ -2294,7 +2626,10 @@
         57,
         65,
         83
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 87,
@@ -2315,7 +2650,10 @@
       "types": [
         1
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 88,
@@ -2333,6 +2671,13 @@
         27,
         94,
         101
+      ],
+      "requires": [],
+      "requires-types": [
+        21
+      ],
+      "provides": [
+        1
       ]
     },
     {
@@ -2345,7 +2690,10 @@
       "types": [
         7
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 90,
@@ -2359,7 +2707,12 @@
         15,
         4
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        1
+      ]
     },
     {
       "id": 91,
@@ -2374,7 +2727,10 @@
         8,
         3
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 92,
@@ -2391,7 +2747,10 @@
       "combos": [
         64,
         71
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 93,
@@ -2403,7 +2762,10 @@
       "types": [
         7
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 94,
@@ -2421,7 +2783,10 @@
         61,
         72,
         88
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 95,
@@ -2439,7 +2804,10 @@
         10,
         14,
         23
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 96,
@@ -2451,7 +2819,10 @@
       "types": [
         7
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 97,
@@ -2476,7 +2847,10 @@
         21,
         24,
         44
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 99,
@@ -2490,7 +2864,12 @@
         15,
         4
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        1
+      ]
     },
     {
       "id": 100,
@@ -2503,7 +2882,10 @@
         18,
         17
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 101,
@@ -2522,7 +2904,10 @@
         61,
         72,
         88
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 102,
@@ -2534,7 +2919,10 @@
       "types": [
         7
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 103,
@@ -2550,7 +2938,10 @@
         33,
         54,
         119
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 104,
@@ -2570,7 +2961,10 @@
         23,
         55,
         64
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 105,
@@ -2590,7 +2984,10 @@
       "types": [
         1
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 106,
@@ -2604,7 +3001,10 @@
       ],
       "combos": [
         27
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 107,
@@ -2622,6 +3022,11 @@
       "combos": [
         24,
         41
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        1
       ]
     },
     {
@@ -2639,7 +3044,10 @@
         56,
         77,
         119
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 109,
@@ -2652,7 +3060,10 @@
         26,
         19
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 111,
@@ -2669,7 +3080,10 @@
       "combos": [
         10,
         14
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 112,
@@ -2681,7 +3095,10 @@
       "types": [
         7
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 113,
@@ -2694,7 +3111,10 @@
         13,
         6
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 114,
@@ -2706,7 +3126,10 @@
       "types": [
         18
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 115,
@@ -2723,7 +3146,10 @@
         56,
         77,
         119
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 116,
@@ -2739,7 +3165,10 @@
       "combos": [
         11,
         56
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 117,
@@ -2756,7 +3185,10 @@
         9,
         23,
         118
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 118,
@@ -2771,7 +3203,10 @@
       ],
       "combos": [
         117
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 119,
@@ -2793,6 +3228,11 @@
         103,
         108,
         115
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": [
+        1
       ]
     },
     {
@@ -2810,7 +3250,10 @@
         3,
         55,
         59
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 121,
@@ -2825,7 +3268,10 @@
       ],
       "combos": [
         59
-      ]
+      ],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 122,
@@ -2837,7 +3283,10 @@
       "types": [
         7
       ],
-      "combos": []
+      "combos": [],
+      "requires": [],
+      "requires-types": [],
+      "provides": []
     },
     {
       "id": 123,
@@ -2852,6 +3301,13 @@
       ],
       "combos": [
         64
+      ],
+      "requires": [],
+      "requires-types": [
+        5
+      ],
+      "provides": [
+        1
       ]
     }
   ]
