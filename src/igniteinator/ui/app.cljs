@@ -8,6 +8,7 @@
             [igniteinator.ui.pages.cards-page :refer [cards-page]]
             [igniteinator.ui.pages.display-setup-page :refer [display-setup-page]]
             [igniteinator.ui.pages.epic-pages :refer [display-stack-page epic-page trash-page]]
+            [igniteinator.ui.pages.randomizer-data-page :refer [randomizer-data-page]]
             [igniteinator.ui.pages.setups-page :refer [setups-page]]
             [igniteinator.ui.singletons.caching-progress :refer [caching-progress]]
             [igniteinator.ui.singletons.reload-snackbar :refer [reload-snackbar]]
@@ -25,7 +26,8 @@
       :display-setup [display-setup-page]
       :epic [epic-page]
       :epic/display-stack [display-stack-page]
-      :epic/trash [trash-page])))
+      :epic/trash [trash-page]
+      :randomizer/data [randomizer-data-page])))
 
 (defn content []
   (let [mode (<sub :mode)]

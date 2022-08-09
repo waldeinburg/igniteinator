@@ -68,4 +68,6 @@
                              :first-transition-in? true}
    :card-load-state         {:en nil}
    :cards                   nil
+   :types                   nil
+   :effects                 nil
    :combos-set              nil})

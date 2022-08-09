@@ -102,12 +102,14 @@
     cards]
    ;; Default tooltip and on-click is to show card details.
    (let [on-click-fn     (cond
+                           (false? on-click-prop) (constantly nil)
                            on-click-prop (fn [_] on-click-prop)
                            on-click-fn-prop on-click-fn-prop
                            :else (fn [card]
                                    #(>evt :show-card-details cards (:idx card) :page/push)))
          tooltip-fn      (cond
-                           (not (nil? tooltip-prop)) (fn [_] tooltip-prop)
+                           (false? tooltip-prop) (constantly nil)
+                           tooltip-prop (fn [_] tooltip-prop)
                            tooltip-fn-prop tooltip-fn-prop
                            :else (fn [card]
                                    (if (not-empty (:combos card))

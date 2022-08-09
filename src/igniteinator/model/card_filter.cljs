@@ -33,4 +33,5 @@
                            ;; or the Kickstarter setting is set for the box.
                            (= :ks bs)))))
    :type          (fn [type]
-                    #(contains? (:types %) type))})
+                    #(contains? (:types %) type))
+   :not-starter   (fn [] #(not (:starter %)))})

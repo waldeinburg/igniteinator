@@ -95,6 +95,7 @@
         :mode :ready
         :boxes (id-map boxes)
         :types (id-map types)
+        :effects (id-map (:effects result))
         :cards (id-map cards)
         :combos-set (:combos result)
         :setups (id-map (:setups result)))

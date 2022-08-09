@@ -580,3 +580,11 @@
                   preposition " " (-> stack-idx stacks :name)))))))]
   (reg-history-title-sub :epic/undo-title :undo-history)
   (reg-history-title-sub :epic/redo-title :redo-history))
+
+(reg-sub-db :effects-map [:effects])
+
+(reg-sub
+  :randomizer/cards
+  :<- [:cards :all [{:key :not-starter}] [{:key :name, :order :asc}]]
+  (fn [cards _]
+    cards))
