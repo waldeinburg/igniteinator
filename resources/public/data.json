@@ -159,6 +159,10 @@
     {
       "id": 2,
       "name": "knock-down"
+    },
+    {
+      "id": 3,
+      "name": "push"
     }
   ],
   "setups": [
@@ -1072,7 +1076,8 @@
       "requires": [],
       "requires-types": [],
       "provides": [
-        2
+        2,
+        3
       ]
     },
     {
@@ -1109,7 +1114,9 @@
         94
       ],
       "requires": [],
-      "requires-types": [],
+      "requires-types": [
+        21
+      ],
       "provides": []
     },
     {
@@ -1127,7 +1134,9 @@
       ],
       "requires": [],
       "requires-types": [],
-      "provides": []
+      "provides": [
+        3
+      ]
     },
     {
       "id": 9,
@@ -1146,7 +1155,9 @@
       ],
       "requires": [],
       "requires-types": [],
-      "provides": []
+      "provides": [
+        1
+      ]
     },
     {
       "id": 10,
@@ -1226,7 +1237,9 @@
       ],
       "combos": [],
       "requires": [],
-      "requires-types": [],
+      "requires-types": [
+        15
+      ],
       "provides": []
     },
     {
@@ -1327,7 +1340,9 @@
       ],
       "combos": [],
       "requires": [],
-      "requires-types": [],
+      "requires-types": [
+        22
+      ],
       "provides": []
     },
     {
@@ -1378,6 +1393,7 @@
       "combos": [],
       "requires": [],
       "requires-types": [],
+      "requires-additional-of-type": true,
       "provides": []
     },
     {
@@ -1483,7 +1499,9 @@
         106
       ],
       "requires": [],
-      "requires-types": [],
+      "requires-types": [
+        22
+      ],
       "provides": []
     },
     {
@@ -1536,7 +1554,9 @@
       ],
       "combos": [],
       "requires": [],
-      "requires-types": [],
+      "requires-types": [
+        15
+      ],
       "provides": []
     },
     {
@@ -1592,7 +1612,9 @@
       ],
       "requires": [],
       "requires-types": [],
-      "provides": []
+      "provides": [
+        2
+      ]
     },
     {
       "id": 34,
@@ -1778,7 +1800,9 @@
       "combos": [],
       "requires": [],
       "requires-types": [],
-      "provides": []
+      "provides": [
+        1
+      ]
     },
     {
       "id": 44,
@@ -1936,7 +1960,9 @@
       ],
       "requires": [],
       "requires-types": [],
-      "provides": []
+      "provides": [
+        1
+      ]
     },
     {
       "id": 52,
@@ -1997,7 +2023,9 @@
       ],
       "requires": [],
       "requires-types": [],
-      "provides": []
+      "provides": [
+        2
+      ]
     },
     {
       "id": 55,
@@ -2023,7 +2051,9 @@
       ],
       "requires": [],
       "requires-types": [],
-      "provides": []
+      "provides": [
+        1
+      ]
     },
     {
       "id": 56,
@@ -2047,7 +2077,12 @@
         116
       ],
       "requires": [],
-      "requires-types": [],
+      "requires-types": [
+        17
+      ],
+      "requires-types-except": [
+        30
+      ],
       "provides": [
         1
       ]
@@ -2068,7 +2103,9 @@
         94
       ],
       "requires": [],
-      "requires-types": [],
+      "requires-types": [
+        21
+      ],
       "provides": []
     },
     {
@@ -2108,7 +2145,9 @@
       ],
       "requires": [],
       "requires-types": [],
-      "provides": []
+      "provides": [
+        1
+      ]
     },
     {
       "id": 60,
@@ -2219,7 +2258,9 @@
       ],
       "requires": [],
       "requires-types": [],
-      "provides": []
+      "provides": [
+        1
+      ]
     },
     {
       "id": 65,
@@ -2236,7 +2277,9 @@
         86
       ],
       "requires": [],
-      "requires-types": [],
+      "requires-types": [
+        21
+      ],
       "provides": []
     },
     {
@@ -2351,7 +2394,9 @@
       ],
       "requires": [],
       "requires-types": [],
-      "provides": []
+      "provides": [
+        1
+      ]
     },
     {
       "id": 72,
@@ -2464,7 +2509,8 @@
       "requires": [],
       "requires-types": [],
       "provides": [
-        1
+        1,
+        2
       ]
     },
     {
@@ -2516,6 +2562,10 @@
       ],
       "requires": [],
       "requires-types": [],
+      "requires-types-or": [
+        4,
+        21
+      ],
       "provides": []
     },
     {
@@ -2628,7 +2678,9 @@
         83
       ],
       "requires": [],
-      "requires-types": [],
+      "requires-types": [
+        21
+      ],
       "provides": []
     },
     {
@@ -2730,7 +2782,9 @@
       "combos": [],
       "requires": [],
       "requires-types": [],
-      "provides": []
+      "provides": [
+        1
+      ]
     },
     {
       "id": 92,
@@ -2807,7 +2861,9 @@
       ],
       "requires": [],
       "requires-types": [],
-      "provides": []
+      "provides": [
+        1
+      ]
     },
     {
       "id": 96,
@@ -2940,6 +2996,10 @@
         119
       ],
       "requires": [],
+      "requires-or": [
+        2,
+        3
+      ],
       "requires-types": [],
       "provides": []
     },
@@ -3003,7 +3063,9 @@
         27
       ],
       "requires": [],
-      "requires-types": [],
+      "requires-types": [
+        15
+      ],
       "provides": []
     },
     {
@@ -3047,7 +3109,9 @@
       ],
       "requires": [],
       "requires-types": [],
-      "provides": []
+      "provides": [
+        1
+      ]
     },
     {
       "id": 109,
@@ -3149,7 +3213,10 @@
       ],
       "requires": [],
       "requires-types": [],
-      "provides": []
+      "provides": [
+        1,
+        2
+      ]
     },
     {
       "id": 116,
@@ -3229,7 +3296,9 @@
         108,
         115
       ],
-      "requires": [],
+      "requires": [
+        2
+      ],
       "requires-types": [],
       "provides": [
         1
@@ -3253,7 +3322,9 @@
       ],
       "requires": [],
       "requires-types": [],
-      "provides": []
+      "provides": [
+        1
+      ]
     },
     {
       "id": 121,
@@ -3271,7 +3342,9 @@
       ],
       "requires": [],
       "requires-types": [],
-      "provides": []
+      "provides": [
+        1
+      ]
     },
     {
       "id": 122,
@@ -3307,7 +3380,8 @@
         5
       ],
       "provides": [
-        1
+        1,
+        3
       ]
     }
   ]
