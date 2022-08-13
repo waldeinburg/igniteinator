@@ -10,6 +10,7 @@
                  [org.clojure/clojurescript "1.11.4"]
                  [funcool/promesa "8.0.450"]
                  [cljs-http "0.1.46"]
+                 [funcool/bide "1.7.0"]
                  [re-frame "1.2.0"
                   :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server]]
                  [day8.re-frame/http-fx "0.2.4"]

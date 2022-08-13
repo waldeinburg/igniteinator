@@ -11,7 +11,8 @@
   ;; Clicking accept to ignore certificate works for main page but not for service worker.
   ;; Avoid launching Chrome with a shell script with --ignore-certificate-errors.
   :ring-server-options {:keystore     "dev-keystore.jks"    ; git-ignored symlink
-                        :key-password "password"}}
+                        :key-password "password"}
+  :ring-handler        igniteinator.app-server/handler}
 {:main            igniteinator.core
  :dev?            true
  :debug?          true

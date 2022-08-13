@@ -1,0 +1,12 @@
+RewriteEngine On
+
+# Trailing slash unless it's a file.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !/$
+RewriteRule (.*) %{REQUEST_URI}/ [R=301,L]
+
+# Redirect index.html to root.
+RewriteRule ^index\.html$ / [R=301,L]
+
+# Routing.
+RewriteRule ^(cards|setups|epic)/?$ index.html [L]
