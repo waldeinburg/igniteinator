@@ -1,7 +1,6 @@
 (ns igniteinator.cofx
   (:require [igniteinator.util.environment :as environment]
-            [re-frame.core :refer [reg-cofx]]
-            [cljs-http.client :refer [parse-url]]))
+            [re-frame.core :refer [reg-cofx]]))
 
 (reg-cofx
   :scroll-top
@@ -12,12 +11,6 @@
                   (.. js/document -body -scrollTop)
                   ;; Others
                   (.. js/document -documentElement -scrollTop)))))
-
-(reg-cofx
-  :query-params
-  (fn [cofx _]
-    (assoc cofx :query-params
-                (-> js/self .-location.href parse-url :query-params))))
 
 (reg-cofx :standalone-mode?
   (fn [cofx _]

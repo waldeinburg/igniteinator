@@ -28,24 +28,34 @@
 
 (reg-event-fx
   :init-db
-  [(inject-cofx :query-params)
-   (inject-cofx :store)]
-  (fn [{:keys [query-params store]} _]
-    (let [db (if (or
-                   (empty? (:ids query-params))
-                   (not (re-matches #"[1-9][0-9]*(,[1-9][0-9]*)*" (:ids query-params))))
-               default-db
-               (let [ids (map js/parseInt
-                           (s/split (:ids query-params) #","))]
-                 (assoc-ins default-db
-                   [:current-page] :cards
-                   [:cards-page :base] ids
-                   [:cards-page :card-selection :ids] (set ids))))]
-      {:db (-> db
-             ;; Don't put language in options map. We often need to access it in events.
-             (update :language #(or (:language store) %))
-             (update :options #(merge % (:options store)))
-             (update :epic #(merge % (:epic store))))})))
+  [(inject-cofx :store)]
+  (fn [{:keys [store]} _]
+    {:db (-> default-db
+           ;; Don't put language in options map. We often need to access it in events.
+           (update :language #(or (:language store) %))
+           (update :options #(merge % (:options store)))
+           (update :epic #(merge % (:epic store))))}))
+
+(reg-event-fx
+  :start-router
+  (fn [_ _]
+    {:fx [[:start-router]]}))
+
+(reg-event-db
+  :route
+  (fn [db [_ name _ query]]
+    (if (and
+          (#{:cards :front} name)
+          (:ids query)
+          (re-matches #"[1-9][0-9]*(,[1-9][0-9]*)*" (:ids query)))
+      (let [ids (map js/parseInt
+                  (s/split (:ids query) #","))]
+        (assoc-ins db
+          [:current-page] :cards
+          [:cards-page :base] ids
+          [:cards-page :card-selection :ids] (set ids)))
+      (assoc db :current-page name))))
+
 (reg-event-db-assoc :set-mode)
 
 (reg-event-db-assoc :set-waiting?)

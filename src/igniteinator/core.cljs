@@ -24,6 +24,7 @@
 
 (defn init [app-element]
   (rf/dispatch-sync [:init-db])
+  (rf/dispatch-sync [:start-router])
   (>evt :load-data)
   (reg-sw)
   (reg-beforeinstallprompt-event)

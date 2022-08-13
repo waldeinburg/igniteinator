@@ -1,10 +1,11 @@
 (ns igniteinator.fx
-  (:require [igniteinator.util.message :as msg]
+  (:require-macros [igniteinator.util.debug :refer [dbg]])
+  (:require [akiroz.re-frame.storage :as storage]
+            [igniteinator.router :as router]
+            [igniteinator.util.message :as msg]
             [igniteinator.util.re-frame :refer [>evt]]
-            [re-frame.core :refer [reg-fx]]
-            [akiroz.re-frame.storage :as storage]
-            [promesa.core :as p])
-  (:require-macros [igniteinator.util.debug :refer [dbg]]))
+            [promesa.core :as p]
+            [re-frame.core :refer [reg-fx]]))
 
 (defn- reload []
   (.. js/window -location reload))
@@ -19,6 +20,10 @@
   :igniteinator/store
   {:fx   :store
    :cofx :store})
+
+(reg-fx
+  :start-router
+  router/start)
 
 (reg-fx
   :scroll-to
