@@ -6,7 +6,7 @@
   ;;:open-url            false
   }
 {:main            igniteinator.service-worker
- ;; Service workers doesn't work without optimizations, because theres no document.write available.
+ ;; Service workers doesn't work without optimizations, because there's no document.write available.
  ;; Like setting :auto-bundle :webpack, but avoid :clojure-defines {"cljs.core/*global*" "window"}
  ;; It seems to be impossible to override it, even with :extra-closure-defines.
  ;; Setting :closure-defines instead of :extra-closure-defines does not stop figwheel from adding other values.

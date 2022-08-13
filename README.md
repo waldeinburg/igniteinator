@@ -36,17 +36,23 @@ To ensure that the service worker is functioning without bypassing security a ce
 generated and registered. The process needs to be repeated after a couple of months (the symptom
 is that Chrome complains that the server cannot be reached).
 
-Run:
+Delete the old certificate, if any:
+
+    rm -r ~/_certifiable_certs/localhost-.../
+
+Generate a new certificate for localhost:
 
     lein run -m certifiable.main
 
-Then symlink to the generated file referenced in `main.cljs.edn`:
+Then symlink to the generated file referenced in `main.cljs.edn`.
 
-    ln -s /home/.../_certifiable_certs/.../dev-server.jks dev-keystore.jks
+    rm -f dev-keystore.jks && ln -s ~/_certifiable_certs/localhost-.../dev-server.jks dev-keystore.jks
 
-In Chrome: Go to [Settings - Manage certificates](chrome://settings/certificates), choose
-`Authorities`, then click `Import` and
-choose `/home/.../_certifiable_certs/.../dev-root-trust-this.pem`.
+In Chrome: Go to [Settings - Manage certificates](chrome://settings/certificates) and choose
+`Authorities`. If you are renewing the certificate, first delete the `org-Certifiable dev root`
+authority. Then click `Import` and choose
+`/home/.../_certifiable_certs/.../dev-root-trust-this.pem`, choose `Trust this certificate for
+identifying websites` and click `OK`.
 
 Forget adding the certificate in Android; it doesn't work.
 
