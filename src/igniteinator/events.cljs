@@ -37,9 +37,9 @@
            (update :epic #(merge % (:epic store))))}))
 
 (reg-event-fx
-  :start-router
+  :router/start
   (fn [_ _]
-    {:fx [[:start-router]]}))
+    {:fx [[:router/start]]}))
 
 (reg-event-db
   :route
@@ -221,13 +221,12 @@
                :count    count
                :progress progress})))
 
-;; Push page onto history stack.
 (reg-event-fx
   :scroll-to
   (fn [_ [_ n]]
     {:fx [[:scroll-to n]]}))
 
-;; Replace current page, not changing the history stack.
+;; Push page onto history stack.
 (reg-event-fx
   :page/push
   [(inject-cofx :scroll-top)]
@@ -238,7 +237,7 @@
                                        :scroll-top scroll-top}))
      :fx [[:scroll-to-top]]}))
 
-;; Set current page, clearing the history stack.
+;; Replace current page, not changing the history stack.
 (reg-event-fx
   :page/replace
   [(inject-cofx :scroll-top)]
@@ -246,15 +245,17 @@
     {:db (assoc db :current-page key)
      :fx [[:scroll-to-top]]}))
 
-;; Pop page from history stack.
+;; Set current page, clearing the history stack.
 (reg-event-fx
   :page/set
   [(inject-cofx :scroll-top)]
   (fn [{:keys [db]} [_ key]]
     {:db (assoc db :current-page key
                    :page-history [])
-     :fx [[:scroll-to-top]]}))
+     :fx [[:router/navigate key]
+          [:scroll-to-top]]}))
 
+;; Pop page from history stack.
 (reg-event-fx
   :page/pop
   (fn [{:keys [db]} _]

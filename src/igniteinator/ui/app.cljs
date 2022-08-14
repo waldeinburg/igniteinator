@@ -8,6 +8,7 @@
             [igniteinator.ui.pages.cards-page :refer [cards-page]]
             [igniteinator.ui.pages.display-setup-page :refer [display-setup-page]]
             [igniteinator.ui.pages.epic-pages :refer [display-stack-page epic-page trash-page]]
+            [igniteinator.ui.pages.front-page :refer [front-page]]
             [igniteinator.ui.pages.randomizer-data-page :refer [randomizer-data-page]]
             [igniteinator.ui.pages.setups-page :refer [setups-page]]
             [igniteinator.ui.singletons.caching-progress :refer [caching-progress]]
@@ -20,6 +21,7 @@
   ;; TODO: add router here?
   (let [page (<sub :current-page)]
     (case page
+      :front [front-page]
       :cards [cards-page]
       :card-details [card-details-page]
       :setups [setups-page]

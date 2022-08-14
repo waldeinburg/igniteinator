@@ -22,8 +22,18 @@
    :cofx :store})
 
 (reg-fx
-  :start-router
-  router/start)
+  :router/start
+  router/start!)
+
+(reg-fx
+  :router/navigate
+  (fn [id params query]
+    (router/navigate! id params query)))
+
+(reg-fx
+  :router/replace
+  (fn [[id params query]]
+    (router/replace! id params query)))
 
 (reg-fx
   :scroll-to

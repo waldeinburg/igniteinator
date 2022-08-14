@@ -1,20 +1,20 @@
 (ns ^:figwheel-hooks igniteinator.core
+  (:require-macros [igniteinator.util.debug :refer [when-debug when-dev]])
   (:require
     ;; Re-frame registrations BEGIN
-    [igniteinator.events]
-    [igniteinator.subs]
-    [igniteinator.fx]
-    [igniteinator.cofx]
     [day8.re-frame.http-fx]
-    ;; Re-frame registrations END
-    [igniteinator.ui.app :refer [app]]
-    [igniteinator.util.re-frame :refer [>evt]]
-    [igniteinator.service-worker-client :refer [reg-sw]]
-    [igniteinator.ui.singletons.install-button :refer [reg-beforeinstallprompt-event]]
     [goog.dom :as gdom]
+    [igniteinator.cofx]
+    [igniteinator.events]
+    [igniteinator.fx]
+    ;; Re-frame registrations END
+    [igniteinator.service-worker-client :refer [reg-sw]]
+    [igniteinator.subs]
+    [igniteinator.ui.app :refer [app]]
+    [igniteinator.ui.singletons.install-button :refer [reg-beforeinstallprompt-event]]
+    [igniteinator.util.re-frame :refer [>evt]]
     [re-frame.core :as rf]
-    [reagent.dom :as rdom])
-  (:require-macros [igniteinator.util.debug :refer [when-debug when-dev]]))
+    [reagent.dom :as rdom]))
 
 (defn get-app-element []
   (gdom/getElement "app"))
@@ -24,7 +24,7 @@
 
 (defn init [app-element]
   (rf/dispatch-sync [:init-db])
-  (rf/dispatch-sync [:start-router])
+  (rf/dispatch-sync [:router/start])
   (>evt :load-data)
   (reg-sw)
   (reg-beforeinstallprompt-event)
