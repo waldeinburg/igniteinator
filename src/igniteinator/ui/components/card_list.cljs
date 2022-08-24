@@ -106,7 +106,7 @@
                            on-click-prop (fn [_] on-click-prop)
                            on-click-fn-prop on-click-fn-prop
                            :else (fn [card]
-                                   #(>evt :show-card-details cards (:idx card) :page/push)))
+                                   #(>evt :show-card-details cards (:idx card) :page/to-sub-page)))
          tooltip-fn      (cond
                            (false? tooltip-prop) (constantly nil)
                            tooltip-prop (fn [_] tooltip-prop)

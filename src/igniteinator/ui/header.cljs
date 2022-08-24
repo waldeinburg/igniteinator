@@ -1,29 +1,31 @@
 (ns igniteinator.ui.header
-  (:require [igniteinator.text :refer [txt]]
-            [igniteinator.util.re-frame :refer [<sub >evt]]
-            [igniteinator.util.reagent :refer [add-children]]
-            [igniteinator.constants :as const]
-            [igniteinator.ui.hooks :refer [desktop-menu?-hook show-title-in-bar?-hook]]
+  (:require [igniteinator.constants :as const]
+            [igniteinator.router :refer [resolve-to-href]]
+            [igniteinator.text :refer [txt]]
+            [igniteinator.ui.components.link :refer [external-link internal-link]]
             [igniteinator.ui.components.menu-button :refer [menu-button]]
-            [igniteinator.ui.components.link :refer [external-link]]
-            [igniteinator.ui.singletons.share-button :refer [share-button]]
+            [igniteinator.ui.hooks :refer [desktop-menu?-hook show-title-in-bar?-hook]]
+            [igniteinator.ui.settings.settings-menu :refer [settings-button]]
             [igniteinator.ui.singletons.install-button :refer [install-button]]
             [igniteinator.ui.singletons.language-menu :refer [language-menu]]
-            [igniteinator.ui.settings.settings-menu :refer [settings-button]]
-            [reagent-mui.material.box :refer [box]]
-            [reagent-mui.material.typography :refer [typography]]
-            [reagent-mui.material.app-bar :refer [app-bar]]
-            [reagent-mui.material.toolbar :refer [toolbar]]
-            [reagent-mui.material.button :refer [button]]
+            [igniteinator.ui.singletons.share-button :refer [share-button]]
+            [igniteinator.util.event :refer [prevent-default]]
+            [igniteinator.util.re-frame :refer [<sub >evt]]
+            [igniteinator.util.reagent :refer [add-children]]
             [reagent-mui.icons.menu :refer [menu] :rename {menu menu-icon}]
-            [reagent-mui.material.menu-item :refer [menu-item]]))
+            [reagent-mui.material.app-bar :refer [app-bar]]
+            [reagent-mui.material.box :refer [box]]
+            [reagent-mui.material.button :refer [button]]
+            [reagent-mui.material.menu-item :refer [menu-item]]
+            [reagent-mui.material.toolbar :refer [toolbar]]
+            [reagent-mui.material.typography :refer [typography]]))
 
 (def main-menu-list [[:cards :cards-page-title]
                      [:setups :setups-page-title]
                      [:epic :epic/page-title]])
 
 (defn navigate [page-key]
-  (>evt :page/set page-key))
+  (>evt :page/navigate page-key))
 
 (defn if-desktop-menu [f]
   [:f> (fn []
@@ -41,9 +43,16 @@
            (item-fn page-key (txt title-key) active?)))
     main-menu-list))
 
+(defn front-link []
+  [internal-link :front
+   {:color     :black
+    :underline :none}
+   "Igniteinator"])
+
 (defn title []
   [box
-   [typography {:component "h1", :variant "h4"} "Igniteinator"]
+   [typography {:component "h1", :variant "h4"}
+    [front-link]]
    [:div.subtitle "– " (txt :subtitle) " " [external-link const/ignite-link "Ignite"]]])
 
 (defn bar-title []
@@ -77,11 +86,11 @@
         (main-menu-items current-page
           (fn [page-key title active?]
             [menu-item {:selected active?
-                        :on-click (if active?
-                                    on-close
-                                    (fn []
-                                      (on-close)
-                                      (navigate page-key)))}
+                        :href     (resolve-to-href page-key)
+                        :on-click (fn [event]
+                                    (prevent-default event)
+                                    (on-close)
+                                    (navigate page-key))}
              title])))]]))
 
 (defn main-menu-desktop []
@@ -90,12 +99,14 @@
      (add-children
        (main-menu-items current-page
          (fn [page-key title active?]
-           [button {:role     :menuitem,
+           [button {:href     (resolve-to-href page-key)
+                    :role     :menuitem,
                     :color    (if active?
                                 :secondary
                                 :primary)
-                    :on-click (if (not active?)
-                                #(navigate page-key))}
+                    :on-click (fn [event]
+                                (prevent-default event)
+                                (navigate page-key))}
             title])))]))
 
 (defn header []

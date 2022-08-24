@@ -5,16 +5,20 @@
             [igniteinator.util.message :as msg]
             [igniteinator.util.re-frame :refer [>evt]]
             [promesa.core :as p]
-            [re-frame.core :refer [reg-fx]]))
+            [re-frame.core :refer [reg-fx]]
+            [reagent.core :as r]))
 
 (defn- reload []
   (.. js/window -location reload))
 
 (defn- scroll-to [n]
-  ;; Safari
-  (set! (.. js/document -body -scrollTop) n)
-  ;; Others
-  (set! (.. js/document -documentElement -scrollTop) n))
+  ;; Used after page shift. Important that the DOM is ready.
+  (r/after-render
+    (fn []
+      ;; Safari
+      (set! (.. js/document -body -scrollTop) n)
+      ;; Others
+      (set! (.. js/document -documentElement -scrollTop) n))))
 
 (storage/reg-co-fx!
   :igniteinator/store
@@ -27,7 +31,7 @@
 
 (reg-fx
   :router/navigate
-  (fn [id params query]
+  (fn [[id params query]]
     (router/navigate! id params query)))
 
 (reg-fx

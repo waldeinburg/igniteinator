@@ -11,3 +11,6 @@
 
 (defn checked? [event]
   (.-checked (target event)))
+
+(defn prevent-default [event]
+  (.preventDefault event))

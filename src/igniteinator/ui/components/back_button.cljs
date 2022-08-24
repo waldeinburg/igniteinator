@@ -1,15 +1,15 @@
 (ns igniteinator.ui.components.back-button
-  (:require [igniteinator.util.re-frame :refer [<sub >evt]]
-            [igniteinator.text :refer [txt-c]]
+  (:require [igniteinator.text :refer [txt-c]]
             [igniteinator.ui.components.tooltip :refer [tooltip]]
-            [reagent-mui.material.button :refer [button]]
-            [reagent-mui.icons.arrow-back :refer [arrow-back]]))
+            [igniteinator.util.re-frame :refer [<sub >evt]]
+            [reagent-mui.icons.arrow-back :refer [arrow-back]]
+            [reagent-mui.material.button :refer [button]]))
 
 (defn back-button [{:as button-props}]
-  (if (<sub :page-history-not-empty?)
+  (if (<sub :back-page)
     [tooltip (txt-c :back)
      [button (merge
                {:variant  :outlined
-                :on-click #(>evt :page/pop)}
+                :on-click #(>evt :page/back)}
                button-props)
       [arrow-back]]]))

@@ -3,6 +3,7 @@
 
 (def default-db
   {
+   :app-navigating?         false
    :language                constants/default-language
    :options                 {:boxes         nil             ; set when loading
                              :size          1,
@@ -15,8 +16,9 @@
    :reload-snackbar         {:open?  false
                              :new-sw nil}
    :caching-progress        nil
-   :current-page            :cards
-   :page-history            []
+   :current-page            :front
+   :back-page               nil
+   :back-scroll-top         nil
    :language-menu-open?     false
    :settings-menu-open?     false
    :share                   {:dialog-open?   false
@@ -37,12 +39,15 @@
                              :prev-idx             nil
                              :first-transition-in? true
                              :card-ids             nil
+                             :ids-query-str        nil
                              :sortings             nil}
    :setups-filter           {:operator  :some
                              :selection nil}                ; filled when data is loaded
    :display-setup-page      {:idx                  nil
                              :prev-idx             nil
                              :first-transition-in? true
+                             :setup-ids            nil
+                             :ids-query-str        nil
                              :sortings             nil}
    :epic                    {:setups             nil
                              :show-stack-info?   false

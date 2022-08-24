@@ -44,9 +44,9 @@
     [box {:ml 2}
      [setups-filter-selection]]]])
 
-(defn setup-list-item [s]
+(defn setup-list-item [setups s]
   [list-item {:button   true
-              :on-click #(>evt :display-setup (:idx s))}
+              :on-click #(>evt :display-setup setups (:idx s))}
    [list-item-text {:primary (:name s)}]])
 
 (defn setups-list []
@@ -63,12 +63,12 @@
       (if includes-recommended-starter-set?
         [:<>
          (let [s (first setups-with-idxs)]
-           ^{:key (:id s)} [setup-list-item s])
+           ^{:key (:id s)} [setup-list-item setups-with-idxs s])
          [divider]])
       (doall
         (for [s main-list]
           ^{:key (:id s)}
-          [setup-list-item s]))])])
+          [setup-list-item setups-with-idxs s]))])])
 
 (defn setups-page []
   [page (txt :setups-page-title)

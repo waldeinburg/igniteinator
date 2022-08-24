@@ -33,9 +33,7 @@
   (fn [[setting translating?] _]
     (or (= :always setting) (and (= :translating setting) translating?))))
 
-(reg-sub :page-history-not-empty?
-  (fn [db _]
-    (not-empty (:page-history db))))
+(reg-sub-db :back-page)
 
 (reg-sub-db :main-menu-mobile/open?)
 (reg-sub-db :language-menu-open?)
@@ -303,6 +301,11 @@
   (fn [setups-map _]
     (vals setups-map)))
 (reg-sub
+  :setups-by-ids
+  :<- [:setups-map]
+  (fn [setups-map [_ ids]]
+    (vals (select-keys setups-map ids))))
+(reg-sub
   :setups-sorted
   :<- [:setups]
   (fn [setups _]
@@ -364,15 +367,23 @@
     (let [setup (setups id)]
       (<sub :cards (:cards setup) [] (or page-sortings default-order-sortings)))))
 
-(defn- reg-setup-page-name [name idx-sub]
-  (reg-sub
-    name
-    :<- [:setups-filtered-and-sorted]
-    :<- [idx-sub]
-    (fn [[setups idx] _]
-      (:name (get setups idx)))))
-(reg-setup-page-name :display-setup-page/current-setup-name :display-setup-page/idx)
-(reg-setup-page-name :display-setup-page/previous-setup-name :display-setup-page/prev-idx)
+(reg-sub-db :display-setup-page/setup-ids)
+(reg-sub
+  :display-setup-page/setups
+  :<- [:display-setup-page/setup-ids]
+  (fn [setup-ids _]
+    (<sub :setups-by-ids setup-ids)))
+(let [reg-setup-page-name
+      (fn [name idx-sub]
+        (reg-sub
+          name
+          :<- [:setups-map]
+          :<- [:display-setup-page/setup-ids]
+          :<- [idx-sub]
+          (fn [[setups-map setup-ids idx] _]
+            (-> setup-ids (get idx) setups-map :name))))]
+  (reg-setup-page-name :display-setup-page/current-setup-name :display-setup-page/idx)
+  (reg-setup-page-name :display-setup-page/previous-setup-name :display-setup-page/prev-idx))
 
 (reg-sub
   :setup/required-boxes
@@ -403,7 +414,7 @@
   :<- [:share/cards]
   (fn [cards _]
     (if cards
-      (str constants/page-url "?ids=" (s/join "," (sort (map :id cards)))))))
+      (str constants/page-url "?ids=" (s/join "-" (sort (map :id cards)))))))
 (reg-sub
   :share/names
   :<- [:share/cards]

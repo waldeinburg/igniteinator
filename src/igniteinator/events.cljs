@@ -1,23 +1,26 @@
 (ns igniteinator.events
   (:require [ajax.core :as ajax]
             [clojure.string :as s]
-            [clojure.string :as str]
             [igniteinator.constants :as constants]
             [igniteinator.db :refer [default-db]]
             [igniteinator.model.setups :as setups]
+            [igniteinator.router :refer [route->state]]
             [igniteinator.text :refer [txt]]
             [igniteinator.util.re-frame :refer [assoc-db assoc-db-and-store assoc-ins assoc-ins-db
                                                 assoc-ins-db-and-store reg-event-db-assoc
                                                 reg-event-db-assoc-store reg-event-set-option update-in-db-and-store]]
+            [igniteinator.util.url :as url]
             [re-frame.core :refer [inject-cofx reg-event-db reg-event-fx]]))
 
-(defn- reg-nav-page-event-set-idx [name root]
-  (reg-event-db
+(defn- reg-nav-page-event-set-idx [name root param-fn query-fn]
+  (reg-event-fx
     name
-    (fn [db [_ idx]]
-      (update db root #(assoc % :prev-idx (:idx %)
-                                :idx idx
-                                :first-transition-in? (not (:first-transition-in? %)))))))
+    (fn [{:keys [db]} [_ idx]]
+      (let [new-db (update db root #(assoc % :prev-idx (:idx %)
+                                             :idx idx
+                                             :first-transition-in? (not (:first-transition-in? %))))]
+        {:db       new-db
+         :dispatch [:page/replace-sub-page (:current-page new-db) (param-fn new-db) (query-fn new-db)]}))))
 (defn- nav-page-assoc-init [db root idx]
   (assoc-ins db
     [root :idx] idx
@@ -41,20 +44,19 @@
   (fn [_ _]
     {:fx [[:router/start]]}))
 
-(reg-event-db
+(reg-event-fx
   :route
-  (fn [db [_ name _ query]]
-    (if (and
-          (#{:cards :front} name)
-          (:ids query)
-          (re-matches #"[1-9][0-9]*(,[1-9][0-9]*)*" (:ids query)))
-      (let [ids (map js/parseInt
-                  (s/split (:ids query) #","))]
-        (assoc-ins db
-          [:current-page] :cards
-          [:cards-page :base] ids
-          [:cards-page :card-selection :ids] (set ids)))
-      (assoc db :current-page name))))
+  (fn [{:keys [db]} [_ name params query]]
+    (if (:app-navigating? db)
+      ;; The :app-navigating? key is set by our own :page/* events to tell that we have already changed state. This way
+      ;; we avoid calculating state from query params all the time.
+      {:db (assoc db :app-navigating? false)}
+      ;; Not navigating internally.
+      (if (and (= :front name) (:ids query))
+        ;; Share link. Migrate old style comma query and redirect.
+        {:router/replace [:cards nil (update query :ids #(s/replace % #"," "-"))]}
+        ;; Just plain navigating. Get state.
+        {:db (route->state db name params query)}))))
 
 (reg-event-db-assoc :set-mode)
 
@@ -226,46 +228,70 @@
   (fn [_ [_ n]]
     {:fx [[:scroll-to n]]}))
 
-;; Push page onto history stack.
-(reg-event-fx
-  :page/push
-  [(inject-cofx :scroll-top)]
-  (fn [{:keys [db scroll-top]} [_ key]]
-    {:db (-> db
-           (assoc :current-page key)
-           (update :page-history conj {:page       (:current-page db)
-                                       :scroll-top scroll-top}))
-     :fx [[:scroll-to-top]]}))
+(defn set-navigating [fx {:keys [db]} name]
+  (assoc fx :db (assoc db
+                  :app-navigating? true
+                  :current-page name)))
 
-;; Replace current page, not changing the history stack.
 (reg-event-fx
   :page/replace
-  [(inject-cofx :scroll-top)]
-  (fn [{:keys [db]} [_ key]]
-    {:db (assoc db :current-page key)
-     :fx [[:scroll-to-top]]}))
+  (fn [cofx _ [_ name]]
+    (->
+      {:router/replace [name]}
+      (set-navigating cofx name))))
 
-;; Set current page, clearing the history stack.
 (reg-event-fx
-  :page/set
-  [(inject-cofx :scroll-top)]
-  (fn [{:keys [db]} [_ key]]
-    {:db (assoc db :current-page key
-                   :page-history [])
-     :fx [[:router/navigate key]
-          [:scroll-to-top]]}))
+  :page/navigate
+  (fn [cofx [_ name]]
+    (->
+      {:fx [[:router/navigate [name]]
+            [:scroll-to-top]]}
+      (set-navigating cofx name))))
 
-;; Pop page from history stack.
+(defn- sub-page-query [query back-page scroll-top]
+  (assoc query
+    :back back-page
+    :back-scroll-top scroll-top))
+
+;; Navigate to a sub-page, i.e. a page which have a back button and potentially navigates to other sub-pages which still
+;; has the same back-button.
 (reg-event-fx
-  :page/pop
-  (fn [{:keys [db]} _]
-    (let [hist (:page-history db)]
-      (if-let [{:keys [page scroll-top]} (first hist)]
-        {:db             (assoc db :current-page page
-                                   :page-history (rest hist))
-         ;; Don't use the fx directly but dispatch an event after a delay to let React rerender before scrolling.
-         ;; TODO: Create a non-race-condition method for this.
-         :dispatch-later {:ms 100 :dispatch [:scroll-to scroll-top]}}))))
+  :page/to-sub-page
+  [(inject-cofx :scroll-top)]
+  (fn [{{:keys [current-page]} :db
+        :keys                  [scroll-top]
+        :as                    cofx}
+       [_ name params query]]
+    (->
+      {:fx [[:router/navigate [name params (sub-page-query query current-page scroll-top)]]
+            [:scroll-to-top]]}
+      (set-navigating cofx name)
+      (update :db #(assoc %
+                     :back-page current-page
+                     :back-scroll-top scroll-top)))))
+
+(reg-event-fx
+  :page/to-other-sub-page
+  (fn [{{:keys [back-page back-scroll-top]} :db :as cofx} [_ name params query]]
+    (->
+      {:fx [[:router/navigate [name params (sub-page-query query back-page back-scroll-top)]]
+            [:scroll-to-top]]}
+      (set-navigating cofx name))))
+
+(reg-event-fx
+  :page/replace-sub-page
+  (fn [{{:keys [back-page back-scroll-top]} :db :as cofx} [_ name params query]]
+    (->
+      {:router/replace [name params (sub-page-query query back-page back-scroll-top)]}
+      (set-navigating cofx name))))
+
+(reg-event-fx
+  :page/back
+  (fn [{{:keys [back-page back-scroll-top]} :db :as cofx} _]
+    (->
+      {:fx [[:router/navigate [back-page]]
+            [:scroll-to back-scroll-top]]}
+      (set-navigating cofx back-page))))
 
 (reg-event-db
   :set-card-load-state
@@ -274,14 +300,28 @@
           id   (:id card)]
       (assoc-in db [:card-load-state lang id] state))))
 
-(reg-nav-page-event-set-idx :card-details-page/set-idx :card-details-page)
-(reg-event-fx
-  :show-card-details
-  (fn [{:keys [db]} [_ card-list idx navigate-event]]
-    {:db       (-> db
-                 (nav-page-assoc-init :card-details-page idx)
-                 (assoc-in [:card-details-page :card-ids] (mapv :id card-list)))
-     :dispatch [navigate-event :card-details]}))
+(let [get-params (fn [card] {:card-name (url/to-param-str (:name card))})]
+  (reg-nav-page-event-set-idx :card-details-page/set-idx :card-details-page
+    (fn [db]
+      (let [ids     (get-in db [:card-details-page :card-ids])
+            idx     (get-in db [:card-details-page :idx])
+            card-id (nth ids idx)]
+        (get-params (get (:cards db) card-id))))
+    (fn [db]
+      {:ids (get-in db [:card-details-page :ids-query-str])}))
+
+  (reg-event-fx
+    :show-card-details
+    (fn [{:keys [db]} [_ card-list idx navigate-event]]
+      (let [params        (get-params (nth card-list idx))
+            ids           (mapv :id card-list)
+            ids-query-str (url/to-query-array ids)]
+        {:db       (-> db
+                     (nav-page-assoc-init :card-details-page idx)
+                     (assoc-ins
+                       [:card-details-page :card-ids] ids
+                       [:card-details-page :ids-query-str] ids-query-str))
+         :dispatch [navigate-event :card-details params {:ids ids-query-str}]}))))
 
 (reg-event-db-assoc
   :cards-page.combos/set-dialog-open?)
@@ -331,12 +371,30 @@
   (fn [db [_ id set?]]
     (let [f (if set? conj disj)]
       (update-in db [:setups-filter :selection] f id))))
-(reg-nav-page-event-set-idx :display-setup-page/set-idx :display-setup-page)
-(reg-event-fx
-  :display-setup
-  (fn [{:keys [db]} [_ idx]]
-    {:db       (nav-page-assoc-init db :display-setup-page idx)
-     :dispatch [:page/push :display-setup]}))
+
+(let [get-params (fn [setup]
+                   {:setup-name (url/to-param-str (:name setup))})]
+  (reg-nav-page-event-set-idx :display-setup-page/set-idx :display-setup-page
+    (fn [db]
+      (let [ids      (get-in db [:display-setup-page :setup-ids])
+            idx      (get-in db [:display-setup-page :idx])
+            setup-id (nth ids idx)]
+        (get-params (get (:setups db) setup-id))))
+    (fn [db]
+      {:ids (get-in db [:display-setup-page :ids-query-str])}))
+
+  (reg-event-fx
+    :display-setup
+    (fn [{:keys [db]} [_ setups idx]]
+      (let [params        (get-params (nth setups idx))
+            ids           (mapv :id setups)
+            ids-query-str (url/to-query-array ids)]
+        {:db       (-> db
+                     (nav-page-assoc-init :display-setup-page idx)
+                     (assoc-ins
+                       [:display-setup-page :setup-ids] ids
+                       [:display-setup-page :ids-query-str ids-query-str]))
+         :dispatch [:page/to-sub-page :display-setup params {:ids ids-query-str}]}))))
 
 (reg-event-fx
   :current-setup/copy-to-cards-page
@@ -346,7 +404,7 @@
                         (get-in db [:setups current-setup-id :cards])]]
             [:dispatch [:cards-page/set-base :some]]
             [:dispatch [:cards-page/reset-filters]]
-            [:dispatch [:page/set :cards]]]})))
+            [:dispatch [:page/navigate :cards]]]})))
 
 (reg-event-db-assoc :share/set-dialog-open?)
 (reg-event-db-assoc :share/set-snackbar-open?)
@@ -475,7 +533,7 @@
 (defn epic-snackbar-message [verb cards card-id preposition stacks stack-idx]
   (let [card  (cards card-id)
         stack (stacks stack-idx)]
-    [:<> (str/capitalize verb) " " [:strong (:name card)] " " preposition " " [:strong (:name stack)]]))
+    [:<> (s/capitalize verb) " " [:strong (:name card)] " " preposition " " [:strong (:name stack)]]))
 
 (defn epic-event [cofx action card-id stack-idx]
   (let [state (-> cofx :db :epic)]
@@ -579,7 +637,7 @@
     {:fx [[:dispatch [:epic/set-trash-search-str ""]]
           [:dispatch [:epic/set-trashing? true]]
           [:dispatch (case trash-mode
-                       :page [:page/push :epic/trash]
+                       :page [:page/navigate :epic/trash]
                        :dialog [:epic/set-trash-dialog-open? true])]]}))
 
 (reg-event-fx
@@ -587,7 +645,7 @@
   (fn [{{{:keys [trash-mode]} :epic} :db}]
     {:fx [[:dispatch [:epic/set-trashing? false]]
           [:dispatch (case trash-mode
-                       :page [:page/pop]
+                       :page [:page/back]
                        :dialog [:epic/set-trash-dialog-open? false])]]}))
 
 (reg-event-fx
@@ -605,15 +663,17 @@
   :epic/show-stack
   (fn [{:keys [db]} [_ idx]]
     {:db       (nav-page-assoc-init db :epic-display-stack-page idx)
-     :dispatch [:page/push :epic/display-stack]}))
-(reg-nav-page-event-set-idx :epic-display-stack-page/set-idx :epic-display-stack-page)
+     :dispatch [:page/to-sub-page :epic/display-stack]}))
+(reg-nav-page-event-set-idx :epic-display-stack-page/set-idx :epic-display-stack-page
+  (constantly nil)
+  (constantly nil))
 (let [reg-button-event
       (fn [name event]
         (reg-event-fx
           name
           (fn [_ [_ idx]]
             {:fx [[:dispatch [event idx]]
-                  [:dispatch [:page/pop]]]})))]
+                  [:dispatch [:page/back]]]})))]
   (reg-button-event :epic-display-stack-page/take-card :epic/take-card)
   (reg-button-event :epic-display-stack-page/cycle-card :epic/cycle-card))
 
