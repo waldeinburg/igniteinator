@@ -8,6 +8,7 @@
             [igniteinator.ui.pages.cards-page :refer [cards-page]]
             [igniteinator.ui.pages.display-setup-page :refer [display-setup-page]]
             [igniteinator.ui.pages.epic-pages :refer [display-stack-page epic-page trash-page]]
+            [igniteinator.ui.pages.error-page :refer [error-page]]
             [igniteinator.ui.pages.front-page :refer [front-page]]
             [igniteinator.ui.pages.randomizer-data-page :refer [randomizer-data-page]]
             [igniteinator.ui.pages.randomizer-page :refer [randomizer-page]]
@@ -19,10 +20,10 @@
             [reagent-mui.material.css-baseline :refer [css-baseline]]))
 
 (defn pages []
-  ;; TODO: add router here?
   (let [page (<sub :current-page)]
     (case page
       :front [front-page]
+      :error [error-page]
       :cards [cards-page]
       :card-details [card-details-page]
       :setups [setups-page]

@@ -85,12 +85,13 @@
       (add-children
         (main-menu-items current-page
           (fn [page-key title active?]
-            [menu-item {:selected active?
-                        :href     (resolve-to-href page-key)
-                        :on-click (fn [event]
-                                    (prevent-default event)
-                                    (on-close)
-                                    (navigate page-key))}
+            [menu-item {:component :a
+                        :selected  active?
+                        :href      (resolve-to-href page-key) ; TODO: Doesn't work because the component is li
+                        :on-click  (fn [event]
+                                     (prevent-default event)
+                                     (on-close)
+                                     (navigate page-key))}
              title])))]]))
 
 (defn main-menu-desktop []
