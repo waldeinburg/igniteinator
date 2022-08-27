@@ -9,7 +9,9 @@
              ["/cards/" :cards]
              ["/setups/" :setups]
              ["/setups/:setup-name" :display-setup]
-             ["/epic/" :epic]]))
+             ["/epic/" :epic]
+             ["/randomizer/" :randomizer]
+             ["/randomizer/data/" :randomizer/data]]))
 
 (defn on-navigate [name params query]
   (>evt :route name params query))

@@ -10,6 +10,7 @@
             [igniteinator.ui.pages.epic-pages :refer [display-stack-page epic-page trash-page]]
             [igniteinator.ui.pages.front-page :refer [front-page]]
             [igniteinator.ui.pages.randomizer-data-page :refer [randomizer-data-page]]
+            [igniteinator.ui.pages.randomizer-page :refer [randomizer-page]]
             [igniteinator.ui.pages.setups-page :refer [setups-page]]
             [igniteinator.ui.singletons.caching-progress :refer [caching-progress]]
             [igniteinator.ui.singletons.reload-snackbar :refer [reload-snackbar]]
@@ -29,6 +30,7 @@
       :epic [epic-page]
       :epic/display-stack [display-stack-page]
       :epic/trash [trash-page]
+      :randomizer [randomizer-page]
       :randomizer/data [randomizer-data-page])))
 
 (defn content []
