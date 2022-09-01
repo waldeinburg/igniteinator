@@ -130,8 +130,9 @@
     (let [new-db    (load-data-update-db db result)
           new-store (assoc-in store [:options :boxes]
                       (get-in new-db [:options :boxes]))]
-      {:db    new-db
-       :store new-store})))
+      {:db       new-db
+       :store    new-store
+       :dispatch (into [:route] (:init-route new-db))})))
 
 (reg-event-fx
   :load-data-failure

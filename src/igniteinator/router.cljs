@@ -1,7 +1,8 @@
 (ns igniteinator.router
   (:require [bide.core :as r]
             [clojure.string :as s]
-            [igniteinator.util.re-frame :refer [>evt assoc-ins]]))
+            [igniteinator.util.re-frame :refer [>evt assoc-ins]]
+            [igniteinator.util.url :refer [to-param-str to-query-array]]))
 
 (def router
   (r/router [["/" :front]
@@ -35,6 +36,11 @@
   ([name params query]
    (r/resolve router name params query)))
 
+(defn set-error [db msg]
+  (assoc db
+    :current-page :error
+    :error-message msg))
+
 (defn- ids-from-csv-query [query]
   (if (and
         (:ids query)
@@ -63,16 +69,46 @@
       (update-in [:cards-page :card-selection :ids] #(or (not-empty (set ids)) %)))))
 
 (defn- card-details-state [db {:keys [card-name]} query]
-  (let [ids   (ids-from-csv-query query)
-        cards (vals (select-keys (:cards db) ids))]
-    ;; TODO: den skal kunne returnere en error-state. Måske bare en sæt current page = error (som skal have et hex-kort)
-    (nav-page-state db :card-details-page :card-details 0)))
+  (let [=card-name (fn [card]
+                     (= card-name (to-param-str (:name card))))
+        cards-map  (:cards db)
+        q-ids      (ids-from-csv-query query)
+        [card-ids idx] (if q-ids
+                         (let [cards (map-indexed           ; Not select-keys; we need to keep the order.
+                                       (fn [idx id]
+                                         (assoc (cards-map id) :idx idx))
+                                       q-ids)
+                               idx   (->>
+                                       cards
+                                       (filter =card-name)
+                                       first
+                                       :idx)]
+                           [(mapv :id cards) idx])
+                         (let [card (->>
+                                      cards-map
+                                      (filter (fn [[_ v]]
+                                                (=card-name v)))
+                                      first
+                                      second)]
+                           [[(:id card)] 0]))]
+    (cond
+      (and q-ids (some nil? card-ids)) (set-error db "Invalid id in list")
+      (and q-ids (not idx)) (set-error db "Card not found in list")
+      (and (not q-ids) (= [nil] card-ids)) (set-error db "Card not found")
+      :else (-> db
+              (nav-page-state :card-details-page :card-details idx)
+              (assoc-ins
+                [:card-details-page :card-ids] card-ids
+                [:card-details-page :ids-query-str] (to-query-array card-ids))))))
 
 (defn route->state [db name params query]
   (let [state-fn (case name
                    :cards cards-state
                    :card-details card-details-state
                    (fn [db _ _] db))]
-    (-> db
-      (assoc :current-page name)
-      (state-fn params query))))
+    (if (= :ready (:mode db))
+      (-> db
+        (assoc :current-page name)
+        (state-fn params query))
+      ;; Postpone state resolving. :load-data-success will dispatch :route.
+      (assoc db :init-route [name params query]))))
