@@ -46,10 +46,15 @@
         effects-map (<sub :effects-map)]
     [page "Randomizer metadata"
      [:p
+      "Multiple requirements means that one of the types/effects in the list should be in the market, not necessarily "
+      "all."]
+     [:p
       "Please notice that a trait is only added to a card if it makes sense, not just because it's formally true. "
       "E.g., Unicorn can knock down a unit if blocked by a shield. However, this is not enough to satisfy requirements "
       "for Warhammer: Without any shields in the setup Unicorn can only knock down while there's still Old Wooden "
-      "Shield cards left in the decks, making Warhammer close to worthless."]
+      "Shield cards left in the decks, making Warhammer close to worthless. "
+      "Similarly, as the randomizer should always add cards providing Damage, no cards have Damage set as a required "
+      "effect."]
      [card-list
       {:on-click         false
        :tooltip          false
