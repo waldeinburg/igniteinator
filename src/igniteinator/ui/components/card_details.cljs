@@ -8,7 +8,7 @@
   (let [cards (<sub :card-details-page/combos card)]
     [card-list
      {:on-click-fn (fn [c]
-                     #(>evt :show-card-details cards (:idx c) :page/replace))
+                     #(>evt :show-card-details cards (:idx c) :page/to-other-sub-page))
       :tooltip-fn  (fn [c]
                      (case (:combos c)
                        [] (txt :card-tooltip-no-combos)
