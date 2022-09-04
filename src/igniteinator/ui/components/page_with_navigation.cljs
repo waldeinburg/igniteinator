@@ -1,32 +1,31 @@
 (ns igniteinator.ui.components.page-with-navigation
-  (:require [igniteinator.util.reagent :refer [add-children]]
+  (:require [igniteinator.ui.components.back-button :refer [back-button]]
             [igniteinator.ui.components.page :refer [page]]
-            [igniteinator.ui.components.back-button :refer [back-button]]
             [igniteinator.ui.components.vendor.swipeable-views :refer [swipeable-views]]
-            [reagent-mui.material.grid :refer [grid]]
-            [reagent-mui.material.modal :refer [modal]]
-            [reagent-mui.material.box :refer [box]]
-            [reagent-mui.material.toolbar :refer [toolbar]]
-            [reagent-mui.material.fade :refer [fade]]
-            [reagent-mui.material.button :refer [button]]
+            [reagent-mui.icons.first-page :refer [first-page]]
+            [reagent-mui.icons.last-page :refer [last-page]]
             [reagent-mui.icons.navigate-before :refer [navigate-before]]
             [reagent-mui.icons.navigate-next :refer [navigate-next]]
-            [reagent-mui.icons.first-page :refer [first-page]]
-            [reagent-mui.icons.last-page :refer [last-page]]))
+            [reagent-mui.material.box :refer [box]]
+            [reagent-mui.material.button :refer [button]]
+            [reagent-mui.material.fade :refer [fade]]
+            [reagent-mui.material.toolbar :refer [toolbar]]))
+
 
 (defn- content-view [{:keys [idx-ref on-change-index]} children]
   ;; Make the slides appear from the edge by canceling any padding using margin on the container and then adding the
   ;; same amount of padding on the children.
-  ;; Margin cannot be applied to the slides containers so we cannot collapse margins. That would be nice because
+  ;; Margin cannot be applied to the slides containers, so we cannot collapse margins. That would be nice because
   ;; the next slide would be right behind the edge.
   ;; Margins are the same as applied to the padding on the MUI Container.
   [box {:mx -2, :sm {:mx -3}}
    [swipeable-views {:animate-height  true                  ; The height of the slides may be very different.
                      :index           @idx-ref
                      :on-change-index on-change-index}
-    (doall (map-indexed #(with-meta
-                           [box {:px 2, :sm {:px 3}} %2]
-                           {:key %1})
+    (doall (map-indexed (fn [idx child]
+                          (with-meta
+                            [box {:px 2, :sm {:px 3}} child]
+                            {:key idx}))
              children))]])
 
 (defn- title [transition-in? t]

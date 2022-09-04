@@ -40,6 +40,11 @@
            (update :epic #(merge % (:epic store))))}))
 
 (reg-event-fx
+  :preload-placeholder-img
+  (fn [_ _]
+    {:preload-placeholder-img nil}))
+
+(reg-event-fx
   :router/start
   (fn [_ _]
     {:fx [[:router/start]]}))

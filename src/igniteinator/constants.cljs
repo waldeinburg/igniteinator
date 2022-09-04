@@ -4,6 +4,7 @@
 (def page-url "https://igniteinator.waldeinburg.dk")
 (def github-url "https://github.com/waldeinburg/igniteinator")
 (def img-base-path "/img")
+(def placeholder-img-src (str img-base-path "/placeholder.png"))
 (def data-file-path "/data.json")
 (def gen-img-base-path "/generated/img")
 (def gen-img-ext ".png")

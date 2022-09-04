@@ -24,6 +24,10 @@
 
 (defn init [app-element]
   (rf/dispatch-sync [:init-db])
+  ;; Preloading the placeholder image is essential when starting on a navigation page. Without it, the swipeable-view
+  ;; element will receive a child with img-elements with a height of 0 because the placeholder image is not yet loaded.
+  ;; This will give a page with only a tiny part of the content visible until navigating to the next slide.
+  (rf/dispatch-sync [:preload-placeholder-img])
   (rf/dispatch-sync [:router/start])
   (>evt :load-data)
   (reg-sw)

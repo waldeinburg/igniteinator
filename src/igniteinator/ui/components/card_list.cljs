@@ -7,8 +7,6 @@
             [reagent-mui.material.box :refer [box]]
             [reagent-mui.material.grid :refer [grid]]))
 
-(def placeholder-img-src (str constants/img-base-path "/placeholder.png"))
-
 (defn card-debug-data [card]
   (if (<sub :debug/show-card-data)
     [:ul {:style {:list-style :none, :padding 0}}
@@ -37,7 +35,7 @@
                                        :loaded)
            name            (:name card)
            ;; The placeholder has the exact scale of the images.
-           placeholder-img [:img {:src   placeholder-img-src, :alt name
+           placeholder-img [:img {:src   constants/placeholder-img-src, :alt name
                                   :class :card-img}]
            img             [:img (into {:src      src, :alt name
                                         :class    :card-img
