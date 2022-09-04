@@ -1,7 +1,6 @@
 (ns igniteinator.fx
   (:require-macros [igniteinator.util.debug :refer [dbg]])
   (:require [akiroz.re-frame.storage :as storage]
-            [igniteinator.constants :as constants]
             [igniteinator.router :as router]
             [igniteinator.util.message :as msg]
             [igniteinator.util.re-frame :refer [>evt]]
@@ -25,12 +24,6 @@
   :igniteinator/store
   {:fx   :store
    :cofx :store})
-
-(reg-fx
-  :preload-placeholder-img
-  (fn [_]
-    (let [img (js/Image.)]
-      (set! (. img -src) constants/placeholder-img-src))))
 
 (reg-fx
   :router/start

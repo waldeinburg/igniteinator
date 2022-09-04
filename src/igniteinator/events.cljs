@@ -39,10 +39,15 @@
            (update :options #(merge % (:options store)))
            (update :epic #(merge % (:epic store))))}))
 
-(reg-event-fx
+(reg-event-db
   :preload-placeholder-img
-  (fn [_ _]
-    {:preload-placeholder-img nil}))
+  (fn [db _]
+    ;; Just creating the Image in an effect triggered proved effective only when starting on a card display. When
+    ;; starting on the front page and navigating to a suggested setup, the image had been garbage collected. At least it
+    ;; is my and the fact that the following works seems to prove it.
+    (let [img (js/Image.)]
+      (set! (. img -src) constants/placeholder-img-src)
+      (assoc db :placeholder-img-holder img))))
 
 (reg-event-fx
   :router/start
