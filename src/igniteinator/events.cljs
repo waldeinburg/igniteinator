@@ -236,16 +236,16 @@
 
 (reg-event-fx
   :page/replace
-  (fn [cofx _ [_ name]]
+  (fn [cofx _ [_ name params query]]
     (->
-      {:router/replace [name]}
+      {:router/replace [name params query]}
       (set-navigating cofx name))))
 
 (reg-event-fx
   :page/navigate
-  (fn [cofx [_ name]]
+  (fn [cofx [_ name params query]]
     (->
-      {:fx [[:router/navigate [name]]
+      {:fx [[:router/navigate [name params query]]
             [:scroll-to-top]]}
       (set-navigating cofx name))))
 
@@ -335,12 +335,12 @@
 
 (reg-event-db
   :cards-page.card-selection/set-selection
-  (fn [db [_ val]]
+  (fn [db [_ selection]]
     (assoc-in db [:cards-page :card-selection :ids]
-      (case val
+      (case selection
         :all (-> db :cards keys set)
         :none #{}
-        (set val)))))
+        (set selection)))))
 
 (reg-event-db
   :cards-page.card-selection/set-item-selected?
@@ -399,12 +399,13 @@
 
 (reg-event-fx
   :current-setup/copy-to-cards-page
-  (fn [{:keys [db]} _]
-    (let [current-setup-id (get-in db [:setup :id])]
-      {:fx [[:dispatch [:cards-page.card-selection/set-selection
-                        (get-in db [:setups current-setup-id :cards])]]
+  (fn [{:keys                                         [db]
+        {{:keys [idx setup-ids]} :display-setup-page} :db} _]
+    (let [current-setup-id (get setup-ids idx)
+          card-ids         (get-in db [:setups current-setup-id :cards])]
+      {:fx [[:dispatch [:cards-page/reset-filters]]
+            [:dispatch [:cards-page.card-selection/set-selection card-ids]]
             [:dispatch [:cards-page/set-base :some]]
-            [:dispatch [:cards-page/reset-filters]]
             [:dispatch [:page/navigate :cards]]]})))
 
 (reg-event-db-assoc :share/set-dialog-open?)

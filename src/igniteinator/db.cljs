@@ -47,7 +47,6 @@
                              :prev-idx             nil
                              :first-transition-in? true
                              :setup-ids            nil
-                             :ids-query-str        nil
                              :sortings             nil}
    :epic                    {:setups             nil
                              :show-stack-info?   false
