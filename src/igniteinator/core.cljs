@@ -1,20 +1,30 @@
 (ns ^:figwheel-hooks igniteinator.core
   (:require-macros [igniteinator.util.debug :refer [when-debug when-dev]])
   (:require
-    ;; Re-frame registrations BEGIN
-    [day8.re-frame.http-fx]
+    [day8.re-frame.http-fx]                                 ; Re-frame registrations
     [goog.dom :as gdom]
-    [igniteinator.cofx]
-    [igniteinator.events]
-    [igniteinator.fx]
-    ;; Re-frame registrations END
+    [igniteinator.cofx]                                     ; Re-frame registrations
+    [igniteinator.constants :as constants]
+    [igniteinator.events]                                   ; Re-frame registrations
+    [igniteinator.fx]                                       ; Re-frame registrations
     [igniteinator.service-worker-client :refer [reg-sw]]
-    [igniteinator.subs]
+    [igniteinator.subs]                                     ; Re-frame registrations
     [igniteinator.ui.app :refer [app]]
     [igniteinator.ui.singletons.install-button :refer [reg-beforeinstallprompt-event]]
     [igniteinator.util.re-frame :refer [>evt]]
     [re-frame.core :as rf]
     [reagent.dom :as rdom]))
+
+(defonce placeholder-img-cache (js/Image.))
+
+(defn preload-placeholder-img []
+  ;; Preloading the placeholder image is essential when starting on a navigation page. Without it, the swipeable-view
+  ;; element will receive a child with img-elements with a height of 0 because the placeholder image is not yet loaded.
+  ;; This will give a page with only a tiny part of the content visible until navigating to the next slide.
+  ;; Just creating the Image in an effect triggered proved effective only when starting on a card display. When
+  ;; starting on the front page and navigating to a suggested setup, the image had been garbage collected. At least it
+  ;; is my and the fact that the following works seems to prove it.
+  (set! (. placeholder-img-cache -src) constants/placeholder-img-src))
 
 (defn get-app-element []
   (gdom/getElement "app"))
@@ -23,11 +33,8 @@
   (rdom/render [app] el))
 
 (defn init [app-element]
+  (preload-placeholder-img)
   (rf/dispatch-sync [:init-db])
-  ;; Preloading the placeholder image is essential when starting on a navigation page. Without it, the swipeable-view
-  ;; element will receive a child with img-elements with a height of 0 because the placeholder image is not yet loaded.
-  ;; This will give a page with only a tiny part of the content visible until navigating to the next slide.
-  (rf/dispatch-sync [:preload-placeholder-img])
   (rf/dispatch-sync [:router/start])
   (>evt :load-data)
   (reg-sw)
