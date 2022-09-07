@@ -32,7 +32,8 @@
       :epic/display-stack [display-stack-page]
       :epic/trash [trash-page]
       :randomizer [randomizer-page]
-      :randomizer/data [randomizer-data-page])))
+      :randomizer/data [randomizer-data-page]
+      [error-page])))
 
 (defn content []
   (let [mode (<sub :mode)]
