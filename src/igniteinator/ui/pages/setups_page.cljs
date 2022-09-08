@@ -1,18 +1,19 @@
 (ns igniteinator.ui.pages.setups-page
   (:require [igniteinator.text :refer [txt txt-c]]
-            [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
-            [igniteinator.util.event :as event]
-            [igniteinator.ui.components.page :refer [page]]
-            [igniteinator.ui.components.form-item :refer [form-item]]
             [igniteinator.ui.components.bool-input :refer [checkbox]]
+            [igniteinator.ui.components.form-item :refer [form-item]]
+            [igniteinator.ui.components.page :refer [page]]
+            [igniteinator.util.event :as event]
+            [igniteinator.util.event :refer [prevent-default]]
+            [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
             [reagent-mui.material.box :refer [box]]
-            [reagent-mui.material.list :refer [list]]
-            [reagent-mui.material.list-item :refer [list-item]]
-            [reagent-mui.material.list-item-text :refer [list-item-text]]
             [reagent-mui.material.divider :refer [divider]]
             [reagent-mui.material.form-group :refer [form-group]]
-            [reagent-mui.material.select :refer [select]]
-            [reagent-mui.material.menu-item :refer [menu-item]]))
+            [reagent-mui.material.list :refer [list]]
+            [reagent-mui.material.list-item-button :refer [list-item-button]]
+            [reagent-mui.material.list-item-text :refer [list-item-text]]
+            [reagent-mui.material.menu-item :refer [menu-item]]
+            [reagent-mui.material.select :refer [select]]))
 
 (defn setups-filter-operator []
   [select {:variant   :standard
@@ -45,9 +46,13 @@
      [setups-filter-selection]]]])
 
 (defn setup-list-item [setups s]
-  [list-item {:button   true
-              :on-click #(>evt :display-setup setups (:idx s))}
-   [list-item-text {:primary (:name s)}]])
+  (let [idx (:idx s)]
+    [list-item-button {:component :a
+                       :href      (<sub :setup-href (nth setups idx))
+                       :on-click  (fn [event]
+                                    (prevent-default event)
+                                    (>evt :display-setup setups idx))}
+     [list-item-text {:primary (:name s)}]]))
 
 (defn setups-list []
   [:<>

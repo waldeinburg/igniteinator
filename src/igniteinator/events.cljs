@@ -301,7 +301,8 @@
           id   (:id card)]
       (assoc-in db [:card-load-state lang id] state))))
 
-(let [get-params (fn [card] {:card-name (url/to-param-str (:name card))})]
+(let [get-params (fn [card]
+                   {:card-name (url/to-param-str (:name card))})]
   (reg-nav-page-event-set-idx :card-details-page/set-idx :card-details-page
     (fn [db]
       (let [ids     (get-in db [:card-details-page :card-ids])
@@ -394,7 +395,7 @@
                      (nav-page-assoc-init :display-setup-page idx)
                      (assoc-ins
                        [:display-setup-page :setup-ids] ids
-                       [:display-setup-page :ids-query-str ids-query-str]))
+                       [:display-setup-page :ids-query-str] ids-query-str))
          :dispatch [:page/to-sub-page :display-setup params {:ids ids-query-str}]}))))
 
 (reg-event-fx

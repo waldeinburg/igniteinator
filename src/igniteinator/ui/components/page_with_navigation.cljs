@@ -71,11 +71,12 @@
                               :column-gap 1
                               :row-gap    1}}
    [back-button {:variant :contained}]
-   [box
-    [first-button idx-ref on-change-index]
-    [prev-button idx-ref on-change-index]
-    [next-button idx-ref on-change-index children-count]
-    [last-button idx-ref on-change-index children-count]]
+   (if (> children-count 1)
+     [box
+      [first-button idx-ref on-change-index]
+      [prev-button idx-ref on-change-index]
+      [next-button idx-ref on-change-index children-count]
+      [last-button idx-ref on-change-index children-count]])
    extra-buttons])
 
 (defn page-with-navigation [{:keys [idx-ref

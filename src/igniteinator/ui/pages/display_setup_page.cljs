@@ -1,14 +1,11 @@
 (ns igniteinator.ui.pages.display-setup-page
   (:require [igniteinator.text :refer [txt]]
-            [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
-            [igniteinator.ui.components.page-with-navigation :refer [page-with-navigation]]
-            [igniteinator.ui.components.back-button :refer [back-button]]
             [igniteinator.ui.components.card-list :refer [card-list]]
+            [igniteinator.ui.components.page-with-navigation :refer [page-with-navigation]]
             [igniteinator.ui.components.tooltip :refer [tooltip]]
-            [reagent-mui.material.box :refer [box]]
-            [reagent-mui.material.toolbar :refer [toolbar]]
-            [reagent-mui.material.button :refer [button]]
-            [reagent-mui.icons.file-copy :refer [file-copy]]))
+            [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
+            [reagent-mui.icons.file-copy :refer [file-copy]]
+            [reagent-mui.material.button :refer [button]]))
 
 (defn copy-to-cards-page-button []
   [tooltip (txt :copy-to-cards-page-tooltip)
@@ -26,7 +23,7 @@
      [card-list cards]]))
 
 (defn display-setup-page []
-  (let [setup-ids (<sub :setups-page-ids)]
+  (let [setup-ids (<sub :display-setup-page/setup-ids)]
     [page-with-navigation
      {:idx-ref                  (<sub-ref :display-setup-page/idx)
       :current-title-ref        (<sub-ref :display-setup-page/current-setup-name)

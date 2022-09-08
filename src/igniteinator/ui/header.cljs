@@ -87,7 +87,7 @@
           (fn [page-key title active?]
             [menu-item {:component :a
                         :selected  active?
-                        :href      (resolve-to-href page-key) ; TODO: Doesn't work because the component is li
+                        :href      (resolve-to-href page-key)
                         :on-click  (fn [event]
                                      (prevent-default event)
                                      (on-close)

@@ -5,11 +5,13 @@
             [igniteinator.model.cards :as cards]
             [igniteinator.model.epic-setups :refer [epic-setups]]
             [igniteinator.model.setups :as setups]
+            [igniteinator.router :refer [resolve-to-href]]
             [igniteinator.text :as text]
             [igniteinator.util.filter :as filter-util]
             [igniteinator.util.image-path :refer [image-path]]
             [igniteinator.util.re-frame :refer [<sub <sub-ref reg-sub-db reg-sub-option]]
             [igniteinator.util.sort :as sort-util]
+            [igniteinator.util.url :as url]
             [re-frame.core :refer [reg-sub reg-sub-raw]]))
 
 (reg-sub-db :debug/show-card-data)
@@ -349,12 +351,18 @@
     (= (-> setups first :id) 0)))
 
 (reg-sub
+  :setup-href
+  (fn [_ [_ setup]]
+    (resolve-to-href :display-setup {:setup-name (url/to-param-str (:name setup))})))
+
+(reg-sub
   :setups-page-ids
   :<- [:setups-filtered-and-sorted]
   (fn [setups _]
     (map :id setups)))
 
 (reg-sub-db :display-setup-page/idx)
+(reg-sub-db :display-setup-page/setup-ids)
 (reg-sub-db :display-setup-page/prev-idx)
 (reg-sub-db :display-setup-page/first-transition-in?)
 (reg-sub-db :display-setup-page/sortings)
