@@ -3,6 +3,7 @@
             [igniteinator.text :refer [txt txt-c]]
             [igniteinator.ui.components.tooltip :refer [tooltip] :rename {tooltip tooltip-elem}]
             [igniteinator.ui.components.vendor.visibility-sensor :refer [visibility-sensor]]
+            [igniteinator.util.event :refer [link-on-click]]
             [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
             [reagent-mui.material.box :refer [box]]
             [reagent-mui.material.grid :refer [grid]]))
@@ -28,12 +29,15 @@
    ;; after an increasing list of loaded cards, but the number of loaded cards should be reset when
    ;; the card list changes. The present solution is way more simple and also handles nicely
    ;; skipping images due to rapid scrolling.
-   (fn [{:keys [on-click tooltip]} card]
+   (fn [{:keys [href-fn on-click tooltip]} card]
      (let [normal?         (not (:image-path card))
            src             (or (:image-path card) (<sub :image-path card))
            load-state      (if normal? (<sub :card-load-state card)
                                        :loaded)
            name            (:name card)
+           wrapper         (if href-fn
+                             [:a {:href (href-fn card)}]
+                             [:<>])
            ;; The placeholder has the exact scale of the images.
            placeholder-img [:img {:src   constants/placeholder-img-src, :alt name
                                   :class :card-img}]
@@ -43,27 +47,28 @@
                                         :style    (if on-click {:cursor :pointer})}
                                    (if (not (= :loaded load-state))
                                      {:on-load #(>evt :set-card-load-state card :loaded)}))]]
-       (cond
-         ;; All ready. Just show image.
-         (= :loaded load-state)
-         (let []
-           (if tooltip
-             [tooltip-elem tooltip img]
-             img))
-         ;; The image is visible on screen but not loaded yet. Show the placeholder image still to
-         ;; avoid the height of the container to be zero until the height of the image is loaded
-         ;; which breaks scrolling to bottom (the height of the whole page will be correct
-         ;; initially, then suddenly smaller, then back to the correct size). The image is loading
-         ;; over the placeholder.
-         (= :loading load-state)
-         [:div {:class :dyn-height-block}
-          [:div {:class :dyn-height-background} placeholder-img]
-          [:div {:class :dyn-height-foreground} img]]
-         ;; The image is not visible on screen. Avoid fetching until necessary.
-         :else
-         [visibility-sensor {:partial-visibility true
-                             :on-change          #(when % (>evt :set-card-load-state card :loading))} ; %: visible?
-          placeholder-img])))))
+       (conj wrapper
+         (cond
+           ;; All ready. Just show image.
+           (= :loaded load-state)
+           (let []
+             (if tooltip
+               [tooltip-elem tooltip img]
+               img))
+           ;; The image is visible on screen but not loaded yet. Show the placeholder image still to
+           ;; avoid the height of the container to be zero until the height of the image is loaded
+           ;; which breaks scrolling to bottom (the height of the whole page will be correct
+           ;; initially, then suddenly smaller, then back to the correct size). The image is loading
+           ;; over the placeholder.
+           (= :loading load-state)
+           [:div {:class :dyn-height-block}
+            [:div {:class :dyn-height-background} placeholder-img]
+            [:div {:class :dyn-height-foreground} img]]
+           ;; The image is not visible on screen. Avoid fetching until necessary.
+           :else
+           [visibility-sensor {:partial-visibility true
+                               :on-change          #(when % (>evt :set-card-load-state card :loading))} ; %: visible?
+            placeholder-img]))))))
 
 (defn card-container
   ([card]
@@ -92,19 +97,28 @@
 (defn card-list
   ([cards]
    (card-list {} cards))
-  ([{on-click-prop    :on-click
+  ([{href-fn          :href-fn
+     on-click-prop    :on-click
      on-click-fn-prop :on-click-fn
      tooltip-prop     :tooltip
      tooltip-fn-prop  :tooltip-fn
      content-below-fn :content-below-fn}
     cards]
    ;; Default tooltip and on-click is to show card details.
-   (let [on-click-fn     (cond
-                           (false? on-click-prop) (constantly nil)
-                           on-click-prop (fn [_] on-click-prop)
-                           on-click-fn-prop on-click-fn-prop
-                           :else (fn [card]
-                                   #(>evt :show-card-details cards (:idx card) :page/to-sub-page)))
+   (let [href-fn         (if (nil? href-fn)
+                           #(<sub :card-href %)
+                           href-fn)
+         on-click-fn     (if (false? on-click-prop)
+                           (constantly nil)
+                           (let [on-clk-fn (cond
+                                             on-click-prop (fn [_] on-click-prop)
+                                             on-click-fn-prop on-click-fn-prop
+                                             :else (fn [card]
+                                                     #(>evt :show-card-details cards (:idx card) :page/to-sub-page)))]
+                             (if href-fn
+                               (fn [card]
+                                 (link-on-click (on-clk-fn card)))
+                               on-clk-fn)))
          tooltip-fn      (cond
                            (false? tooltip-prop) (constantly nil)
                            tooltip-prop (fn [_] tooltip-prop)
@@ -123,4 +137,8 @@
                   tooltip  (tooltip-fn c)]
               ;; Use index instead of id because Epic Ignite needs to be able to show the same card twice.
               ^{:key (:idx c)}                              ; Cf. example on https://reagent-project.github.io/
-              [card-grid {:on-click on-click, :tooltip tooltip, :content-below-fn content-below-fn} c])))]))))
+              [card-grid {:href-fn          href-fn
+                          :on-click         on-click
+                          :tooltip          tooltip
+                          :content-below-fn content-below-fn}
+               c])))]))))

@@ -14,3 +14,10 @@
 
 (defn prevent-default [event]
   (.preventDefault event))
+
+(defn link-on-click [on-click]
+  "Create event handler for links: Ignore on Ctrl-click (new tab) and prevent-default if handling."
+  (fn [event]
+    (when (not (.-ctrlKey event))
+      (prevent-default event)
+      (on-click event))))

@@ -9,7 +9,7 @@
             [igniteinator.ui.singletons.install-button :refer [install-button]]
             [igniteinator.ui.singletons.language-menu :refer [language-menu]]
             [igniteinator.ui.singletons.share-button :refer [share-button]]
-            [igniteinator.util.event :refer [prevent-default]]
+            [igniteinator.util.event :refer [link-on-click]]
             [igniteinator.util.re-frame :refer [<sub >evt]]
             [igniteinator.util.reagent :refer [add-children]]
             [reagent-mui.icons.menu :refer [menu] :rename {menu menu-icon}]
@@ -88,10 +88,9 @@
             [menu-item {:component :a
                         :selected  active?
                         :href      (resolve-to-href page-key)
-                        :on-click  (fn [event]
-                                     (prevent-default event)
-                                     (on-close)
-                                     (navigate page-key))}
+                        :on-click  (link-on-click (fn [_]
+                                                    (on-close)
+                                                    (navigate page-key)))}
              title])))]]))
 
 (defn main-menu-desktop []
@@ -105,9 +104,7 @@
                     :color    (if active?
                                 :secondary
                                 :primary)
-                    :on-click (fn [event]
-                                (prevent-default event)
-                                (navigate page-key))}
+                    :on-click (link-on-click #(navigate page-key))}
             title])))]))
 
 (defn header []

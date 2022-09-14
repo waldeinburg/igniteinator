@@ -49,9 +49,7 @@
   (let [idx (:idx s)]
     [list-item-button {:component :a
                        :href      (<sub :setup-href (nth setups idx))
-                       :on-click  (fn [event]
-                                    (prevent-default event)
-                                    (>evt :display-setup setups idx))}
+                       :on-click  (event/link-on-click #(>evt :display-setup setups idx))}
      [list-item-text {:primary (:name s)}]]))
 
 (defn setups-list []

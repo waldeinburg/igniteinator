@@ -89,6 +89,7 @@
   (let [top-cards (<sub :epic/top-cards)]
     [card-list
      {:tooltip          false                               ;; Tooltip covers buttons
+      :href-fn          false
       :on-click-fn      (fn [card]
                           (let [stack (:stack card)]
                             (if (or (:placeholder? stack) (= 0 (count (:cards stack))))

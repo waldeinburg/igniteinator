@@ -269,6 +269,11 @@
                                (into combos-base-filter) (into page-filters) (into global-filters))]
       (<sub :cards base-spec filters sortings))))
 
+(reg-sub
+  :card-href
+  (fn [_ [_ card]]
+    (resolve-to-href :card-details {:card-name (url/to-param-str (:name card))})))
+
 (reg-sub-db :card-details-page/idx)
 (reg-sub-db :card-details-page/prev-idx)
 (reg-sub-db :card-details-page/first-transition-in?)
