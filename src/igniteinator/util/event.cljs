@@ -6,6 +6,9 @@
 (defn value [event]
   (.-value (target event)))
 
+(defn blur [event]
+  (.blur (target event)))
+
 (defn value->keyword [event]
   (keyword (value event)))
 

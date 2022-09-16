@@ -9,7 +9,7 @@
             [igniteinator.ui.singletons.install-button :refer [install-button]]
             [igniteinator.ui.singletons.language-menu :refer [language-menu]]
             [igniteinator.ui.singletons.share-button :refer [share-button]]
-            [igniteinator.util.event :refer [link-on-click]]
+            [igniteinator.util.event :refer [blur link-on-click]]
             [igniteinator.util.re-frame :refer [<sub >evt]]
             [igniteinator.util.reagent :refer [add-children]]
             [reagent-mui.icons.menu :refer [menu] :rename {menu menu-icon}]
@@ -24,8 +24,12 @@
                      [:setups :setups-page-title]
                      [:epic :epic/page-title]])
 
-(defn navigate [page-key]
-  (>evt :page/navigate page-key))
+(defn navigate-fn [page-key pre-navigate]
+  (link-on-click (fn [event]
+                   (blur event)
+                   (if pre-navigate
+                     (pre-navigate))
+                   (>evt :page/navigate page-key))))
 
 (defn if-desktop-menu [f]
   [:f> (fn []
@@ -88,9 +92,7 @@
             [menu-item {:component :a
                         :selected  active?
                         :href      (resolve-to-href page-key)
-                        :on-click  (link-on-click (fn [_]
-                                                    (on-close)
-                                                    (navigate page-key)))}
+                        :on-click  (navigate-fn page-key on-close)}
              title])))]]))
 
 (defn main-menu-desktop []
@@ -104,7 +106,7 @@
                     :color    (if active?
                                 :secondary
                                 :primary)
-                    :on-click (link-on-click #(navigate page-key))}
+                    :on-click (navigate-fn page-key nil)}
             title])))]))
 
 (defn header []
