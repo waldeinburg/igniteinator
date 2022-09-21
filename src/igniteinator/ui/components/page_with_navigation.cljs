@@ -65,19 +65,21 @@
      [last-page]]))
 
 (defn- nav-bar [idx-ref on-change-index children-count extra-buttons]
-  [toolbar {:disable-gutters true
-            :sx              {:mb         1
-                              :flex-wrap  :wrap
-                              :column-gap 1
-                              :row-gap    1}}
-   [back-button {:variant :contained}]
-   (if (> children-count 1)
-     [box
-      [first-button idx-ref on-change-index]
-      [prev-button idx-ref on-change-index]
-      [next-button idx-ref on-change-index children-count]
-      [last-button idx-ref on-change-index children-count]])
-   extra-buttons])
+  (let [multiple-slides? (> children-count 1)]
+    (if (or multiple-slides? extra-buttons)
+      [toolbar {:disable-gutters true
+                :sx              {:mb         1
+                                  :flex-wrap  :wrap
+                                  :column-gap 1
+                                  :row-gap    1}}
+       [back-button {:variant :contained}]
+       (if multiple-slides?
+         [box
+          [first-button idx-ref on-change-index]
+          [prev-button idx-ref on-change-index]
+          [next-button idx-ref on-change-index children-count]
+          [last-button idx-ref on-change-index children-count]])
+       extra-buttons])))
 
 (defn page-with-navigation [{:keys [idx-ref
                                     current-title-ref
