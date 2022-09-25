@@ -49,6 +49,12 @@
     (scroll-to 0)))
 
 (reg-fx
+  :set-site-subtitle
+  (fn [subtitle]
+    (set! (.-title js/document) (str "Igniteinator" (if subtitle
+                                                      (str ": " subtitle))))))
+
+(reg-fx
   :reload
   reload)
 

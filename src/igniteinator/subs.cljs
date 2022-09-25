@@ -53,9 +53,7 @@
   :txt
   :<- [:language]
   (fn [lang [_ key]]
-    (or
-      (get-in text/strings [key lang])
-      (get-in text/strings [key constants/default-language]))))
+    (text/txt-lang lang key)))
 
 (reg-sub
   :txt-c
@@ -380,7 +378,6 @@
     (let [setup (setups id)]
       (<sub :cards (:cards setup) [] (or page-sortings default-order-sortings)))))
 
-(reg-sub-db :display-setup-page/setup-ids)
 (reg-sub
   :display-setup-page/setups
   :<- [:display-setup-page/setup-ids]

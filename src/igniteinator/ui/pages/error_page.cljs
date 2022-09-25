@@ -1,10 +1,11 @@
 (ns igniteinator.ui.pages.error-page
-  (:require [igniteinator.ui.components.card-list :refer [card-list]]
+  (:require [igniteinator.text :refer [txt]]
+            [igniteinator.ui.components.card-list :refer [card-list]]
             [igniteinator.ui.components.page :refer [page]]
             [igniteinator.util.image-path :refer [image-path]]))
 
 (defn error-page []
-  (page "Error"
+  (page (txt :error-page-title)
     [card-list
      {:on-click false
       :tooltip  false}

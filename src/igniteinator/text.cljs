@@ -1,10 +1,12 @@
 (ns igniteinator.text
-  (:require [igniteinator.util.re-frame :refer [<sub]]
+  (:require [igniteinator.constants :as constants]
+            [igniteinator.util.re-frame :refer [<sub]]
             [igniteinator.util.string :as ss]))
 
 (def strings
   {
    :subtitle                          {:en "an inator for"}
+   :error-page-title                  {:en "Error"}
    :ok                                {:en "ok"}
    :cancel                            {:en "cancel"}
    :close                             {:en "close"}
@@ -77,6 +79,7 @@
    :settings.display-name/label       {:en "Display card name"}
    :settings.display-name/translating {:en "When translating"}
    :epic/page-title                   {:en "Epic Ignite"}
+   :epic/trash-page-title             {:en "Select card to trash"}
    :epic/reset-button-text            {:en "Reset"}
    :epic/reset-dialog-title           {:en "Reset game?"}
    :epic/reset-dialog-text            {:en "Are you sure you want to reset the current game?"}
@@ -84,10 +87,12 @@
    :epic/cycle-button-text            {:en "Cycle"}
    :epic/take-button-tooltip          {:en "Take {name} from the stack"}
    :epic/cycle-button-tooltip         {:en "Cycle {name} to the bottom of the stack"}
+   :randomizer/page-title             {:en "Randomizer"}
+   :randomizer/metadata-page-title    {:en "Randomizer metadata"}
    })
 
 ;; Convenience functions to minimize the boilerplate retrieving strings.
-;; Use txt-c when the key does not instruct it's specific context and capitalizing is intended.
+;; Use txt-c when the key does not instruct its specific context and capitalizing is intended.
 
 (defn txt
   ([s]
@@ -97,3 +102,11 @@
 
 (defn txt-c [s]
   (<sub :txt-c s))
+
+(defn txt-lang [lang key]
+  (or
+    (get-in strings [key lang])
+    (get-in strings [key constants/default-language])))
+
+(defn txt-db [db key]
+  (txt-lang (:language db) key))

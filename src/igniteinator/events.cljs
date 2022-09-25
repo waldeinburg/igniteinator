@@ -5,7 +5,7 @@
             [igniteinator.db :refer [default-db]]
             [igniteinator.model.setups :as setups]
             [igniteinator.router :refer [route->state]]
-            [igniteinator.text :refer [txt]]
+            [igniteinator.text :refer [txt-db]]
             [igniteinator.util.re-frame :refer [assoc-db assoc-db-and-store assoc-ins assoc-ins-db
                                                 assoc-ins-db-and-store reg-event-db-assoc
                                                 reg-event-db-assoc-store reg-event-set-option update-in-db-and-store]]
@@ -57,6 +57,11 @@
         {:router/replace [:cards nil (update query :ids #(s/replace % #"," "-"))]}
         ;; Just plain navigating. Get state.
         {:db (route->state db name params query)}))))
+
+(reg-event-fx
+  :set-site-subtitle
+  (fn [_ [_ subtitle]]
+    {:set-site-subtitle subtitle}))
 
 (reg-event-db-assoc :set-mode)
 
@@ -140,8 +145,7 @@
     {:dispatch [:fatal
                 ;; Language for fatal error will be based on current db state but will not update. That's okay.
                 (->
-                  (:language db)
-                  (txt :data-load-error)
+                  (txt-db db :data-load-error)
                   (s/capitalize)
                   (str ":" (:status-text result)))]}))
 

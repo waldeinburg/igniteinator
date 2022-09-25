@@ -1,5 +1,6 @@
 (ns igniteinator.ui.pages.randomizer-data-page
   (:require [clojure.string :as s]
+            [igniteinator.text :refer [txt]]
             [igniteinator.ui.components.card-list :refer [card-list]]
             [igniteinator.ui.components.page :refer [page]]
             [igniteinator.ui.components.tooltip :refer [tooltip]]
@@ -44,7 +45,7 @@
   (let [cards       (<sub :randomizer/cards)
         types-map   (<sub :types-map)
         effects-map (<sub :effects-map)]
-    [page "Randomizer metadata"
+    [page (txt :randomizer/metadata-page-title)
      [:p
       "Multiple requirements means that one of the types/effects in the list should be in the market, not necessarily "
       "all."]

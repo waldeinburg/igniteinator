@@ -1,5 +1,5 @@
 (ns igniteinator.epic.trash
-  (:require [igniteinator.text :refer [txt-c]]
+  (:require [igniteinator.text :refer [txt txt-c]]
             [igniteinator.ui.components.back-button :refer [back-button]]
             [igniteinator.ui.components.card-list :refer [card-list]]
             [igniteinator.ui.components.dialog :refer [dialog]]
@@ -19,7 +19,7 @@
 
 (defn trash-page []
   (let [cards (<sub :epic/trash-page-cards)]
-    [page "Select card to trash"
+    [page (txt :epic/trash-page-title) {:site-subtitle :keep}
      [toolbar {:disable-gutters true}
       [back-button {:variant :contained
                     :sx      {:mr 2}}]

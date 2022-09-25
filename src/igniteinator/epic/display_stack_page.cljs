@@ -53,7 +53,8 @@
 (defn display-stack-page []
   (let [cards (<sub :epic/relevant-top-cards)]
     [page-with-navigation
-     {:idx-ref                  (<sub-ref :epic-display-stack-page/idx)
+     {:site-subtitle            :keep
+      :idx-ref                  (<sub-ref :epic-display-stack-page/idx)
       :current-title-ref        (<sub-ref :epic-display-stack-page/current-title)
       :previous-title-ref       (<sub-ref :epic-display-stack-page/previous-title)
       :first-transition-in?-ref (<sub-ref :epic-display-stack-page/first-transition-in?)

@@ -40,7 +40,7 @@
         menu-items))]])
 
 (defn front-page []
-  (page "Welcome to the Igniteinator"
+  (page "Welcome to the Igniteinator" {:site-subtitle nil}
     [:p "This is a fan-made app for the skirmish deck building board game "
      [external-link const/ignite-link "Ignite"] "."]
     [:p "Use the "

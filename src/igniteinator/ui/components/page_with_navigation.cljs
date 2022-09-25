@@ -81,7 +81,8 @@
           [last-button idx-ref on-change-index children-count]])
        extra-buttons])))
 
-(defn page-with-navigation [{:keys [idx-ref
+(defn page-with-navigation [{:keys [site-subtitle
+                                    idx-ref
                                     current-title-ref
                                     previous-title-ref
                                     first-transition-in?-ref
@@ -100,6 +101,7 @@
        [title
         (not first-transition-in?)
         (if first-transition-in? previous-title current-title)]]
+      {:site-subtitle (or site-subtitle current-title)}
       [nav-bar idx-ref on-change-index (count children) extra-buttons]]
      [content-view {:idx-ref         idx-ref
                     :on-change-index on-change-index}
