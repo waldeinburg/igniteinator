@@ -10,6 +10,7 @@ source private.inc.sh
 
 BUILD_DIR=target
 SRC_DIR="$BUILD_DIR/final"
+MAIN_FILE="$SRC_DIR/main.js"
 
 TEST=
 CLEAR_TEST=
@@ -129,6 +130,9 @@ function build_code() {
   if [[ "$BUILD_SW" ]]; then
     lein fig:build-sw
   fi
+  # Nasty hack to solve goog.global not being set correctly before being used by third party code.
+  # https://clojurians.slack.com/archives/C03S1L9DN/p1664662511267109
+  perl -p -i -e 's/(?<!=)=this\|\|self/=self/' "$MAIN_FILE"
 }
 
 function build_static() {
