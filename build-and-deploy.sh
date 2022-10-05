@@ -11,6 +11,7 @@ source private.inc.sh
 BUILD_DIR=target
 SRC_DIR="$BUILD_DIR/final"
 MAIN_FILE="$SRC_DIR/main.js"
+SW_FILE="$SRC_DIR/sw.js"
 
 TEST=
 CLEAR_TEST=
@@ -125,14 +126,32 @@ function clean() {
   lein clean
 }
 
+function fix_goog_global() {
+  local f=$1
+  local num_to_replace
+  # Nasty hack to solve goog.global not being set correctly by ClojureScript (cljs/core.cljs bottom) before being used
+  # by other code (like "goog.Timer.defaultTimerObject = goog.global;" in goog/timer/timer.js).
+  # Cf. https://clojurians.slack.com/archives/C03S1L9DN/p1664662511267109
+  # Using https://webpack.js.org/loaders/imports-loader does not seem to be a possibility because goog/base.js is not
+  # loaded as a module but with a raw "document.write('<script ..."; the imports-loader complains that the module does
+  # not exist.
+  # Terminate if there's any doubt that we are replacing the right thing.
+  num_to_replace=$(grep -oE '[^=]=this\|\|self[,;]' "$f" | wc -l)
+  if [[ "$num_to_replace" -ne 1 ]]; then
+    echo "Found $num_to_replace occurences of '=this||self' to replace!"
+    exit 1
+  fi
+  perl -p -i -e 's/(?<!=)=this\|\|self(?=[,;])/=self/' "$f"
+}
+
 function build_code() {
   lein fig:build
+  fix_goog_global "$MAIN_FILE"
   if [[ "$BUILD_SW" ]]; then
     lein fig:build-sw
+    # The error has not been seen in the service worker but there's no guarantee it will not break.
+    fix_goog_global "$SW_FILE"
   fi
-  # Nasty hack to solve goog.global not being set correctly before being used by third party code.
-  # https://clojurians.slack.com/archives/C03S1L9DN/p1664662511267109
-  perl -p -i -e 's/(?<!=)=this\|\|self/=self/' "$MAIN_FILE"
 }
 
 function build_static() {
