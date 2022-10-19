@@ -1,55 +1,19 @@
 (ns igniteinator.model.epic-setups
-  (:require [igniteinator.ui.components.link :refer [external-link]]))
+  (:require [igniteinator.ui.components.link :refer [external-link]]
+            [igniteinator.util.filter :refer [cost<= cost= cost>= cost>=< find-id-by-name-fn]]))
 
-(defn- find-id-by-name-fn [coll]
-  (fn [name]
-    (some #(if (= name (:name %))
-             (:id %))
-      coll)))
-
-(defn epic-setups [cards types has-the-freeze? has-a-new-enemy?]
+(defn epic-setups [{:keys [march-id dagger-id old-wooden-shield-id dragon-potion-id
+                           bow? movement? ability? event? weapon? shield? war-machine? projectile? spell? item? title?]}
+                   has-the-freeze? has-a-new-enemy?]
   "Get list of Epic setup types.
   To be called from a subscription."
-  (let [split-50-50-stacks   (fn [name]
-                               [{:name    (str name " A")
-                                 :take-fn (fn [cards]
-                                            (let [half (js/Math.ceil (/ (count cards) 2))]
-                                              (partition half half nil cards)))}
-                                {:name    (str name " B")
-                                 :take-fn #(list % nil)}])
-        find-card-id-by-name (find-id-by-name-fn cards)
-        find-type-id-by-name (find-id-by-name-fn types)
-        is-type-fn           (fn [type-name]
-                               (let [type-id (find-type-id-by-name type-name)]
-                                 (fn [card]
-                                   (= type-id (-> card :types (get 0))))))
-        has-type-fn          (fn [type-name]
-                               (let [type-id (find-type-id-by-name type-name)]
-                                 (fn [card]
-                                   (some #(= type-id %) (:types card)))))
-        cost=                (fn [cost card]
-                               (= cost (:cost card)))
-        cost>=<              (fn [cost-from cost-to card]
-                               (<= cost-from (:cost card) cost-to))
-        cost<=               (fn [cost card]
-                               (>= cost (:cost card)))
-        cost>=               (fn [cost card]
-                               (<= cost (:cost card)))
-        march-id             (find-card-id-by-name "March")
-        dagger-id            (find-card-id-by-name "Dagger")
-        old-wooden-shield-id (find-card-id-by-name "Old Wooden Shield")
-        dragon-potion-id     (find-card-id-by-name "Dragon Potion")
-        bow?                 (has-type-fn "Bow")
-        movement?            (is-type-fn "Movement")
-        ability?             (is-type-fn "Ability")
-        event?               (is-type-fn "Event")
-        weapon?              (is-type-fn "Weapon")
-        shield?              (is-type-fn "Shield")
-        war-machine?         (is-type-fn "War Machine")
-        projectile?          (is-type-fn "Projectile")
-        spell?               (is-type-fn "Spell")
-        item?                (is-type-fn "Item")
-        title?               (is-type-fn "Title")]
+  (let [split-50-50-stacks (fn [name]
+                             [{:name    (str name " A")
+                               :take-fn (fn [cards]
+                                          (let [half (js/Math.ceil (/ (count cards) 2))]
+                                            (partition half half nil cards)))}
+                              {:name    (str name " B")
+                               :take-fn #(list % nil)}])]
     [{:name             "Epic Ignite"
       :description
       (if has-the-freeze?

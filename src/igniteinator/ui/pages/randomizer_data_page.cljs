@@ -34,12 +34,7 @@
      [entry "Requires type exceptions"
       "Cards with the following types does not satisfy the Requires type condition above"
       types-map
-      type-ids])
-   (if-let [additional-types (:requires-additional-of-types card)]
-     [entry "Requires another of type"
-      "Setup must have one additional card (besides this card) of each of the following types"
-      types-map
-      additional-types])])
+      type-ids])])
 
 (defn randomizer-data-page []
   (let [cards       (<sub :randomizer/cards)

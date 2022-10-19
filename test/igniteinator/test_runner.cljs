@@ -2,9 +2,11 @@
 (ns igniteinator.test-runner
   (:require
     ;; require all the namespaces that you want to test
+    [figwheel.main.testing :refer [run-tests-async]]
     [igniteinator.core-test]
+    [igniteinator.randomizer.randomizer-test]
     [igniteinator.util.sort-test]
-    [figwheel.main.testing :refer [run-tests-async]]))
+    [igniteinator.util.string-test]))
 
 (defn -main [& args]
   (run-tests-async 5000))

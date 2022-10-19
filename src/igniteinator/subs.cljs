@@ -7,6 +7,7 @@
             [igniteinator.model.setups :as setups]
             [igniteinator.router :refer [resolve-to-href]]
             [igniteinator.text :as text]
+            [igniteinator.util.filter :refer [find-id-by-name-fn]]
             [igniteinator.util.filter :as filter-util]
             [igniteinator.util.image-path :refer [image-path]]
             [igniteinator.util.re-frame :refer [<sub <sub-ref reg-sub-db reg-sub-option]]
@@ -466,6 +467,45 @@
   (fn [types-map _]
     (vals types-map)))
 
+;; A set of constants and functions that are not available until data are loaded.
+(reg-sub
+  :filter-utils
+  :<- [:all-cards]
+  :<- [:all-types]
+  :<- [:all-effects]
+  (fn [[cards types effects] _]
+    (let [find-card-id-by-name   (find-id-by-name-fn cards)
+          find-type-id-by-name   (find-id-by-name-fn types)
+          find-effect-id-by-name (find-id-by-name-fn effects)
+          is-type-fn             (fn [type-name]
+                                   (let [type-id (find-type-id-by-name type-name)]
+                                     (fn [card]
+                                       (= type-id (-> card :types (get 0))))))
+          has-type-fn            (fn [type-name]
+                                   (let [type-id (find-type-id-by-name type-name)]
+                                     (fn [card]
+                                       (some #(= type-id %) (:types card)))))
+          provides-effect-fn     (fn [effect-name]
+                                   (let [effect-id (find-effect-id-by-name effect-name)]
+                                     (fn [card]
+                                       (some #(= effect-id %) (:provides-effect card)))))]
+      {:march-id             (find-card-id-by-name "March")
+       :dagger-id            (find-card-id-by-name "Dagger")
+       :old-wooden-shield-id (find-card-id-by-name "Old Wooden Shield")
+       :dragon-potion-id     (find-card-id-by-name "Dragon Potion")
+       :bow?                 (has-type-fn "Bow")
+       :movement?            (is-type-fn "Movement")
+       :ability?             (is-type-fn "Ability")
+       :event?               (is-type-fn "Event")
+       :weapon?              (is-type-fn "Weapon")
+       :shield?              (is-type-fn "Shield")
+       :war-machine?         (is-type-fn "War Machine")
+       :projectile?          (is-type-fn "Projectile")
+       :spell?               (is-type-fn "Spell")
+       :item?                (is-type-fn "Item")
+       :title?               (is-type-fn "Title")
+       :provides-damage?     (provides-effect-fn "Damage")})))
+
 (reg-sub-db :epic/show-stack-info?)
 (reg-sub-db :epic/reset-dialog-open?)
 (reg-sub-db :epic/active?)
@@ -474,8 +514,7 @@
 (reg-sub-db :epic/trash-mode)
 
 (reg-sub :epic/setups
-  :<- [:all-cards]
-  :<- [:all-types]
+  :<- [:filter-utils]
   :<- [:boxes-setting/box? {:id 2}]
   :<- [:boxes-setting/box? {:id 3}]
   (fn [args _]
@@ -603,6 +642,11 @@
   (reg-history-title-sub :epic/redo-title :redo-history))
 
 (reg-sub-db :effects-map [:effects])
+(reg-sub
+  :all-effects
+  :<- [:effects-map]
+  (fn [effects-map _]
+    (vals effects-map)))
 
 (reg-sub
   :randomizer/cards
