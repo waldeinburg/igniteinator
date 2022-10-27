@@ -48,7 +48,9 @@
       :filter damage-card-other-cost}
      {:name   "Card providing damage of a different cost"
       :filter damage-card-other-cost}
-     ;; 3-10 is 8 different costs. The 7th and 8th filter will never just select the whole remaining set.
+     ;; 3-10 is 8 different costs. Worst case is that we have only selected 4 different cost by now (if two of the four
+     ;; damage cards has the same cost as the two movement cards). Best case is 6 different costs. Thus, we need 2-4
+     ;; more filters to ensure cost 3-10.
      ;; 11 not included; there's only two cards from the base game plus Dragon Potion and the randomizer should not
      ;; always include those few.
      {:name   "Ensure cards of cost 3-10"

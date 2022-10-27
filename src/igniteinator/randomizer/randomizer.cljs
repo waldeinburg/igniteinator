@@ -94,7 +94,8 @@
   (->
     market-base
     mark-depends-on
-    mark-satisfies))
+    mark-satisfies
+    vec))
 
 (defn resolve-requirements [random-cards market-base specs]
   (loop [cards-left     random-cards
@@ -103,52 +104,51 @@
          idx-to-replace (dec (count selected-cards))]
     (if (= idx-to-resolve (count selected-cards))
       selected-cards
-      (if (:requirement? (nth selected-cards idx-to-replace))
-        ;; We need to skip this card as it is the only card that satisfies some requirement.
-        (recur cards-left selected-cards idx-to-resolve (dec idx-to-replace))
-        ;; Check requirements and resolve if any.
-        (let [new-idx-to-resolve (inc idx-to-resolve)
-              card-to-resolve    (nth selected-cards idx-to-resolve)
-              new-card-pred      (if-let [pred (get-full-requirement-pred card-to-resolve)]
-                                   ;; No cards matches predicate.
-                                   (if (not-empty (filter pred selected-cards))
-                                     pred))]
-          (if new-card-pred
-            (let [valid-card-pred         ((:filter (nth specs idx-to-replace)) selected-cards)
-                  valid-cards             (filter valid-card-pred cards-left)
-                  new-card                (if (<= idx-to-replace idx-to-resolve)
-                                            (or
-                                              (first (filter new-card-pred valid-cards))
-                                              ;; If there's for some reason no cards satisfying both the spec and the
-                                              ;; requirement, we must satisfy the requirement from the full deck.
-                                              (first (filter new-card-pred cards-left)))
-                                            ;; We cannot resolve the card because it's the card to be replaced, or we have
-                                            ;; replaced cards past the cards to resolve. Select a card without
-                                            ;; requirements.
-                                            (first (filter (fn [card]
-                                                             (not-any? #(contains? % card)
-                                                               [:requires-effect
-                                                                :requires-type
-                                                                :requires-additional-of-type]))
-                                                     valid-cards)))
-                  card-to-replace         (nth selected-cards idx-to-replace)
-                  new-card-id             (:id new-card)
-                  new-cards-left          (conj
-                                            ;; Remove new card.
-                                            (filterv #(not= new-card-id (:id %)) cards-left)
-                                            ;; Insert replaced card to "bottom" of the random deck.
-                                            card-to-replace)
-                  selected-cards-replaced (assoc selected-cards idx-to-replace new-card)
-                  new-selected-cards      (if (:satisfies-some? card-to-replace)
-                                            ;; The card was not the only card that satisfied some requirement (it would
-                                            ;; have been skipped) but it satisfied some requirement. This mean that there
-                                            ;; might be another card which is not the only card that satisfied that
-                                            ;; requirement. Recalculate.
-                                            (mark-dependencies selected-cards-replaced)
-                                            selected-cards-replaced)]
-              (recur new-cards-left new-selected-cards new-idx-to-resolve (dec idx-to-replace)))
-            ;; Nothing to do for this card.
-            (recur cards-left selected-cards new-idx-to-resolve idx-to-replace)))))))
+      (let [card-to-replace (nth selected-cards idx-to-replace)]
+        (if (:requirement? card-to-replace)
+          ;; We need to skip this card as it is the only card that satisfies some requirement.
+          (recur cards-left selected-cards idx-to-resolve (dec idx-to-replace))
+          ;; Check requirements and resolve if any.
+          (let [new-idx-to-resolve (inc idx-to-resolve)
+                card-to-resolve    (nth selected-cards idx-to-resolve)
+                new-card-pred      (if-let [pred (get-full-requirement-pred card-to-resolve)]
+                                     ;; No cards matches predicate.
+                                     (if (empty? (filter pred selected-cards))
+                                       pred))]
+            (if new-card-pred
+              (let [valid-card-pred         (:filter (nth specs idx-to-replace))
+                    valid-cards             (filter valid-card-pred cards-left)
+                    new-card                (if (> idx-to-replace idx-to-resolve)
+                                              (or
+                                                (first (filter new-card-pred valid-cards))
+                                                ;; If there's for some reason no cards satisfying both the spec and the
+                                                ;; requirement, we must satisfy the requirement from the full deck.
+                                                (first (filter new-card-pred cards-left)))
+                                              ;; We cannot resolve the card because it's the card to be replaced, or we
+                                              ;; have replaced cards past the cards to resolve. Select a card without
+                                              ;; requirements.
+                                              (first (filter (fn [card]
+                                                               (not-any? #(contains? % card)
+                                                                 [:requires-effect
+                                                                  :requires-type]))
+                                                       valid-cards)))
+                    new-card-id             (:id new-card)
+                    new-cards-left          (conj
+                                              ;; Remove new card.
+                                              (filterv #(not= new-card-id (:id %)) cards-left)
+                                              ;; Insert replaced card to "bottom" of the random deck.
+                                              card-to-replace)
+                    selected-cards-replaced (assoc selected-cards idx-to-replace new-card)
+                    new-selected-cards      (if (:satisfies-some? card-to-replace)
+                                              ;; The card was not the only card that satisfied some requirement (it
+                                              ;; would have been skipped) but it satisfied some requirement. This mean
+                                              ;; that there might be another card which is not the only card that
+                                              ;; satisfied that requirement. Recalculate.
+                                              (mark-dependencies selected-cards-replaced)
+                                              selected-cards-replaced)]
+                (recur new-cards-left new-selected-cards new-idx-to-resolve (dec idx-to-replace)))
+              ;; Nothing to do for this card.
+              (recur cards-left selected-cards new-idx-to-resolve idx-to-replace))))))))
 
 (defn add-title-cards [selected-cards random-title-cards]
   (into (vec selected-cards) (take 2 random-title-cards)))
