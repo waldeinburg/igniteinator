@@ -29,6 +29,9 @@
     [random-cards []]
     specs))
 
+(defn has-requirements? [card]
+  (some #{:requires-effect :requires-type} (keys card)))
+
 (defn get-requirement-pred [card-to-resolve key pred-fn]
   (if-let [req (get card-to-resolve key)]
     (let [req-set (set req)]
@@ -58,22 +61,28 @@
                       preds)]
       (apply every-pred all-preds))))
 
-(defn mark-depends-on [market-base]
-  "Add set :depends-on-idx on each card in market with all indexes in market that satisfy requirements."
+(defn set-requirement-pred [selected-cards]
   (map
-    (fn [card-to-resolve]
-      (if-let [pred (get-full-requirement-pred card-to-resolve)]
-        (let [depends-on-idx (reduce-kv
-                               (fn [res idx card]
-                                 (if (pred card)
-                                   (conj res idx)))
-                               #{}
-                               market-base)]
-          (assoc card-to-resolve :depends-on-idx depends-on-idx))
-        card-to-resolve))
-    market-base))
+    #(assoc % :requirement-pred (get-full-requirement-pred %))
+    selected-cards))
 
-(defn mark-satisfies [market-with-depends-on]
+(defn set-depends-on [market-base-with-requirement-pred]
+  "Add set :depends-on-idx on each card in market with all indexes in market that satisfy requirements."
+  (let [market-vec (vec market-base-with-requirement-pred)]
+    (map
+      (fn [card-to-resolve]
+        (if-let [pred (:requirement-pred card-to-resolve)]
+          (let [depends-on-idx (reduce-kv
+                                 (fn [res idx card]
+                                   (if (pred card)
+                                     (conj res idx)))
+                                 #{}
+                                 market-vec)]
+            (assoc card-to-resolve :depends-on-idx depends-on-idx))
+          card-to-resolve))
+      market-base-with-requirement-pred)))
+
+(defn set-satisfies [market-with-depends-on]
   "Mark that a card is the only card that satisfies some requirement."
   (map-indexed
     (fn [idx card-to-resolve]
@@ -90,65 +99,100 @@
         card-to-resolve))
     market-with-depends-on))
 
+(defn unresolved? [market-with-requirement-pred card]
+  (let [pred (:requirement-pred card)]
+    (and pred
+      ;; No cards matches predicate.
+      (empty? (filter pred market-with-requirement-pred)))))
+
+(defn set-unresolved? [market-with-requirement-pred]
+  (map
+    (fn [card]
+      (assoc card :unresolved? (unresolved? market-with-requirement-pred card)))
+    market-with-requirement-pred))
+
 (defn mark-dependencies [market-base]
   (->
     market-base
-    mark-depends-on
-    mark-satisfies
+    set-requirement-pred
+    set-depends-on
+    set-satisfies
     vec))
 
 (defn resolve-requirements [random-cards market-base specs]
-  (loop [cards-left     random-cards
-         selected-cards (mark-dependencies market-base)
-         idx-to-resolve 0
-         idx-to-replace (dec (count selected-cards))]
-    (if (= idx-to-resolve (count selected-cards))
-      selected-cards
-      (let [card-to-replace (nth selected-cards idx-to-replace)]
-        (if (:requirement? card-to-replace)
-          ;; We need to skip this card as it is the only card that satisfies some requirement.
-          (recur cards-left selected-cards idx-to-resolve (dec idx-to-replace))
-          ;; Check requirements and resolve if any.
-          (let [new-idx-to-resolve (inc idx-to-resolve)
-                card-to-resolve    (nth selected-cards idx-to-resolve)
-                new-card-pred      (if-let [pred (get-full-requirement-pred card-to-resolve)]
-                                     ;; No cards matches predicate.
-                                     (if (empty? (filter pred selected-cards))
-                                       pred))]
-            (if new-card-pred
-              (let [valid-card-pred         (:filter (nth specs idx-to-replace))
-                    valid-cards             (filter valid-card-pred cards-left)
-                    new-card                (if (> idx-to-replace idx-to-resolve)
-                                              (or
+  (let [last-idx (dec (count market-base))]
+    (loop [cards-left     random-cards
+           selected-cards (mark-dependencies market-base)
+           idx-to-resolve 0
+           idx-to-replace last-idx
+           replaced-any?  false
+           ;; Replace cards having requirements? Our first priority is not to because requirements are a sort of combo.
+           preserve-reqs? true]
+      (if (> idx-to-resolve last-idx)
+        (if (some (partial unresolved? selected-cards) selected-cards)
+          ;; We need another run to resolve all cards. This can happen if idx-to-resolve runs past idx-to-replace and
+          ;; a card with an unfulfilled requirements is selected. Example: Arrow Storm is selected as the last card in
+          ;; a market without any Projectile or Bow cards or any other card with requirements. When idx-to-resolve is
+          ;; 15 then idx-to-replace goes down to 14 to avoid replacing idx 15, a Projectile card replaces idx 14, and
+          ;; we now have run through the whole market but is ending up with a Projectile missing a Bow.
+          (recur cards-left selected-cards 0 last-idx false
+            ;; If we did not replace any cards in the last run and still have unresolved dependencies, it means that our
+            ;; strategy of avoiding replacing cards with requirements did not work out (will happen if all cards have
+            ;; requirements but one of them is not satisfied).
+            replaced-any?)
+          selected-cards)
+        (let [card-to-resolve (nth selected-cards idx-to-resolve)
+              card-to-replace (nth selected-cards idx-to-replace)]
+          (if (or
+                ;; This card is the only card that satisfies some requirement.
+                (:requirement? card-to-replace)
+                ;; We cannot resolve a card by replacing the card itself. We could select a card without requirements,
+                ;; but we will not do that because requirements are a sort of combo; and we want to prioritize cards
+                ;; that fit together. Of course, this only applies if the card actually has any requirements. If not,
+                ;; we can proceed, the resolving will do nothing and the card may be replaced when resolving the next.
+                (and (= idx-to-replace idx-to-resolve) (:requirement-pred card-to-resolve))
+                ;; For the same reason mentioned above, do not replace the card if it has requirements unless that
+                ;; priority has failed. The preserve-reqs? condition does not apply to replacing the same card for
+                ;; simplicity.
+                (and preserve-reqs? (:requirement-pred card-to-replace)))
+            ;; Then do not replace this card.
+            (recur cards-left selected-cards idx-to-resolve (dec idx-to-replace) replaced-any? preserve-reqs?)
+            ;; Check requirements and resolve if any.
+            (let [new-idx-to-resolve (inc idx-to-resolve)]
+              ;; Do not calculate :unresolved? beforehand. The card could have been resolved when another card was
+              ;; resolved.
+              (if (unresolved? selected-cards card-to-resolve)
+                (let [new-card-pred           (:requirement-pred card-to-resolve)
+                      valid-card-pred         (:filter (nth specs idx-to-replace))
+                      valid-cards             (filter valid-card-pred cards-left)
+                      new-card                (or
                                                 (first (filter new-card-pred valid-cards))
                                                 ;; If there's for some reason no cards satisfying both the spec and the
-                                                ;; requirement, we must satisfy the requirement from the full deck.
+                                                ;; requirement, we must satisfy the requirement from the full deck. We
+                                                ;; can safely assume that this will always be possible (the contrary
+                                                ;; would be extremely inflexible cards or idx-to-replace reaching the
+                                                ;; movement card filters which is not going to happen).
                                                 (first (filter new-card-pred cards-left)))
-                                              ;; We cannot resolve the card because it's the card to be replaced, or we
-                                              ;; have replaced cards past the cards to resolve. Select a card without
-                                              ;; requirements.
-                                              (first (filter (fn [card]
-                                                               (not-any? #(contains? % card)
-                                                                 [:requires-effect
-                                                                  :requires-type]))
-                                                       valid-cards)))
-                    new-card-id             (:id new-card)
-                    new-cards-left          (conj
-                                              ;; Remove new card.
-                                              (filterv #(not= new-card-id (:id %)) cards-left)
-                                              ;; Insert replaced card to "bottom" of the random deck.
-                                              card-to-replace)
-                    selected-cards-replaced (assoc selected-cards idx-to-replace new-card)
-                    new-selected-cards      (if (:satisfies-some? card-to-replace)
-                                              ;; The card was not the only card that satisfied some requirement (it
-                                              ;; would have been skipped) but it satisfied some requirement. This mean
-                                              ;; that there might be another card which is not the only card that
-                                              ;; satisfied that requirement. Recalculate.
-                                              (mark-dependencies selected-cards-replaced)
-                                              selected-cards-replaced)]
-                (recur new-cards-left new-selected-cards new-idx-to-resolve (dec idx-to-replace)))
-              ;; Nothing to do for this card.
-              (recur cards-left selected-cards new-idx-to-resolve idx-to-replace))))))))
+                      new-card-id             (:id new-card)
+                      new-cards-left          (conj
+                                                ;; Remove new card.
+                                                (filterv #(not= new-card-id (:id %)) cards-left)
+                                                ;; Insert replaced card to "bottom" of the random deck.
+                                                card-to-replace)
+                      selected-cards-replaced (assoc selected-cards idx-to-replace new-card)
+                      ;; Always recalculate. The card could satisfy another dependency already satisfied by one other
+                      ;; card, meaning that another card should now lose its :requirement? tag.
+                      ;; There's other cases requiring a recalculation, but we could test for those:
+                      ;; 1. (:satisfies-some? card-to-replace): The card was not the only card that satisfied some
+                      ;; requirement (it would have been skipped) but it satisfied some requirement. This mean that
+                      ;; there might be another card which is not the only card that satisfied that requirement.
+                      ;; 2. (has-requirements? new-card): The new card has requirements. We will either run into this
+                      ;; card if idx-to-resolve < idx-to-replace or we catch the unresolved dependency when we check if
+                      ;; we can safely return from the loop.
+                      new-selected-cards      (mark-dependencies selected-cards-replaced)]
+                  (recur new-cards-left new-selected-cards new-idx-to-resolve (dec idx-to-replace) true preserve-reqs?))
+                ;; Nothing to do for this card.
+                (recur cards-left selected-cards new-idx-to-resolve idx-to-replace replaced-any? preserve-reqs?)))))))))
 
 (defn add-title-cards [selected-cards random-title-cards]
   (into (vec selected-cards) (take 2 random-title-cards)))

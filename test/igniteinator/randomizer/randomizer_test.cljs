@@ -75,4 +75,20 @@
          {:id 27, :types [:hoo :goo]}]
         (card-range 28 30)
         (card-range 101 105))
-      (concat (range 1 13) [25 23 27 24 101 102]))))
+      (concat (range 1 13) [25 23 27 24 101 102])
+      ;; Do not resolve a card by replacing card it. And handle idx-to-resolve running paste idx-to-replace.
+      (concat
+        [{:id 1, :types [:mov], :cost 4}
+         {:id 2, :types [:mov], :cost 6}
+         {:id 3, :provides-effect [:dmg], :cost 5}
+         {:id 4, :provides-effect [:dmg], :cost 7}
+         {:id 5, :provides-effect [:dmg], :cost 8}
+         {:id 6, :provides-effect [:dmg], :cost 9}
+         {:id 7, :cost 3}
+         {:id 8, :cost 10}]
+        (card-range 9 16)
+        [{:id 16, :requires-type [:foo]}                    ;; Will be selected as the last card.
+         {:id 17, :types [:foo], :requires-type [:bar]}     ;; Will not be resolved in first run.
+         {:id 18, :types [:bar]}]
+        (card-range 101 105))
+      (concat (range 1 14) [18 17 16 101 102]))))
