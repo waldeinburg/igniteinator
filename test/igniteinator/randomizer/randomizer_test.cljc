@@ -16,15 +16,24 @@
     (is (= [4 5] (mapv :id (get-randomizer-cards filter-utils cards))))
     (is (= [6 7 8] (mapv :id (get-title-cards filter-utils cards))))))
 
+(defn cards-concat [& cols]
+  (map (fn [card]
+         ;; CLJS doesn't care that we compare a number and nil with < or > but CLJ does.
+         (update card :cost #(or % 0)))
+    (apply concat cols)))
+
 (deftest generate-market-from-base-specs
-  (let [filter-utils {:title?           #(> (:id %) 100)
-                      :movement?        #(= :types [:mov])
-                      :provides-damage? #(= :provides-effect [:dmg])}
+  (let [filter-utils {:march-id             -1
+                      :dagger-id            -2
+                      :old-wooden-shield-id -3
+                      :title?               #(> (:id %) 100)
+                      :movement?            #(= (:types %) [:mov])
+                      :provides-damage?     #(= (:provides-effect %) [:dmg])}
         specs        (card-specs filter-utils)]
     (are [cards market-ids]
       (= market-ids (mapv :id (generate-market filter-utils cards specs)))
       ;; No combos, no dependencies, select cost 11 at cost 10-11 rule.
-      (concat
+      (cards-concat
         [{:id 1, :types [:mov], :cost 4}
          {:id 2, :types [:mov], :cost 6}
          {:id 3, :provides-effect [:dmg], :cost 5}
@@ -42,7 +51,7 @@
         (card-range 101 105))
       (concat (id-range 1 11) [12 11] (id-range 13 17) [101 102])
       ;; No dependencies, select combos.
-      (concat
+      (cards-concat
         [{:id 1, :types [:mov], :cost 4, :combos [28, 29]}
          {:id 2, :types [:mov], :cost 6}
          {:id 3, :provides-effect [:dmg], :cost 5, :combos [25]}
@@ -55,7 +64,7 @@
         (card-range 101 105))
       (concat (range 1 12) [21 25 28 12 13 101 102])
       ;; Simple requirements, just overwrite cards.
-      (concat
+      (cards-concat
         [{:id 1, :types [:mov], :cost 4, :requires-effect [:foo]}
          {:id 2, :types [:mov], :cost 6}
          {:id 3, :types [:goo] :provides-effect [:dmg], :cost 5, :requires-type [:goo]}
@@ -78,7 +87,7 @@
         (card-range 101 105))
       (concat (range 1 13) [28 23 27 24 101 102])
       ;; Do not resolve a card by replacing card it. And handle idx-to-resolve running paste idx-to-replace.
-      (concat
+      (cards-concat
         [{:id 1, :types [:mov], :cost 4}
          {:id 2, :types [:mov], :cost 6}
          {:id 3, :provides-effect [:dmg], :cost 5}
