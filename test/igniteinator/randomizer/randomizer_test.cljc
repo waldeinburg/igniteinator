@@ -62,20 +62,21 @@
          {:id 4, :provides-effect [:dmg], :cost 7, :requires-type [:bar], :requires-type-except [:baz]}
          {:id 5, :provides-effect [:dmg], :cost 8, :requires-effect [:quz :qoo]}
          {:id 6, :provides-effect [:dmg], :cost 9, :requires-type [:qux :quy]}
-         {:id 7, :cost 3}
-         {:id 8, :cost 10}]
+         {:id 7, :cost 3, :combos [11 12 13]}               ; Make sure 28 is not selected before resolving.
+         {:id 8, :cost 10, :combos [28]}]
         (card-range 9 20)
         [{:id 20, :provides-effect [:mov]}                  ; Not type
          {:id 21, :types [:foo]}                            ; Not effect
          {:id 22, :types [:bar :baz]}                       ; Not selected because of except
-         {:id 23, :types [:bar :quy]}                       ; Satifisfies two
+         {:id 23, :types [:bar :quy]}                       ; Satifisfies two. Does not satisfy spec, but no card does.
          {:id 24, :provides-effect [:foo]}
-         {:id 25, :provides-effect [:qru :qoo]}             ; Satisfies, but not with primary type
+         {:id 25, :provides-effect [:qru :qoo]}             ; Does not satisfy spec; 28 is selected instead (combo).
          {:id 26, :types [:quy]}                            ; Already satisfied.
-         {:id 27, :types [:hoo :goo]}]
-        (card-range 28 30)
+         {:id 27, :types [:hoo :goo]}                       ; Satisfies, but not with primary type.
+         {:id 28, :provides-effect [:qru :qoo]}]            ; Satisfies, but not with first effect. Selected from spec.
+        (card-range 29 30)
         (card-range 101 105))
-      (concat (range 1 13) [25 23 27 24 101 102])
+      (concat (range 1 13) [28 23 27 24 101 102])
       ;; Do not resolve a card by replacing card it. And handle idx-to-resolve running paste idx-to-replace.
       (concat
         [{:id 1, :types [:mov], :cost 4}
