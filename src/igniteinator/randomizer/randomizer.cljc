@@ -163,7 +163,8 @@
               ;; resolved.
               (if (unresolved? selected-cards card-to-resolve)
                 (let [new-card-pred           (:requirement-pred card-to-resolve)
-                      valid-card-pred         (:filter (nth specs idx-to-replace))
+                      spec-filter             (:filter (nth specs idx-to-replace))
+                      valid-card-pred         (spec-filter (assoc selected-cards idx-to-replace nil))
                       valid-cards             (filter valid-card-pred cards-left)
                       new-card                (or
                                                 (first (filter new-card-pred valid-cards))

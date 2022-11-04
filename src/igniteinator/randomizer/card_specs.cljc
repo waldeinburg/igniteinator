@@ -3,18 +3,25 @@
             [igniteinator.util.filter :refer [cost= cost>= cost>=<]]))
 
 (defn card-specs [{:keys [movement? provides-damage?]}]
+  ;; Notice that cards in selected-cards can be nil. This happens when replacing: For example, we should not find combos
+  ;; for the card we are replacing.
   (let [basic-costs                 (set (range 3 11))
         high-cost                   10
         damage-card-other-cost      (fn [selected-cards]
                                       (let [other-damage-cards-cost (->>
                                                                       (nthrest selected-cards 2)
+                                                                      (filter some?)
                                                                       (map :cost)
                                                                       set)]
                                         #(and
                                            (provides-damage? %)
                                            (not (other-damage-cards-cost (:cost %))))))
         ensure-basic-cost-or-random (fn [selected-cards]
-                                      (let [other-costs (set (map :cost selected-cards))
+                                      (let [other-costs (->>
+                                                          selected-cards
+                                                          (filter some?)
+                                                          (map :cost)
+                                                          set)
                                             costs       (difference basic-costs other-costs)]
                                         (if (empty? costs)
                                           (constantly true)
