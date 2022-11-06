@@ -129,7 +129,12 @@
            ;; Replace cards having requirements? Our first priority is not to because requirements are a sort of combo.
            preserve-reqs? true]
       (if (> idx-to-resolve last-idx)
-        (if (some (partial unresolved? selected-cards) selected-cards)
+        (if (and
+              ;; If we haven't replaced any in the last run and the false preserve-reqs fallback has failed, then
+              ;; terminate to avoid infinite loop (the next try will also fail).
+              (or replaced-any? preserve-reqs?)
+              ;; Any unresolved after running through all cards?
+              (some (partial unresolved? selected-cards) selected-cards))
           ;; We need another run to resolve all cards. This can happen if idx-to-resolve runs past idx-to-replace and
           ;; a card with an unfulfilled requirements is selected. Example: Arrow Storm is selected as the last card in
           ;; a market without any Projectile or Bow cards or any other card with requirements. When idx-to-resolve is
