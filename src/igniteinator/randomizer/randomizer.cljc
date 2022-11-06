@@ -119,6 +119,37 @@
     set-satisfies
     vec))
 
+(defn replace-card [new-card-pred specs selected-cards cards-left idx-to-replace]
+  (let [card-to-replace (nth selected-cards idx-to-replace)
+        spec-filter     (:filter (nth specs idx-to-replace))
+        valid-card-pred (spec-filter (assoc selected-cards idx-to-replace nil))
+        valid-cards     (filter valid-card-pred cards-left)]
+    (if-let [new-card (or
+                        (first (filter new-card-pred valid-cards))
+                        ;; If there's for some reason no cards satisfying both the spec and the requirement, we must
+                        ;; satisfy the requirement from the full deck. We can safely assume that this will always be
+                        ;; possible (the contrary would be extremely inflexible cards or idx-to-replace reaching the
+                        ;; movement card filters which is not going to happen).
+                        (first (filter new-card-pred cards-left)))]
+      (let [new-card-id             (:id new-card)
+            new-cards-left          (conj
+                                      ;; Remove new card.
+                                      (filterv #(not= new-card-id (:id %)) cards-left)
+                                      ;; Insert replaced card to "bottom" of the random deck.
+                                      card-to-replace)
+            selected-cards-replaced (assoc selected-cards idx-to-replace new-card)
+            ;; Always recalculate. The card could satisfy another dependency already satisfied by one other card,
+            ;; meaning that another card should now lose its :requirement? tag.
+            ;; There's other cases requiring a recalculation, but we could test for those:
+            ;; 1. (:satisfies-some? card-to-replace): The card was not the only card that satisfied some requirement (it
+            ;; would have been skipped) but it satisfied some requirement. This mean that there might be another card
+            ;; which is not the only card that satisfied that requirement.
+            ;; 2. (has-requirements? new-card): The new card has requirements. We will either run into this card if
+            ;; idx-to-resolve < idx-to-replace or we catch the unresolved dependency when we check if we can safely
+            ;; return from the loop.
+            new-selected-cards      (mark-dependencies selected-cards-replaced)]
+        {:new-cards-left new-cards-left, :new-selected-cards new-selected-cards}))))
+
 (defn resolve-requirements [random-cards market-base specs]
   (let [last-idx (dec (count market-base))]
     (loop [cards-left     random-cards
@@ -167,36 +198,16 @@
               ;; Do not calculate :unresolved? beforehand. The card could have been resolved when another card was
               ;; resolved.
               (if (unresolved? selected-cards card-to-resolve)
-                (let [new-card-pred           (:requirement-pred card-to-resolve)
-                      spec-filter             (:filter (nth specs idx-to-replace))
-                      valid-card-pred         (spec-filter (assoc selected-cards idx-to-replace nil))
-                      valid-cards             (filter valid-card-pred cards-left)
-                      new-card                (or
-                                                (first (filter new-card-pred valid-cards))
-                                                ;; If there's for some reason no cards satisfying both the spec and the
-                                                ;; requirement, we must satisfy the requirement from the full deck. We
-                                                ;; can safely assume that this will always be possible (the contrary
-                                                ;; would be extremely inflexible cards or idx-to-replace reaching the
-                                                ;; movement card filters which is not going to happen).
-                                                (first (filter new-card-pred cards-left)))
-                      new-card-id             (:id new-card)
-                      new-cards-left          (conj
-                                                ;; Remove new card.
-                                                (filterv #(not= new-card-id (:id %)) cards-left)
-                                                ;; Insert replaced card to "bottom" of the random deck.
-                                                card-to-replace)
-                      selected-cards-replaced (assoc selected-cards idx-to-replace new-card)
-                      ;; Always recalculate. The card could satisfy another dependency already satisfied by one other
-                      ;; card, meaning that another card should now lose its :requirement? tag.
-                      ;; There's other cases requiring a recalculation, but we could test for those:
-                      ;; 1. (:satisfies-some? card-to-replace): The card was not the only card that satisfied some
-                      ;; requirement (it would have been skipped) but it satisfied some requirement. This mean that
-                      ;; there might be another card which is not the only card that satisfied that requirement.
-                      ;; 2. (has-requirements? new-card): The new card has requirements. We will either run into this
-                      ;; card if idx-to-resolve < idx-to-replace or we catch the unresolved dependency when we check if
-                      ;; we can safely return from the loop.
-                      new-selected-cards      (mark-dependencies selected-cards-replaced)]
-                  (recur new-cards-left new-selected-cards new-idx-to-resolve (dec idx-to-replace) true preserve-reqs?))
+                (let [new-card-pred (:requirement-pred card-to-resolve)]
+                  (if-let [{:keys [new-cards-left new-selected-cards]}
+                           (replace-card new-card-pred specs selected-cards cards-left idx-to-replace)]
+                    (recur new-cards-left new-selected-cards new-idx-to-resolve
+                      (dec idx-to-replace) true preserve-reqs?)
+                    ;; We failed to find a card that satisfied the dependency, even outside the spec. Replace the card
+                    ;; to resolve. If the new card has requirements we will handle those in the next loop.
+                    (let [{:keys [new-cards-left new-selected-cards]}
+                          (replace-card any? specs selected-cards cards-left idx-to-resolve)]
+                      (recur new-cards-left new-selected-cards new-idx-to-resolve idx-to-replace true preserve-reqs?))))
                 ;; Nothing to do for this card.
                 (recur cards-left selected-cards new-idx-to-resolve idx-to-replace replaced-any? preserve-reqs?)))))))))
 
