@@ -17,6 +17,8 @@
                   "Browse cards and combos"]
                  [:setups :setups-page-title
                   "See the designer's suggested setups"]
+                 [:randomizer :randomizer/page-title
+                  "Generate a good market automatically"]
                  [:epic :epic/page-title
                   "Play the Epic Ignite variants without sorting all of your cards"]])
 

@@ -87,7 +87,7 @@
    :epic/cycle-button-text            {:en "Cycle"}
    :epic/take-button-tooltip          {:en "Take {name} from the stack"}
    :epic/cycle-button-tooltip         {:en "Cycle {name} to the bottom of the stack"}
-   :randomizer/page-title             {:en "Randomizer"}
+   :randomizer/page-title             {:en "Randomizer (Alpha!)"}
    :randomizer/metadata-page-title    {:en "Randomizer metadata"}
    })
 

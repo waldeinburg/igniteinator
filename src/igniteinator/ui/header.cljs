@@ -22,6 +22,7 @@
 
 (def main-menu-list [[:cards :cards-page-title]
                      [:setups :setups-page-title]
+                     [:randomizer :randomizer/page-title]
                      [:epic :epic/page-title]])
 
 (defn navigate-fn [page-key pre-navigate]

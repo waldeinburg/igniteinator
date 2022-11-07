@@ -81,3 +81,9 @@
   (fn [stacks]
     (let [shuffled-stacks (mapv #(update % :cards shuffle) stacks)]
       (>evt :epic/shuffled-stacks shuffled-stacks))))
+
+(reg-fx
+  :randomizer/shuffle-cards-and-generate-market
+  (fn [[filter-utils specs card-ids]]
+    (let [shuffled-card-ids (shuffle card-ids)]
+      (>evt :randomizer/generate-market-from-shuffled-ids filter-utils specs shuffled-card-ids))))

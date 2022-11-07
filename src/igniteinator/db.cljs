@@ -71,6 +71,9 @@
    :epic-display-stack-page {:idx                  nil
                              :prev-idx             nil
                              :first-transition-in? true}
+   :randomizer              {:cards-base     :all
+                             :selected-cards nil            ; cards with metadata, not ids
+                             :card-ids-left  nil}
    :card-load-state         {:en nil}
    :cards                   nil
    :types                   nil

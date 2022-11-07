@@ -13,7 +13,7 @@
 (defn get-title-cards [{:keys [title?]} cards]
   (filter title? cards))
 
-(defn generate-market-base [random-cards specs]
+(defn generate-market-base [shuffled-cards specs]
   "Generate base for market based on specs. The cards argument should be a shuffled collection."
   (reduce
     (fn [[cards-left selected-cards] spec]
@@ -26,7 +26,7 @@
             new-cards-left     (filter #(not= card-id (:id %)) cards-left)
             new-selected-cards (conj selected-cards card)]
         [new-cards-left new-selected-cards]))
-    [random-cards []]
+    [shuffled-cards []]
     specs))
 
 (defn has-requirements? [card]
@@ -150,9 +150,9 @@
             new-selected-cards      (mark-dependencies selected-cards-replaced)]
         {:new-cards-left new-cards-left, :new-selected-cards new-selected-cards}))))
 
-(defn resolve-requirements [random-cards market-base specs]
+(defn resolve-requirements [shuffled-cards market-base specs]
   (let [last-idx (dec (count market-base))]
-    (loop [cards-left     random-cards
+    (loop [cards-left     shuffled-cards
            selected-cards (mark-dependencies market-base)
            idx-to-resolve 0
            idx-to-replace last-idx
@@ -214,9 +214,9 @@
 (defn add-title-cards [selected-cards random-title-cards]
   (into (vec selected-cards) (take 2 random-title-cards)))
 
-(defn generate-market [filter-utils random-cards-all specs]
-  (let [random-cards       (get-randomizer-cards filter-utils random-cards-all)
-        random-title-cards (get-title-cards filter-utils random-cards-all)
-        [cards-left market-base] (generate-market-base random-cards specs)
-        resolved-market    (resolve-requirements cards-left market-base specs)]
-    (add-title-cards resolved-market random-title-cards)))
+(defn generate-market [filter-utils shuffled-cards-all specs]
+  (let [shuffled-cards       (get-randomizer-cards filter-utils shuffled-cards-all)
+        shuffled-title-cards (get-title-cards filter-utils shuffled-cards-all)
+        [cards-left market-base] (generate-market-base shuffled-cards specs)
+        resolved-market      (resolve-requirements cards-left market-base specs)]
+    (add-title-cards resolved-market shuffled-title-cards)))

@@ -5,6 +5,7 @@
             [igniteinator.model.cards :as cards]
             [igniteinator.model.epic-setups :refer [epic-setups]]
             [igniteinator.model.setups :as setups]
+            [igniteinator.randomizer.card-specs :as randomizer.card-specs]
             [igniteinator.router :refer [resolve-to-href]]
             [igniteinator.text :as text]
             [igniteinator.util.filter :refer [find-id-by-name-fn]]
@@ -649,7 +650,27 @@
     (vals effects-map)))
 
 (reg-sub
-  :randomizer/cards
+  :randomizer/all-cards
   :<- [:cards :all [{:key :not-starter}] [{:key :name, :order :asc}]]
   (fn [cards _]
     cards))
+
+(reg-sub-db :randomizer/cards-base)
+(reg-sub-db :randomizer/selected-cards)
+
+(reg-sub
+  :randomizer/specs
+  :<- [:filter-utils]
+  (fn [filter-utils]
+    (randomizer.card-specs/card-specs filter-utils)))
+
+(reg-sub
+  :randomizer/card-ids-to-shuffle
+  :<- [:randomizer/cards-base]
+  :<- [:global-filters]
+  :<- [:cards-page/cards]
+  (fn [[cards-base global-filters card-page-cards] _]
+    (mapv :id (case cards-base
+                :all (<sub :cards :all global-filters [])
+                :cards-page card-page-cards))))
+

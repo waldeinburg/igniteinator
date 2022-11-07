@@ -4,6 +4,7 @@
             [igniteinator.constants :as constants]
             [igniteinator.db :refer [default-db]]
             [igniteinator.model.setups :as setups]
+            [igniteinator.randomizer.randomizer :as randomizer]
             [igniteinator.router :refer [route->state]]
             [igniteinator.text :refer [txt-db]]
             [igniteinator.util.re-frame :refer [assoc-db assoc-db-and-store assoc-ins assoc-ins-db
@@ -639,7 +640,7 @@
 
 (reg-event-fx
   :epic/open-trash-menu
-  (fn [{{{:keys [trash-mode]} :epic} :db}]
+  (fn [{{{:keys [trash-mode]} :epic} :db} _]
     ;; Reset search string here to avoid doing it during close animation.
     {:fx [[:dispatch [:epic/set-trash-search-str ""]]
           [:dispatch [:epic/set-trashing? true]]
@@ -701,3 +702,15 @@
                 (update-in-db-and-store [:epic reverse-history-key] #(cons reverse-event %)))))))]
   (reg-history-event :epic/undo :undo-history :redo-history)
   (reg-history-event :epic/redo :redo-history :undo-history))
+
+(reg-event-fx
+  :randomizer/generate-market
+  (fn [_ [_ filter-utils specs card-ids]]
+    {:randomizer/shuffle-cards-and-generate-market [filter-utils specs card-ids]}))
+
+(reg-event-db
+  :randomizer/generate-market-from-shuffled-ids
+  (fn [{:keys [cards] :as db} [_ filter-utils specs shuffled-card-ids]]
+    (let [shuffled-cards (map cards shuffled-card-ids)
+          selected-cards (randomizer/generate-market filter-utils shuffled-cards specs)]
+      (assoc-in db [:randomizer :selected-cards] selected-cards))))

@@ -37,7 +37,7 @@
       type-ids])])
 
 (defn randomizer-data-page []
-  (let [cards       (<sub :randomizer/cards)
+  (let [cards       (<sub :randomizer/all-cards)
         types-map   (<sub :types-map)
         effects-map (<sub :effects-map)]
     [page (txt :randomizer/metadata-page-title)
