@@ -159,7 +159,7 @@
            replaced-any?  false
            ;; Replace cards having requirements? Our first priority is not to because requirements are a sort of combo.
            preserve-reqs? true]
-      (if (> idx-to-resolve last-idx)
+      (if (or (> idx-to-resolve last-idx) (< idx-to-replace 0))
         (if (and
               ;; If we haven't replaced any in the last run and the false preserve-reqs fallback has failed, then
               ;; terminate to avoid infinite loop (the next try will also fail).
