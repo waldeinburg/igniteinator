@@ -16,7 +16,7 @@
 (defn generate-market-base [shuffled-cards specs]
   "Generate base for market based on specs. The cards argument should be a shuffled collection."
   (reduce
-    (fn [[cards-left selected-cards] spec]
+    (fn [[selected-cards cards-left] spec]
       (let [f                  ((:filter spec) selected-cards)
             card               (or
                                  (first (filter f cards-left))
@@ -25,8 +25,8 @@
             card-id            (:id card)
             new-cards-left     (filter #(not= card-id (:id %)) cards-left)
             new-selected-cards (conj selected-cards card)]
-        [new-cards-left new-selected-cards]))
-    [shuffled-cards []]
+        [new-selected-cards new-cards-left]))
+    [[] shuffled-cards]
     specs))
 
 (defn has-requirements? [card]
@@ -106,7 +106,7 @@
       (empty? (filter pred market-with-requirement-pred)))))
 
 (defn set-unresolved? [market-with-requirement-pred]
-  (map
+  (mapv
     (fn [card]
       (assoc card :unresolved? (unresolved? market-with-requirement-pred card)))
     market-with-requirement-pred))
@@ -119,10 +119,12 @@
     set-satisfies
     vec))
 
-(defn replace-card [new-card-pred specs selected-cards cards-left idx-to-replace]
+(defn replace-card [new-card-pred use-specs? specs selected-cards cards-left idx-to-replace]
   (let [card-to-replace (nth selected-cards idx-to-replace)
-        spec-filter     (:filter (nth specs idx-to-replace))
-        valid-card-pred (spec-filter (assoc selected-cards idx-to-replace nil))
+        valid-card-pred (if use-specs?
+                          (let [spec-filter (:filter (nth specs idx-to-replace))]
+                            (spec-filter (assoc selected-cards idx-to-replace nil)))
+                          any?)
         valid-cards     (filter valid-card-pred cards-left)]
     (if-let [new-card (or
                         (first (filter new-card-pred valid-cards))
@@ -148,7 +150,7 @@
             ;; idx-to-resolve < idx-to-replace or we catch the unresolved dependency when we check if we can safely
             ;; return from the loop.
             new-selected-cards      (mark-dependencies selected-cards-replaced)]
-        {:new-cards-left new-cards-left, :new-selected-cards new-selected-cards}))))
+        [new-selected-cards new-cards-left]))))
 
 (defn resolve-requirements [shuffled-cards market-base specs]
   (let [last-idx (dec (count market-base))]
@@ -176,7 +178,7 @@
             ;; strategy of avoiding replacing cards with requirements did not work out (will happen if all cards have
             ;; requirements but one of them is not satisfied).
             replaced-any?)
-          selected-cards)
+          [selected-cards cards-left])
         (let [card-to-resolve (nth selected-cards idx-to-resolve)
               card-to-replace (nth selected-cards idx-to-replace)]
           (if (or
@@ -199,24 +201,58 @@
               ;; resolved.
               (if (unresolved? selected-cards card-to-resolve)
                 (let [new-card-pred (:requirement-pred card-to-resolve)]
-                  (if-let [{:keys [new-cards-left new-selected-cards]}
-                           (replace-card new-card-pred specs selected-cards cards-left idx-to-replace)]
+                  (if-let [[new-selected-cards new-cards-left]
+                           (replace-card new-card-pred true specs selected-cards cards-left idx-to-replace)]
                     (recur new-cards-left new-selected-cards new-idx-to-resolve
                       (dec idx-to-replace) true preserve-reqs?)
                     ;; We failed to find a card that satisfied the dependency, even outside the spec. Replace the card
                     ;; to resolve. If the new card has requirements we will handle those in the next loop.
-                    (let [{:keys [new-cards-left new-selected-cards]}
-                          (replace-card any? specs selected-cards cards-left idx-to-resolve)]
+                    (let [[new-selected-cards new-cards-left]
+                          (replace-card any? true specs selected-cards cards-left idx-to-resolve)]
                       (recur new-cards-left new-selected-cards new-idx-to-resolve idx-to-replace true preserve-reqs?))))
                 ;; Nothing to do for this card.
                 (recur cards-left selected-cards new-idx-to-resolve idx-to-replace replaced-any? preserve-reqs?)))))))))
 
 (defn add-title-cards [selected-cards random-title-cards]
-  (into (vec selected-cards) (take 2 random-title-cards)))
+  (let [[a b & title-cards-left] random-title-cards
+        full-market (into (vec selected-cards) [a b])]
+    [full-market title-cards-left]))
+
+(defn replace-title-card [selected-cards title-cards-left idx-to-replace]
+  (let [new-card             (first title-cards-left)
+        card-to-replace      (nth selected-cards idx-to-replace)
+        new-selected-cards   (assoc selected-cards idx-to-replace new-card)
+        new-title-cards-left (conj (rest title-cards-left) card-to-replace)]
+    [new-selected-cards new-title-cards-left]))
+
+(defn replace-selected-card [{:keys [title?]} use-specs? specs
+                             selected-cards cards-left
+                             title-cards-left idx-to-replace]
+  (let [card-to-replace (nth selected-cards idx-to-replace)
+        title-card?     (title? card-to-replace)]
+    (let [[new-selected-cards new-cards-left]
+          (if title-card?
+            (replace-title-card selected-cards title-cards-left idx-to-replace)
+            (let [card-to-replace (nth selected-cards idx-to-replace)
+                  ;; If the card is unresolved, replace it by any card. If there's any other unresolved card, replace
+                  ;; by resolving.
+                  new-card-pred   (if (:unresolved? card-to-replace)
+                                    any?
+                                    (if-let [first-unresolved-card (first (filter :unresolved? selected-cards))]
+                                      (:requirement-pred first-unresolved-card)
+                                      any?))]
+              (replace-card new-card-pred use-specs? specs selected-cards cards-left idx-to-replace)))
+          ;; Update dependency data on market.
+          final-market (-> new-selected-cards mark-dependencies set-unresolved?)]
+      (if title-card?
+        [final-market cards-left new-cards-left]
+        [final-market new-cards-left title-cards-left]))))
 
 (defn generate-market [filter-utils shuffled-cards-all specs]
   (let [shuffled-cards       (get-randomizer-cards filter-utils shuffled-cards-all)
         shuffled-title-cards (get-title-cards filter-utils shuffled-cards-all)
-        [cards-left market-base] (generate-market-base shuffled-cards specs)
-        resolved-market      (resolve-requirements cards-left market-base specs)]
-    (add-title-cards resolved-market shuffled-title-cards)))
+        [market-base cards-left] (generate-market-base shuffled-cards specs)
+        [resolved-market final-cards-left] (resolve-requirements cards-left market-base specs)
+        [full-market title-cards-left] (add-title-cards resolved-market shuffled-title-cards)
+        final-market         (set-unresolved? full-market)] ; should not change anything
+    [final-market final-cards-left title-cards-left]))

@@ -712,5 +712,27 @@
   :randomizer/generate-market-from-shuffled-ids
   (fn [{:keys [cards] :as db} [_ filter-utils specs shuffled-card-ids]]
     (let [shuffled-cards (map cards shuffled-card-ids)
-          selected-cards (randomizer/generate-market filter-utils shuffled-cards specs)]
-      (assoc-in db [:randomizer :selected-cards] selected-cards))))
+          [selected-cards cards-left title-cards-left] (randomizer/generate-market filter-utils shuffled-cards specs)
+          card-ids-left  (mapv :id cards-left)
+          title-ids-left (mapv :id title-cards-left)]
+      (update db :randomizer #(assoc %
+                                :selected-cards selected-cards
+                                :card-ids-left card-ids-left
+                                :title-ids-left title-ids-left)))))
+
+(reg-event-db
+  :randomizer/replace-card
+  (fn [{{:keys [selected-cards card-ids-left title-ids-left use-specs?]} :randomizer
+        :keys                                                            [cards] :as db}
+       [_ filter-utils specs idx-to-replace]]
+    (let [cards-left         (map cards card-ids-left)
+          title-cards-left   (map cards title-ids-left)
+          [new-selected-cards new-cards-left new-title-cards-left]
+          (randomizer/replace-selected-card
+            filter-utils use-specs? specs selected-cards cards-left title-cards-left idx-to-replace)
+          new-card-ids-left  (mapv :id new-cards-left)
+          new-title-ids-left (mapv :id new-title-cards-left)]
+      (update db :randomizer #(assoc %
+                                :selected-cards new-selected-cards
+                                :card-ids-left new-card-ids-left
+                                :title-ids-left new-title-ids-left)))))

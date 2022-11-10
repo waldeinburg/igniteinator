@@ -15,4 +15,10 @@
                :sx       {:mb 2}
                :on-click #(>evt :randomizer/generate-market filter-utils specs card-ids)}
        "Generate market"]
-      [card-list selected-cards])))
+      (if selected-cards
+        [card-list
+         {:tooltip     "Replace card"
+          :href-fn     false
+          :on-click-fn (fn [card]
+                         #(>evt :randomizer/replace-card filter-utils specs (:idx card)))}
+         selected-cards]))))

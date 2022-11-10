@@ -1,7 +1,15 @@
 (ns igniteinator.randomizer.randomizer-test
   (:require [clojure.test :refer [deftest is]]
             [igniteinator.randomizer.card-specs :refer [card-specs]]
-            [igniteinator.randomizer.randomizer :refer [generate-market get-randomizer-cards get-title-cards]]))
+            [igniteinator.randomizer.randomizer :refer [generate-market get-randomizer-cards get-title-cards
+                                                        replace-selected-card]]))
+
+(def test-filter-utils {:march-id             -1
+                        :dagger-id            -2
+                        :old-wooden-shield-id -3
+                        :title?               #(> (:id %) 100)
+                        :movement?            #(= (:types %) [:mov])
+                        :provides-damage?     #(= (:provides-effect %) [:dmg])})
 
 (defn card-range [start end]
   (map (fn [id] {:id id}) (range start end)))
@@ -23,15 +31,11 @@
     (apply concat colls)))
 
 (defn test-generate-market-from-base-specs [expected-market-ids & card-colls]
-  (let [filter-utils {:march-id             -1
-                      :dagger-id            -2
-                      :old-wooden-shield-id -3
-                      :title?               #(> (:id %) 100)
-                      :movement?            #(= (:types %) [:mov])
-                      :provides-damage?     #(= (:provides-effect %) [:dmg])}
-        specs        (card-specs filter-utils)
-        cards        (apply cards-concat card-colls)]
-    (is (= (mapv :id (generate-market filter-utils cards specs)) expected-market-ids))))
+  (let [
+        specs (card-specs test-filter-utils)
+        cards (apply cards-concat card-colls)
+        [market] (generate-market test-filter-utils cards specs)]
+    (is (= (mapv :id market) expected-market-ids))))
 
 (deftest base-no-combos-no-deps
   ;; No combos, no dependencies, select cost 11 at cost 10-11 rule.
@@ -111,3 +115,26 @@
        {:id 17, :types [:foo], :requires-type [:bar]}       ;; Will not be resolved in first run.
        {:id 18, :types [:bar]}]
       (card-range 101 105))))
+
+(deftest replace-selected-card-basic
+  (let [specs (card-specs test-filter-utils)
+        cards (cards-concat [{:id 2, :types [:mov], :cost 7}
+                             {:id 1, :types [:mov], :cost 4}
+                             {:id 4, :provides-effect [:dmg], :cost 6}
+                             {:id 3, :provides-effect [:dmg], :cost 5}
+                             {:id 5, :provides-effect [:dmg], :cost 8}
+                             {:id 6, :provides-effect [:dmg], :cost 9}
+                             {:id 7, :cost 3}
+                             {:id 8, :cost 10}
+                             {:id 9}
+                             {:id 10}
+                             ;; 12 will be selected before 11 because it satisfies cost 10-11.
+                             {:id 11, :cost 9}
+                             {:id 12, :cost 11}]
+                (card-range 13 20)
+                (card-range 101 105))
+        [market cards-left title-cards-left] (generate-market test-filter-utils cards specs)
+        [new-market] (replace-selected-card test-filter-utils true specs market cards-left title-cards-left 15)]
+    (is (=
+          (mapv :id new-market)
+          (concat (id-range 1 11) [12 11] (id-range 13 16) [17 101 102])))))

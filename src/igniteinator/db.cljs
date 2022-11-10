@@ -73,7 +73,9 @@
                              :first-transition-in? true}
    :randomizer              {:cards-base     :all
                              :selected-cards nil            ; cards with metadata, not ids
-                             :card-ids-left  nil}
+                             :card-ids-left  nil
+                             :title-ids-left nil
+                             :use-specs?     true}
    :card-load-state         {:en nil}
    :cards                   nil
    :types                   nil
