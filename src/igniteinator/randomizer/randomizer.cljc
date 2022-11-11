@@ -222,7 +222,7 @@
   (let [new-card             (first title-cards-left)
         card-to-replace      (nth selected-cards idx-to-replace)
         new-selected-cards   (assoc selected-cards idx-to-replace new-card)
-        new-title-cards-left (conj (rest title-cards-left) card-to-replace)]
+        new-title-cards-left (conj (vec (rest title-cards-left)) card-to-replace)]
     [new-selected-cards new-title-cards-left]))
 
 (defn replace-selected-card [{:keys [title?]} use-specs? specs

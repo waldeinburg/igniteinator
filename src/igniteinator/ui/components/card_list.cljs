@@ -29,52 +29,55 @@
    ;; after an increasing list of loaded cards, but the number of loaded cards should be reset when
    ;; the card list changes. The present solution is way more simple and also handles nicely
    ;; skipping images due to rapid scrolling.
-   (fn [{:keys [href-fn on-click tooltip]} card]
-     (let [normal?         (not (:image-path card))
-           src             (or (:image-path card) (<sub :image-path card))
-           load-state      (if normal? (<sub :card-load-state card)
-                                       :loaded)
-           name            (:name card)
-           wrapper         (if href-fn
-                             [:a {:href (href-fn card)}]
-                             [:<>])
-           ;; The placeholder has the exact scale of the images.
-           placeholder-img [:img {:src   constants/placeholder-img-src, :alt name
-                                  :class :card-img}]
-           img             [:img (into {:src      src, :alt name
-                                        :class    :card-img
-                                        :on-click on-click
-                                        :style    (if on-click {:cursor :pointer})}
-                                   (if (not (= :loaded load-state))
-                                     {:on-load #(>evt :set-card-load-state card :loaded)}))]]
-       (conj wrapper
-         (cond
-           ;; All ready. Just show image.
-           (= :loaded load-state)
-           (let []
-             (if tooltip
-               [tooltip-elem tooltip img]
-               img))
-           ;; The image is visible on screen but not loaded yet. Show the placeholder image still to
-           ;; avoid the height of the container to be zero until the height of the image is loaded
-           ;; which breaks scrolling to bottom (the height of the whole page will be correct
-           ;; initially, then suddenly smaller, then back to the correct size). The image is loading
-           ;; over the placeholder.
-           (= :loading load-state)
-           [:div {:class :dyn-height-block}
-            [:div {:class :dyn-height-background} placeholder-img]
-            [:div {:class :dyn-height-foreground} img]]
-           ;; The image is not visible on screen. Avoid fetching until necessary.
-           :else
-           [visibility-sensor {:partial-visibility true
-                               :on-change          #(when % (>evt :set-card-load-state card :loading))} ; %: visible?
-            placeholder-img]))))))
+   (fn [{:keys [href-fn on-click tooltip card-image-sx-fn]} card]
+     [box {:sx (if card-image-sx-fn
+                 (card-image-sx-fn card))}
+      (let [normal?         (not (:image-path card))
+            src             (or (:image-path card) (<sub :image-path card))
+            load-state      (if normal? (<sub :card-load-state card)
+                                        :loaded)
+            name            (:name card)
+            wrapper         (if href-fn
+                              [:a {:href (href-fn card)}]
+                              [:<>])
+            ;; The placeholder has the exact scale of the images.
+            placeholder-img [:img {:src   constants/placeholder-img-src, :alt name
+                                   :class :card-img}]
+            img             [:img (into {:src      src, :alt name
+                                         :class    :card-img
+                                         :on-click on-click
+                                         :style    (if on-click {:cursor :pointer})}
+                                    (if (not (= :loaded load-state))
+                                      {:on-load #(>evt :set-card-load-state card :loaded)}))]]
+        (conj wrapper
+          (cond
+            ;; All ready. Just show image.
+            (= :loaded load-state)
+            (let []
+              (if tooltip
+                [tooltip-elem tooltip img]
+                img))
+            ;; The image is visible on screen but not loaded yet. Show the placeholder image still to
+            ;; avoid the height of the container to be zero until the height of the image is loaded
+            ;; which breaks scrolling to bottom (the height of the whole page will be correct
+            ;; initially, then suddenly smaller, then back to the correct size). The image is loading
+            ;; over the placeholder.
+            (= :loading load-state)
+            [:div {:class :dyn-height-block}
+             [:div {:class :dyn-height-background} placeholder-img]
+             [:div {:class :dyn-height-foreground} img]]
+            ;; The image is not visible on screen. Avoid fetching until necessary.
+            :else
+            [visibility-sensor {:partial-visibility true
+                                :on-change          #(when % (>evt :set-card-load-state card :loading))} ; %: visible?
+             placeholder-img])))])))
 
 (defn card-container
   ([card]
    [card-container {} card])
-  ([{:keys [display-name? content-below-fn] :as props} card]
-   [:<>
+  ([{:keys [display-name? content-below-fn container-sx-fn] :as props} card]
+   [box {:sx (if container-sx-fn
+               (container-sx-fn card))}
     [card-image props card]
     [card-name card display-name?]
     (if content-below-fn
@@ -102,7 +105,9 @@
      on-click-fn-prop :on-click-fn
      tooltip-prop     :tooltip
      tooltip-fn-prop  :tooltip-fn
-     content-below-fn :content-below-fn}
+     content-below-fn :content-below-fn
+     container-sx-fn  :container-sx-fn
+     card-sx-fn       :card-image-sx-fn}
     cards]
    ;; Default tooltip and on-click is to show card details.
    (let [href-fn         (if (nil? href-fn)
@@ -140,5 +145,7 @@
               [card-grid {:href-fn          href-fn
                           :on-click         on-click
                           :tooltip          tooltip
-                          :content-below-fn content-below-fn}
+                          :content-below-fn content-below-fn
+                          :container-sx-fn  container-sx-fn
+                          :card-image-sx-fn card-sx-fn}
                c])))]))))

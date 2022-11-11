@@ -674,3 +674,8 @@
                 :all (<sub :cards :all global-filters [])
                 :cards-page card-page-cards))))
 
+(reg-sub
+  :randomizer/some-unresolved
+  :<- [:randomizer/selected-cards]
+  (fn [selected-cards _]
+    (some :unresolved? selected-cards)))
