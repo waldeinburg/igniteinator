@@ -23,7 +23,7 @@ for downloading the data from the currently deployed Igniteinator._
 
 Run once to install npm packages:
 
-    npm install
+    $ npm install
 
 ### Remote sync script
 
@@ -38,15 +38,16 @@ is that Chrome complains that the server cannot be reached).
 
 Delete the old certificate, if any:
 
-    rm -r ~/_certifiable_certs/localhost-.../
+    $ rm -r ~/_certifiable_certs/localhost-.../
 
 Generate a new certificate for localhost:
 
-    lein run -m certifiable.main
+    $ lein run -m certifiable.main
 
 Then symlink to the generated file referenced in `main.cljs.edn`.
 
-    rm -f dev-keystore.jks && ln -s ~/_certifiable_certs/localhost-.../dev-server.jks dev-keystore.jks
+    $ rm -f dev-keystore.jks && ln -s ~/_certifiable_certs/localhost-.../dev-server.jks 
+dev-keystore.jks
 
 In Chrome: Go to [Settings - Manage certificates](chrome://settings/certificates) and choose
 `Authorities`. If you are renewing the certificate, first delete the `org-Certifiable dev root`
@@ -60,15 +61,15 @@ Forget adding the certificate in Android; it doesn't work.
 
 To get an interactive development environment with [Figwheel](https://figwheel.org):
 
-    lein fig:dev
+    $ lein fig:dev
 
 To clean all compiled files:
 
-	lein clean
+	$ lein clean
 
 To test out doing a production build:
 
-	./build-and-deploy.sh --no-tag --no-deploy
+	$ ./build-and-deploy.sh --no-tag --no-deploy
 
 ## Licenses
 

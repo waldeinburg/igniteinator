@@ -172,6 +172,19 @@ function clear_test() {
   echo "Nothing to see here." > "$SRC_DIR/index.html"
 }
 
+function inject_test_version_number() {
+    local ver
+    local test_ver
+    ver=$(get_version)
+    test_ver="$ver-$(uuid)"
+    function replace_ver() {
+        perl -p -i -e "s/\Q$ver\E/$test_ver/g" "$1"
+    }
+    # Avoid changing source files, though it's potentially a bad strategy to replace like this.
+    replace_ver "$MAIN_FILE"
+    replace_ver "$SW_FILE"
+}
+
 function deploy() {
   # Using https://github.com/waldeinburg/poor-mans-rsync
   ./remote_sync.sh "${DEPLOY_ARGS[@]}" "$SRC_DIR" "$REMOTE_HOST" "$REMOTE_DIR"
@@ -196,6 +209,10 @@ fi
 if [[ "$CLEAR_TEST" ]]; then
   echo "Building test clearing ..."
   clear_test
+fi
+if [[ "$TEST" ]]; then
+  echo "Inject random test version number to ensure reload"
+  inject_test_version_number
 fi
 if [[ "$DEPLOY" ]]; then
   if [[ "$TEST" ]]; then
