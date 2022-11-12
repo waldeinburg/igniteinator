@@ -12,6 +12,9 @@
 (defn value->keyword [event]
   (keyword (value event)))
 
+(defn value->boolean [event]
+  (= "true" (value event)))
+
 (defn checked? [event]
   (.-checked (target event)))
 

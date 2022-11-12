@@ -703,6 +703,10 @@
   (reg-history-event :epic/undo :undo-history :redo-history)
   (reg-history-event :epic/redo :redo-history :undo-history))
 
+;; Do not store. User will probably want these to reset.
+(reg-event-db-assoc :randomizer/set-edit?)
+(reg-event-db-assoc :randomizer/set-replace-using-specs?)
+
 (reg-event-fx
   :randomizer/generate-market
   (fn [_ [_ filter-utils specs card-ids]]
