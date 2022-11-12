@@ -105,10 +105,25 @@
       ;; No cards matches predicate.
       (empty? (filter pred market-with-requirement-pred)))))
 
+(defn set-spec-idx [market]
+  (map-indexed (fn [idx card]
+                 (assoc card :spec-idx idx))
+    market))
+
+(defn set-spec-name [market-with-spec-idx specs]
+  (map (fn [card]
+         (assoc card :spec-name
+                     (let [idx (:spec-idx card)]
+                       (if (< idx (count specs))
+                         (:name (nth specs idx))
+                         "Title card"))))
+    market-with-spec-idx))
+
 (defn set-unresolved? [market-with-requirement-pred]
-  (mapv
+  (map
     (fn [card]
-      (assoc card :unresolved? (unresolved? market-with-requirement-pred card)))
+      (assoc card :unresolved?
+                  (unresolved? market-with-requirement-pred card)))
     market-with-requirement-pred))
 
 (defn mark-dependencies [market-base]
@@ -117,6 +132,14 @@
     set-requirement-pred
     set-depends-on
     set-satisfies
+    vec))
+
+(defn add-final-metadata [market-with-requirement-pred specs]
+  (->
+    market-with-requirement-pred
+    set-spec-idx
+    (set-spec-name specs)
+    set-unresolved?
     vec))
 
 (defn replace-card [new-card-pred use-specs? specs selected-cards cards-left idx-to-replace]
@@ -243,7 +266,7 @@
                                       any?))]
               (replace-card new-card-pred use-specs? specs selected-cards cards-left idx-to-replace)))
           ;; Update dependency data on market.
-          final-market (-> new-selected-cards mark-dependencies set-unresolved?)]
+          final-market (-> new-selected-cards mark-dependencies (add-final-metadata specs))]
       (if title-card?
         [final-market cards-left new-cards-left]
         [final-market new-cards-left title-cards-left]))))
@@ -254,5 +277,5 @@
         [market-base cards-left] (generate-market-base shuffled-cards specs)
         [resolved-market final-cards-left] (resolve-requirements cards-left market-base specs)
         [full-market title-cards-left] (add-title-cards resolved-market shuffled-title-cards)
-        final-market         (set-unresolved? full-market)] ; should not change anything
+        final-market         (add-final-metadata full-market specs)]
     [final-market final-cards-left title-cards-left]))

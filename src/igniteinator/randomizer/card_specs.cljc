@@ -42,7 +42,7 @@
                   #(and
                      (movement? %)
                      (not (cost= other-movement-card-cost %)))))}
-     {:name   "Card providing damage cosing 4-5"            ; 2
+     {:name   "Card providing damage costing 4-5"           ; 2
       :filter (fn [_]
                 #(and
                    (provides-damage? %)

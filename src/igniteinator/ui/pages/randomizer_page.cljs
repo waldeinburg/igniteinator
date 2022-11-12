@@ -7,7 +7,8 @@
             [reagent-mui.material.button :refer [button]]))
 
 (defn randomizer-page []
-  (let [selected-cards  (<sub :randomizer/selected-cards)
+  (let [market          (<sub :randomizer/market)
+        display         (<sub :randomizer/display)
         some-unresolved (<sub :randomizer/some-unresolved)
         filter-utils    (<sub :filter-utils)
         specs           (<sub :randomizer/specs)
@@ -19,22 +20,30 @@
        "Generate market"]
       (if some-unresolved
         [alert {:severity :warning
-                :sx       {:mb 2
-                           :opacity 1
+                :sx       {:mb       2
+                           :opacity  1
                            :position :sticky
-                           :top 16
-                           :z-index 999}}
+                           :top      16
+                           :z-index  999}}
          "There are cards with unresolved dependencies. Please replace marked cards or replace another card to fix."])
-      (if selected-cards
+      (if market
         [card-list
          {:tooltip          "Replace card"
           :href-fn          false
-          :on-click-fn      (fn [card]
-                              #(>evt :randomizer/replace-card filter-utils specs (:idx card)))
-          :container-sx-fn  (fn [card]
-                              (if (:unresolved? card)
-                                {:background-color "rgb(255, 0, 0)"}))
+          :on-click-fn      (if (= :specs display)
+                              ;; Not if display is :sorted. Replacing cards in this mode will more often than not result
+                              ;; in a reordering of the cards (because a card is replaced by a different cost) which
+                              ;; makes it seem like multiple cards are replaced. Also, it makes it less transparent why
+                              ;; a certain card is selected.
+                              ;; The alternative would be to make an option that shows the spec name under the card and
+                              ;; a sort button. I'm not sure that would make it more user-friendly.
+                              (fn [card]
+                                #(>evt :randomizer/replace-card filter-utils specs (:spec-idx card))))
+          :content-below-fn (if (= :specs display)
+                              (fn [card]
+                                (:spec-name card)))
           :card-image-sx-fn (fn [card]
                               (if (:unresolved? card)
-                                {:opacity 0.4}))}
-         selected-cards]))))
+                                {:background-color "rgb(255, 0, 0)"
+                                 :opacity          0.4}))}
+         market]))))

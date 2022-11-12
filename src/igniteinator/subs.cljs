@@ -657,6 +657,19 @@
 
 (reg-sub-db :randomizer/cards-base)
 (reg-sub-db :randomizer/selected-cards)
+(reg-sub-db :randomizer/display)
+(reg-sub-db :randomizer/replace-from)
+
+(reg-sub
+  :randomizer/market
+  :<- [:randomizer/selected-cards]
+  :<- [:randomizer/display]
+  :<- [:default-order-sortings]
+  (fn [[selected-cards display default-sortings] _]
+    (case display
+      :specs selected-cards
+      :sorted (if selected-cards
+                (sort-util/sort-by-hierarchy (cards/sorting-specs->comparators default-sortings) selected-cards)))))
 
 (reg-sub
   :randomizer/specs

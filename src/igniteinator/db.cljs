@@ -71,11 +71,12 @@
    :epic-display-stack-page {:idx                  nil
                              :prev-idx             nil
                              :first-transition-in? true}
-   :randomizer              {:cards-base     :all
-                             :selected-cards nil            ; cards with metadata, not ids
-                             :card-ids-left  nil
-                             :title-ids-left nil
-                             :use-specs?     true}
+   :randomizer              {:cards-base           :all
+                             :selected-cards       nil      ; cards with metadata, not ids
+                             :card-ids-left        nil
+                             :title-ids-left       nil
+                             :replace-using-specs? true
+                             :display              :specs}  ; or :sorted
    :card-load-state         {:en nil}
    :cards                   nil
    :types                   nil

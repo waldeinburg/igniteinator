@@ -722,14 +722,14 @@
 
 (reg-event-db
   :randomizer/replace-card
-  (fn [{{:keys [selected-cards card-ids-left title-ids-left use-specs?]} :randomizer
-        :keys                                                            [cards] :as db}
+  (fn [{{:keys [selected-cards card-ids-left title-ids-left replace-using-specs?]} :randomizer
+        :keys                                                                    [cards] :as db}
        [_ filter-utils specs idx-to-replace]]
     (let [cards-left         (map cards card-ids-left)
           title-cards-left   (map cards title-ids-left)
           [new-selected-cards new-cards-left new-title-cards-left]
           (randomizer/replace-selected-card
-            filter-utils use-specs? specs selected-cards cards-left title-cards-left idx-to-replace)
+            filter-utils replace-using-specs? specs selected-cards cards-left title-cards-left idx-to-replace)
           new-card-ids-left  (mapv :id new-cards-left)
           new-title-ids-left (mapv :id new-title-cards-left)]
       (update db :randomizer #(assoc %
