@@ -1,22 +1,25 @@
 (ns igniteinator.ui.pages.randomizer-page
   (:require [igniteinator.text :refer [txt]]
-            [igniteinator.ui.components.bool-input :refer [switch]]
             [igniteinator.ui.components.card-list :refer [card-list]]
             [igniteinator.ui.components.form-item :refer [form-item]]
             [igniteinator.ui.components.page :refer [page]]
             [igniteinator.util.event :as event]
             [igniteinator.util.re-frame :refer [<sub >evt]]
+            [reagent-mui.icons.done :refer [done] :rename {done done-icon}]
+            [reagent-mui.icons.edit :refer [edit] :rename {edit edit-icon}]
             [reagent-mui.material.alert :refer [alert]]
             [reagent-mui.material.box :refer [box]]
             [reagent-mui.material.button :refer [button]]
             [reagent-mui.material.menu-item :refer [menu-item]]
-            [reagent-mui.material.select :refer [select]]))
+            [reagent-mui.material.select :refer [select]]
+            [reagent.core :as r]))
 
 (defn generate-market-button []
-  (let [filter-utils (<sub :filter-utils)
+  (let [generated?   (<sub :randomizer/market-generated?)
+        filter-utils (<sub :filter-utils)
         specs        (<sub :randomizer/specs)
         card-ids     (<sub :randomizer/card-ids-to-shuffle)]
-    [button {:variant  :contained
+    [button {:variant  (if generated? :outlined :contained)
              :sx       {:mb 2}
              :on-click #(>evt :randomizer/generate-market filter-utils specs card-ids)}
      "Generate market"]))
@@ -35,18 +38,23 @@
   (let [edit?                (<sub :randomizer/edit?)
         replace-using-specs? (<sub :randomizer/replace-using-specs?)]
     [box {:sx {:mb 2}}
-     [switch {:wrapper-sx {:mr 3}
-              :checked?   edit?
-              :name       "edit-market"
-              :label      "Edit"
-              :on-change  #(>evt :randomizer/set-edit? %)}]
-     [form-item {:label "Replace card with"}
-      [select {:disabled  (not edit?)
-               :variant   :standard
-               :value     replace-using-specs?
-               :on-change #(>evt :randomizer/set-replace-using-specs? (event/value %))}
-       [menu-item {:value true} "card matching rule, if possible"]
-       [menu-item {:value false} "any card"]]]]))
+     (if edit?
+       [button {:sx         {:mr 2}
+                :variant    :contained
+                :start-icon (r/as-element [done-icon])
+                :on-click   #(>evt :randomizer/edit-done)}
+        "Done"]
+       [button {:variant    :outlined
+                :start-icon (r/as-element [edit-icon])
+                :on-click   #(>evt :randomizer/edit-start)}
+        "Edit"])
+     (if edit?
+       [form-item {:label "Replace card with"}
+        [select {:variant   :standard
+                 :value     replace-using-specs?
+                 :on-change #(>evt :randomizer/set-replace-using-specs? (event/value %))}
+         [menu-item {:value true} "card matching rule, if possible"]
+         [menu-item {:value false} "any card"]]])]))
 
 (defn market-display []
   (let [market       (<sub :randomizer/market)

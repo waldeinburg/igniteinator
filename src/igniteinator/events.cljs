@@ -710,7 +710,8 @@
 (reg-event-fx
   :randomizer/generate-market
   (fn [_ [_ filter-utils specs card-ids]]
-    {:randomizer/shuffle-cards-and-generate-market [filter-utils specs card-ids]}))
+    {:dispatch                                     [:randomizer/set-edit? false]
+     :randomizer/shuffle-cards-and-generate-market [filter-utils specs card-ids]}))
 
 (reg-event-db
   :randomizer/generate-market-from-shuffled-ids
@@ -740,3 +741,13 @@
                                 :selected-cards new-selected-cards
                                 :card-ids-left new-card-ids-left
                                 :title-ids-left new-title-ids-left)))))
+
+(reg-event-fx
+  :randomizer/edit-start
+  (fn [_ _]
+    {:dispatch [:randomizer/set-edit? true]}))
+
+(reg-event-fx
+  :randomizer/edit-done
+  (fn [_ _]
+    {:dispatch [:randomizer/set-edit? false]}))
