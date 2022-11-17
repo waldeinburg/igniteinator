@@ -12,7 +12,7 @@
                                        @checked?-ref))
                         :name      label
                         :on-change #(on-change (event/checked? %))}
-                   (dissoc props :label :checked?-ref :checked? :on-change))]]
+                   (dissoc props :label :checked?-ref :checked? :on-change :wrapper-sx))]]
     [form-control-label {:sx      wrapper-sx
                          :control (r/as-element cb)
                          :label   label}]))

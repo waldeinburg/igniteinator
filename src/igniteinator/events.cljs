@@ -3,6 +3,7 @@
             [clojure.string :as s]
             [igniteinator.constants :as constants]
             [igniteinator.db :refer [default-db]]
+            [igniteinator.model.cards :as cards-util]
             [igniteinator.model.setups :as setups]
             [igniteinator.randomizer.randomizer :as randomizer]
             [igniteinator.router :refer [route->state]]
@@ -10,6 +11,7 @@
             [igniteinator.util.re-frame :refer [assoc-db assoc-db-and-store assoc-ins assoc-ins-db
                                                 assoc-ins-db-and-store reg-event-db-assoc
                                                 reg-event-db-assoc-store reg-event-set-option update-in-db-and-store]]
+            [igniteinator.util.sort :as sort-util]
             [igniteinator.util.url :as url]
             [re-frame.core :refer [inject-cofx reg-event-db reg-event-fx]]))
 
@@ -742,12 +744,38 @@
                                 :card-ids-left new-card-ids-left
                                 :title-ids-left new-title-ids-left)))))
 
+(defn- recalculate-randomizer-selected-cards-order [db default-sortings]
+  (update-in db [:randomizer :selected-cards]
+    (fn [selected-cards]
+      (let [new-order (->> selected-cards
+                        (sort-util/sort-by-hierarchy (cards-util/sorting-specs->comparators default-sortings))
+                        (map-indexed vector))]
+        (mapv (fn [card]
+                (let [id (:id card)
+                      [idx _] (first (filter (fn [[_ c]]
+                                               (= id (:id c)))
+                                       new-order))]
+                  (assoc card :order-idx idx)))
+          selected-cards)))))
+
 (reg-event-fx
   :randomizer/edit-start
-  (fn [_ _]
-    {:dispatch [:randomizer/set-edit? true]}))
+  (fn [{:keys [db]} [_ default-sortings]]
+    {:db       (if (get-in db [:randomizer :show-specs?])
+                 db
+                 (recalculate-randomizer-selected-cards-order db default-sortings))
+     :dispatch [:randomizer/set-edit? true]}))
 
 (reg-event-fx
   :randomizer/edit-done
   (fn [_ _]
     {:dispatch [:randomizer/set-edit? false]}))
+
+(reg-event-db
+  ;; Not set-show-specs? to avoid confusion with naming of reg-event-db-assoc events.
+  :randomizer/update-show-specs?
+  (fn [db [_ default-sortings value]]
+    (let [new-db (if (or value (not (get-in db [:randomizer :edit?])))
+                   db
+                   (recalculate-randomizer-selected-cards-order db default-sortings))]
+      (update new-db :randomizer #(assoc % :show-specs? value)))))

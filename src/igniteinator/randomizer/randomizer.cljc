@@ -252,6 +252,8 @@
                              selected-cards cards-left
                              title-cards-left idx-to-replace]
   (let [card-to-replace (nth selected-cards idx-to-replace)
+        ;; If editing while showing sorted market, preserve new card in place.
+        order-idx       (:order-idx card-to-replace)
         title-card?     (title? card-to-replace)]
     (let [[new-selected-cards new-cards-left]
           (if title-card?
@@ -266,7 +268,11 @@
                                       any?))]
               (replace-card new-card-pred use-specs? specs selected-cards cards-left idx-to-replace)))
           ;; Update dependency data on market.
-          final-market (-> new-selected-cards mark-dependencies (add-final-metadata specs))]
+          final-market (->
+                         new-selected-cards
+                         mark-dependencies
+                         (add-final-metadata specs)
+                         (update idx-to-replace #(assoc % :order-idx order-idx)))]
       (if title-card?
         [final-market cards-left new-cards-left]
         [final-market new-cards-left title-cards-left]))))

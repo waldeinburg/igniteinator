@@ -1,10 +1,11 @@
 (ns igniteinator.ui.pages.randomizer-page
   (:require [igniteinator.text :refer [txt]]
+            [igniteinator.ui.components.bool-input :refer [switch]]
             [igniteinator.ui.components.card-list :refer [card-list]]
             [igniteinator.ui.components.form-item :refer [form-item]]
             [igniteinator.ui.components.page :refer [page]]
             [igniteinator.util.event :as event]
-            [igniteinator.util.re-frame :refer [<sub >evt]]
+            [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
             [reagent-mui.icons.done :refer [done] :rename {done done-icon}]
             [reagent-mui.icons.edit :refer [edit] :rename {edit edit-icon}]
             [reagent-mui.material.alert :refer [alert]]
@@ -36,31 +37,37 @@
 
 (defn market-toolbar []
   (let [edit?                (<sub :randomizer/edit?)
-        replace-using-specs? (<sub :randomizer/replace-using-specs?)]
+        replace-using-specs? (<sub :randomizer/replace-using-specs?)
+        default-sortings     (<sub :default-order-sortings)]
     [box {:sx {:mb 2}}
      (if edit?
-       [button {:sx         {:mr 2}
-                :variant    :contained
+       [button {:variant    :contained
                 :start-icon (r/as-element [done-icon])
                 :on-click   #(>evt :randomizer/edit-done)}
         "Done"]
        [button {:variant    :outlined
                 :start-icon (r/as-element [edit-icon])
-                :on-click   #(>evt :randomizer/edit-start)}
+                :on-click   #(>evt :randomizer/edit-start default-sortings)}
         "Edit"])
+     [switch {:wrapper-sx   {:ml 1, :mr 2}
+              :label        "Show rules"
+              :checked?-ref (<sub-ref :randomizer/show-specs?)
+              :on-change    #(>evt :randomizer/update-show-specs? default-sortings %)}]
      (if edit?
-       [form-item {:label "Replace card with"}
-        [select {:variant   :standard
-                 :value     replace-using-specs?
-                 :on-change #(>evt :randomizer/set-replace-using-specs? (event/value %))}
-         [menu-item {:value true} "card matching rule, if possible"]
-         [menu-item {:value false} "any card"]]])]))
+       [:<>
+        [form-item {:label "Replace card with"}
+         [select {:variant   :standard
+                  :value     replace-using-specs?
+                  :on-change #(>evt :randomizer/set-replace-using-specs? (event/value %))}
+          [menu-item {:value true} "card matching rule, if possible"]
+          [menu-item {:value false} "any card"]]]])]))
 
 (defn market-display []
   (let [market       (<sub :randomizer/market)
         specs        (<sub :randomizer/specs)
         filter-utils (<sub :filter-utils)
-        edit?        (<sub :randomizer/edit?)]
+        edit?        (<sub :randomizer/edit?)
+        show-specs?  (<sub :randomizer/show-specs?)]
     [card-list
      {:tooltip          "Replace card"
       :href-fn          false
@@ -73,7 +80,7 @@
                           ;; a sort button. I'm not sure that would make it more user-friendly.
                           (fn [card]
                             #(>evt :randomizer/replace-card filter-utils specs (:spec-idx card))))
-      :content-below-fn (if edit?
+      :content-below-fn (if show-specs?
                           (fn [card]
                             (:spec-name card)))
       :card-image-sx-fn (fn [card]

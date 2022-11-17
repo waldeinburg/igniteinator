@@ -76,7 +76,8 @@
                              :card-ids-left        nil
                              :title-ids-left       nil
                              :replace-using-specs? true
-                             :edit?                false}
+                             :edit?                false
+                             :show-specs?          false}
    :card-load-state         {:en nil}
    :cards                   nil
    :types                   nil

@@ -2,7 +2,7 @@
   (:require-macros [reagent.ratom :as ra])
   (:require [clojure.string :as s]
             [igniteinator.constants :as constants]
-            [igniteinator.model.cards :as cards]
+            [igniteinator.model.cards :as cards-util]
             [igniteinator.model.epic-setups :refer [epic-setups]]
             [igniteinator.model.setups :as setups]
             [igniteinator.randomizer.card-specs :as randomizer.card-specs]
@@ -213,8 +213,8 @@
                     :all (<sub :all-cards)
                     :combos (<sub :combos-set-cards)
                     (<sub :cards-by-ids base-spec))
-            preds (cards/filter-specs->preds filter-specs)
-            comps (cards/sorting-specs->comparators sorting-specs)]
+            preds (cards-util/filter-specs->preds filter-specs)
+            comps (cards-util/sorting-specs->comparators sorting-specs)]
         (->>
           base
           (filter-util/filter-multi preds)
@@ -660,16 +660,20 @@
 (reg-sub-db :randomizer/replace-from)
 (reg-sub-db :randomizer/edit?)
 (reg-sub-db :randomizer/replace-using-specs?)
+(reg-sub-db :randomizer/show-specs?)
 
 (reg-sub
   :randomizer/market
   :<- [:randomizer/selected-cards]
+  :<- [:randomizer/show-specs?]
   :<- [:randomizer/edit?]
   :<- [:default-order-sortings]
-  (fn [[selected-cards edit? default-sortings] _]
-    (if edit?
+  (fn [[selected-cards show-specs? edit? default-sortings] _]
+    (if show-specs?
       selected-cards
-      (sort-util/sort-by-hierarchy (cards/sorting-specs->comparators default-sortings) selected-cards))))
+      (if edit?
+        (sort-by :order-idx selected-cards)
+        (sort-util/sort-by-hierarchy (cards-util/sorting-specs->comparators default-sortings) selected-cards)))))
 
 (reg-sub
   :randomizer/market-generated?
