@@ -36,31 +36,38 @@
      "There are cards with unresolved dependencies. Please replace marked cards or replace another card to fix."]))
 
 (defn market-toolbar []
-  (let [edit?                (<sub :randomizer/edit?)
-        replace-using-specs? (<sub :randomizer/replace-using-specs?)
-        default-sortings     (<sub :default-order-sortings)]
+  (let [edit?                 (<sub :randomizer/edit?)
+        sort-button-disabled? (<sub :randomizer/sort-button-disabled?)
+        replace-using-specs?  (<sub :randomizer/replace-using-specs?)
+        default-sortings      (<sub :default-order-sortings)]
     [box {:sx {:mb 2}}
+     [box {:sx {:mb 2}}
+      (if edit?
+        [button {:variant    :contained
+                 :start-icon (r/as-element [done-icon])
+                 :on-click   #(>evt :randomizer/edit-done)}
+         "Done"]
+        [button {:variant    :outlined
+                 :start-icon (r/as-element [edit-icon])
+                 :on-click   #(>evt :randomizer/edit-start default-sortings)}
+         "Edit"])
+      [switch {:wrapper-sx   {:ml 1, :mr 1}
+               :label        "Show rules"
+               :checked?-ref (<sub-ref :randomizer/show-specs?)
+               :on-change    #(>evt :randomizer/update-show-specs? default-sortings %)}]
+      (if edit?
+        [:<>
+         [button {:sx       {:mr 2}
+                  :disabled sort-button-disabled?
+                  :on-click #(>evt :randomizer/update-order default-sortings)}
+          "Sort"]])]
      (if edit?
-       [button {:variant    :contained
-                :start-icon (r/as-element [done-icon])
-                :on-click   #(>evt :randomizer/edit-done)}
-        "Done"]
-       [button {:variant    :outlined
-                :start-icon (r/as-element [edit-icon])
-                :on-click   #(>evt :randomizer/edit-start default-sortings)}
-        "Edit"])
-     [switch {:wrapper-sx   {:ml 1, :mr 2}
-              :label        "Show rules"
-              :checked?-ref (<sub-ref :randomizer/show-specs?)
-              :on-change    #(>evt :randomizer/update-show-specs? default-sortings %)}]
-     (if edit?
-       [:<>
-        [form-item {:label "Replace card with"}
-         [select {:variant   :standard
-                  :value     replace-using-specs?
-                  :on-change #(>evt :randomizer/set-replace-using-specs? (event/value %))}
-          [menu-item {:value true} "card matching rule, if possible"]
-          [menu-item {:value false} "any card"]]]])]))
+       [form-item {:label "Replace card with"}
+        [select {:variant   :standard
+                 :value     replace-using-specs?
+                 :on-change #(>evt :randomizer/set-replace-using-specs? (event/value %))}
+         [menu-item {:value true} "card matching rule, if possible"]
+         [menu-item {:value false} "any card"]]])]))
 
 (defn market-display []
   (let [market       (<sub :randomizer/market)

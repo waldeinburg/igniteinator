@@ -7,6 +7,7 @@
             [igniteinator.model.setups :as setups]
             [igniteinator.randomizer.card-specs :as randomizer.card-specs]
             [igniteinator.router :refer [resolve-to-href]]
+            [igniteinator.subs-calc :refer [default-order-sortings]]
             [igniteinator.text :as text]
             [igniteinator.util.filter :refer [find-id-by-name-fn]]
             [igniteinator.util.filter :as filter-util]
@@ -111,10 +112,7 @@
   :default-order-sortings
   :<- [:default-order]
   (fn [order _]
-    (case order
-      :cost-name [{:key :cost, :order :asc}
-                  {:key :name, :order :asc}]
-      :name [{:key :name, :order :asc}])))
+    (default-order-sortings order)))
 
 (reg-sub
   :image-path
@@ -659,6 +657,7 @@
 (reg-sub-db :randomizer/selected-cards)
 (reg-sub-db :randomizer/replace-from)
 (reg-sub-db :randomizer/edit?)
+(reg-sub-db :randomizer/changed?)
 (reg-sub-db :randomizer/replace-using-specs?)
 (reg-sub-db :randomizer/show-specs?)
 
@@ -702,3 +701,10 @@
   :<- [:randomizer/selected-cards]
   (fn [selected-cards _]
     (some :unresolved? selected-cards)))
+
+(reg-sub
+  :randomizer/sort-button-disabled?
+  :<- [:randomizer/show-specs?]
+  :<- [:randomizer/changed?]
+  (fn [[show-specs? changed?] _]
+    (or show-specs? (not changed?))))

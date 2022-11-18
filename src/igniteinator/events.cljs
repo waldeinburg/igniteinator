@@ -7,6 +7,7 @@
             [igniteinator.model.setups :as setups]
             [igniteinator.randomizer.randomizer :as randomizer]
             [igniteinator.router :refer [route->state]]
+            [igniteinator.subs-calc :refer [default-order-sortings]]
             [igniteinator.text :refer [txt-db]]
             [igniteinator.util.re-frame :refer [assoc-db assoc-db-and-store assoc-ins assoc-ins-db
                                                 assoc-ins-db-and-store reg-event-db-assoc
@@ -199,7 +200,16 @@
   (fn [cofx [_ box-id val]]
     (assoc-db-and-store cofx [:options :boxes box-id] val)))
 (reg-event-set-option :set-size)
+
 (reg-event-set-option :set-default-order)
+(reg-event-fx
+  :update-default-order
+  (fn [_ [_ value]]
+    {:fx [[:dispatch [:set-default-order value]]
+          ;; Recalculate the value the subscription will have.
+          ;; TODO: It's probably time to do something about this:
+          ;; https://day8.github.io/re-frame/FAQs/UseASubscriptionInAnEventHandler/
+          [:dispatch [:randomizer/update-order (default-order-sortings value)]]]}))
 
 (reg-event-set-option :set-display-name?)
 
@@ -707,7 +717,9 @@
 
 ;; Do not store. User will probably want these to reset.
 (reg-event-db-assoc :randomizer/set-edit?)
+(reg-event-db-assoc :randomizer/set-changed?)
 (reg-event-db-assoc :randomizer/set-replace-using-specs?)
+(reg-event-db-assoc :randomizer/set-show-specs?)
 
 (reg-event-fx
   :randomizer/generate-market
@@ -727,55 +739,64 @@
                                 :card-ids-left card-ids-left
                                 :title-ids-left title-ids-left)))))
 
-(reg-event-db
+(reg-event-fx
   :randomizer/replace-card
-  (fn [{{:keys [selected-cards card-ids-left title-ids-left replace-using-specs?]} :randomizer
-        :keys                                                                    [cards] :as db}
+  (fn [{{{:keys [selected-cards card-ids-left title-ids-left replace-using-specs?]} :randomizer
+         :keys                                                                      [cards] :as db} :db}
        [_ filter-utils specs idx-to-replace]]
-    (let [cards-left         (map cards card-ids-left)
-          title-cards-left   (map cards title-ids-left)
-          [new-selected-cards new-cards-left new-title-cards-left]
-          (randomizer/replace-selected-card
-            filter-utils replace-using-specs? specs selected-cards cards-left title-cards-left idx-to-replace)
-          new-card-ids-left  (mapv :id new-cards-left)
-          new-title-ids-left (mapv :id new-title-cards-left)]
-      (update db :randomizer #(assoc %
-                                :selected-cards new-selected-cards
-                                :card-ids-left new-card-ids-left
-                                :title-ids-left new-title-ids-left)))))
-
-(defn- recalculate-randomizer-selected-cards-order [db default-sortings]
-  (update-in db [:randomizer :selected-cards]
-    (fn [selected-cards]
-      (let [new-order (->> selected-cards
-                        (sort-util/sort-by-hierarchy (cards-util/sorting-specs->comparators default-sortings))
-                        (map-indexed vector))]
-        (mapv (fn [card]
-                (let [id (:id card)
-                      [idx _] (first (filter (fn [[_ c]]
-                                               (= id (:id c)))
-                                       new-order))]
-                  (assoc card :order-idx idx)))
-          selected-cards)))))
+    {:dispatch [:randomizer/set-changed? true]
+     :db
+     (let [cards-left         (map cards card-ids-left)
+           title-cards-left   (map cards title-ids-left)
+           [new-selected-cards new-cards-left new-title-cards-left]
+           (randomizer/replace-selected-card
+             filter-utils replace-using-specs? specs selected-cards cards-left title-cards-left idx-to-replace)
+           new-card-ids-left  (mapv :id new-cards-left)
+           new-title-ids-left (mapv :id new-title-cards-left)]
+       (update db :randomizer #(assoc %
+                                 :selected-cards new-selected-cards
+                                 :card-ids-left new-card-ids-left
+                                 :title-ids-left new-title-ids-left)))}))
 
 (reg-event-fx
   :randomizer/edit-start
-  (fn [{:keys [db]} [_ default-sortings]]
-    {:db       (if (get-in db [:randomizer :show-specs?])
-                 db
-                 (recalculate-randomizer-selected-cards-order db default-sortings))
-     :dispatch [:randomizer/set-edit? true]}))
+  (fn [_ [_ default-sortings]]
+    {:fx [[:dispatch [:randomizer/set-edit? true]]
+          [:dispatch [:randomizer/recalculate-order default-sortings]]]}))
 
 (reg-event-fx
   :randomizer/edit-done
   (fn [_ _]
     {:dispatch [:randomizer/set-edit? false]}))
 
-(reg-event-db
-  ;; Not set-show-specs? to avoid confusion with naming of reg-event-db-assoc events.
+(reg-event-fx
   :randomizer/update-show-specs?
-  (fn [db [_ default-sortings value]]
-    (let [new-db (if (or value (not (get-in db [:randomizer :edit?])))
-                   db
-                   (recalculate-randomizer-selected-cards-order db default-sortings))]
-      (update new-db :randomizer #(assoc % :show-specs? value)))))
+  (fn [_ [_ default-sortings value]]
+    {:fx [[:dispatch [:randomizer/set-show-specs? value]]
+          [:dispatch [:randomizer/recalculate-order default-sortings]]]}))
+
+(reg-event-fx
+  :randomizer/update-order
+  (fn [_ [_ default-sortings]]
+    {:fx [[:dispatch [:randomizer/set-changed? false]]
+          [:dispatch [:randomizer/recalculate-order default-sortings]]]}))
+
+(reg-event-fx
+  :randomizer/recalculate-order
+  (fn [{{{:keys [edit? show-specs?]} :randomizer :as db} :db} [_ default-sortings]]
+    {:dispatch [:randomizer/set-changed? false]
+     :db
+     (if (and edit? (not show-specs?))
+       (update-in db [:randomizer :selected-cards]
+         (fn [selected-cards]
+           (let [new-order (->> selected-cards
+                             (sort-util/sort-by-hierarchy (cards-util/sorting-specs->comparators default-sortings))
+                             (map-indexed vector))]
+             (mapv (fn [card]
+                     (let [id (:id card)
+                           [idx _] (first (filter (fn [[_ c]]
+                                                    (= id (:id c)))
+                                            new-order))]
+                       (assoc card :order-idx idx)))
+               selected-cards))))
+       db)}))
