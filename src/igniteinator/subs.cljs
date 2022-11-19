@@ -415,9 +415,11 @@
   :share/cards
   :<- [:current-page]
   :<- [:cards-page/cards]
-  (fn [[current-page cards-page-cards] _]
+  :<- [:randomizer/selected-cards]
+  (fn [[current-page cards-page-cards randomizer-market] _]
     (not-empty (case current-page
                  :cards cards-page-cards
+                 :randomizer randomizer-market
                  nil))))
 (reg-sub
   :share/url
