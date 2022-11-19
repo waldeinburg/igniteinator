@@ -8,6 +8,7 @@
             [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
             [reagent-mui.icons.done :refer [done] :rename {done done-icon}]
             [reagent-mui.icons.edit :refer [edit] :rename {edit edit-icon}]
+            [reagent-mui.icons.shuffle :refer [shuffle] :rename {shuffle shuffle-icon}]
             [reagent-mui.material.alert :refer [alert]]
             [reagent-mui.material.box :refer [box]]
             [reagent-mui.material.button :refer [button]]
@@ -20,9 +21,10 @@
         filter-utils (<sub :filter-utils)
         specs        (<sub :randomizer/specs)
         card-ids     (<sub :randomizer/card-ids-to-shuffle)]
-    [button {:variant  (if generated? :outlined :contained)
-             :sx       {:mb 2}
-             :on-click #(>evt :randomizer/generate-market filter-utils specs card-ids)}
+    [button {:variant    (if generated? :outlined :contained)
+             :start-icon (r/as-element [shuffle-icon])
+             :sx         {:mb 2}
+             :on-click   #(>evt :randomizer/generate-market filter-utils specs card-ids)}
      "Generate market"]))
 
 (defn unresolved-alert []
@@ -41,7 +43,10 @@
         replace-using-specs?  (<sub :randomizer/replace-using-specs?)
         default-sortings      (<sub :default-order-sortings)]
     [box {:sx {:mb 2}}
-     [box {:sx {:mb 2}}
+     [box {:sx {:mb        2,
+                :display   :flex
+                :flex-wrap :wrap
+                :row-gap   1}}
       (if edit?
         [button {:variant    :contained
                  :start-icon (r/as-element [done-icon])
@@ -60,14 +65,13 @@
          [button {:sx       {:mr 2}
                   :disabled sort-button-disabled?
                   :on-click #(>evt :randomizer/update-order default-sortings)}
-          "Sort"]])]
-     (if edit?
-       [form-item {:label "Replace card with"}
-        [select {:variant   :standard
-                 :value     replace-using-specs?
-                 :on-change #(>evt :randomizer/set-replace-using-specs? (event/value %))}
-         [menu-item {:value true} "card matching rule, if possible"]
-         [menu-item {:value false} "any card"]]])]))
+          "Sort"]
+         [form-item {:label "Replace card with"}
+          [select {:variant   :standard
+                   :value     replace-using-specs?
+                   :on-change #(>evt :randomizer/set-replace-using-specs? (event/value %))}
+           [menu-item {:value true} "card matching rule, if possible"]
+           [menu-item {:value false} "any card"]]]])]]))
 
 (defn market-display []
   (let [market       (<sub :randomizer/market)
