@@ -1,5 +1,6 @@
 (ns igniteinator.ui.pages.randomizer-page
-  (:require [igniteinator.text :refer [txt]]
+  (:require [igniteinator.router :refer [resolve-to-href]]
+            [igniteinator.text :refer [txt]]
             [igniteinator.ui.components.bool-input :refer [switch]]
             [igniteinator.ui.components.card-list :refer [card-list]]
             [igniteinator.ui.components.form-item :refer [form-item]]
@@ -10,13 +11,16 @@
             [reagent-mui.icons.done :refer [done] :rename {done done-icon}]
             [reagent-mui.icons.edit :refer [edit] :rename {edit edit-icon}]
             [reagent-mui.icons.file-copy :refer [file-copy] :rename {file-copy file-copy-icon}]
+            [reagent-mui.icons.info :refer [info] :rename {info info-icon}]
             [reagent-mui.icons.shuffle :refer [shuffle] :rename {shuffle shuffle-icon}]
             [reagent-mui.material.alert :refer [alert]]
             [reagent-mui.material.box :refer [box]]
             [reagent-mui.material.button :refer [button]]
+            [reagent-mui.material.icon-button :refer [icon-button]]
             [reagent-mui.material.menu-item :refer [menu-item]]
             [reagent-mui.material.select :refer [select]]
-            [reagent.core :as r]))
+            [reagent.core :as r]
+            ))
 
 (defn generate-market-button []
   (let [generated?   (<sub :randomizer/market-generated?)
@@ -28,6 +32,13 @@
              :start-icon (r/as-element [shuffle-icon])
              :on-click   #(>evt :randomizer/generate-market filter-utils specs card-ids)}
      "Generate market"]))
+
+(defn info-button []
+  [tooltip "Information"
+   [icon-button {:sx       {:ml 2}
+                 :href     (resolve-to-href :randomizer/info)
+                 :on-click (event/link-on-click #(>evt :page/to-sub-page :randomizer/info))}
+    [info-icon]]])
 
 (defn copy-to-cards-page-button []
   (if (<sub :randomizer/market-generated?)
@@ -115,6 +126,7 @@
   (page (txt :randomizer/page-title)
     [box {:sx {:mb 2}}
      [generate-market-button]
+     [info-button]
      [copy-to-cards-page-button]]
     (if (<sub :randomizer/market-generated?)
       [:<>

@@ -12,6 +12,7 @@
              ["/setups/:setup-name" :display-setup]
              ["/epic/" :epic]
              ["/randomizer/" :randomizer]
+             ["/randomizer/info/" :randomizer/info]
              ["/randomizer/data/" :randomizer/data]]))
 
 (defn on-navigate [name params query]
