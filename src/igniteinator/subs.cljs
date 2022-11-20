@@ -415,7 +415,7 @@
   :share/cards
   :<- [:current-page]
   :<- [:cards-page/cards]
-  :<- [:randomizer/selected-cards]
+  :<- [:randomizer/market]
   (fn [[current-page cards-page-cards randomizer-market] _]
     (not-empty (case current-page
                  :cards cards-page-cards
