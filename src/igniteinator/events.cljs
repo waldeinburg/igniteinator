@@ -384,6 +384,14 @@
     {:db       (assoc-in db [:cards-page :filters] [])
      :dispatch [:cards-page/set-search-str ""]}))
 
+(reg-event-fx
+  :copy-to-cards-page
+  (fn [_ [_ card-ids]]
+    {:fx [[:dispatch [:cards-page/reset-filters]]
+          [:dispatch [:cards-page.card-selection/set-selection card-ids]]
+          [:dispatch [:cards-page/set-base :some]]
+          [:dispatch [:page/navigate :cards]]]}))
+
 (reg-event-db-assoc :setups-filter/set-operator)
 (reg-event-db
   :setups-filter/set-box-selected?
@@ -417,14 +425,10 @@
 
 (reg-event-fx
   :current-setup/copy-to-cards-page
-  (fn [{:keys                                         [db]
-        {{:keys [idx setup-ids]} :display-setup-page} :db} _]
+  (fn [{{{:keys [idx setup-ids]} :display-setup-page :as db} :db} _]
     (let [current-setup-id (get setup-ids idx)
           card-ids         (get-in db [:setups current-setup-id :cards])]
-      {:fx [[:dispatch [:cards-page/reset-filters]]
-            [:dispatch [:cards-page.card-selection/set-selection card-ids]]
-            [:dispatch [:cards-page/set-base :some]]
-            [:dispatch [:page/navigate :cards]]]})))
+      {:dispatch [:copy-to-cards-page card-ids]})))
 
 (reg-event-db-assoc :share/set-dialog-open?)
 (reg-event-db-assoc :share/set-snackbar-open?)
@@ -800,3 +804,9 @@
                        (assoc card :order-idx idx)))
                selected-cards))))
        db)}))
+
+(reg-event-fx
+  :randomizer/copy-to-cards-page
+  (fn [{{{:keys [selected-cards]} :randomizer} :db} _]
+    (let [card-ids (mapv :id selected-cards)]
+      {:dispatch [:copy-to-cards-page card-ids]})))

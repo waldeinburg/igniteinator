@@ -4,10 +4,12 @@
             [igniteinator.ui.components.card-list :refer [card-list]]
             [igniteinator.ui.components.form-item :refer [form-item]]
             [igniteinator.ui.components.page :refer [page]]
+            [igniteinator.ui.components.tooltip :refer [tooltip]]
             [igniteinator.util.event :as event]
             [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
             [reagent-mui.icons.done :refer [done] :rename {done done-icon}]
             [reagent-mui.icons.edit :refer [edit] :rename {edit edit-icon}]
+            [reagent-mui.icons.file-copy :refer [file-copy] :rename {file-copy file-copy-icon}]
             [reagent-mui.icons.shuffle :refer [shuffle] :rename {shuffle shuffle-icon}]
             [reagent-mui.material.alert :refer [alert]]
             [reagent-mui.material.box :refer [box]]
@@ -22,10 +24,19 @@
         specs        (<sub :randomizer/specs)
         card-ids     (<sub :randomizer/card-ids-to-shuffle)]
     [button {:variant    (if generated? :outlined :contained)
+             :color      (if generated? :secondary :primary)
              :start-icon (r/as-element [shuffle-icon])
-             :sx         {:mb 2}
              :on-click   #(>evt :randomizer/generate-market filter-utils specs card-ids)}
      "Generate market"]))
+
+(defn copy-to-cards-page-button []
+  (if (<sub :randomizer/market-generated?)
+    [tooltip (txt :copy-to-cards-page-tooltip)
+     [button {:variant  :outlined
+              :sx       {:ml 2}
+              :on-click #(>evt :randomizer/copy-to-cards-page)}
+      [file-copy-icon {:sx {:mr 0.5}}]
+      (txt :copy-to-cards-page-button)]]))
 
 (defn unresolved-alert []
   (if (<sub :randomizer/some-unresolved)
@@ -102,7 +113,9 @@
 
 (defn randomizer-page []
   (page (txt :randomizer/page-title)
-    [generate-market-button]
+    [box {:sx {:mb 2}}
+     [generate-market-button]
+     [copy-to-cards-page-button]]
     (if (<sub :randomizer/market-generated?)
       [:<>
        [market-toolbar]
