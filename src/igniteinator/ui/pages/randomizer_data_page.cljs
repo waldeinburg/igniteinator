@@ -42,7 +42,7 @@
         types-map   (<sub :types-map)
         effects-map (<sub :effects-map)]
     [page (txt :randomizer/metadata-page-title)
-     [back-button]
+     [back-button {:variant :contained}]
      [:p
       "Multiple requirements means that one of the types/effects in the list should be in the market, not necessarily "
       "all."]

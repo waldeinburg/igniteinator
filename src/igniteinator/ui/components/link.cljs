@@ -10,9 +10,13 @@
          :rel    :noreferrer}
    children])
 
-(defn internal-link [name {:keys [navigate-event] :or {navigate-event :page/navigate} :as props} & children]
+(defn internal-link [name {:keys [navigate-event component]
+                           :or   {navigate-event :page/navigate
+                                  component      link}
+                           :as   props}
+                     & children]
   (let [href (resolve-to-href name)]
-    [link (merge {:href     href
-                  :on-click (link-on-click #(>evt navigate-event name))}
-            (dissoc props :nagivate-event))
+    [component (merge {:href     href
+                       :on-click (link-on-click #(>evt navigate-event name))}
+                 (dissoc props :nagivate-event :component))
      children]))

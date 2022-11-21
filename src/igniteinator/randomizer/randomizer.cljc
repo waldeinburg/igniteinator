@@ -183,6 +183,10 @@
            idx-to-replace last-idx
            replaced-any?  false
            ;; Replace cards having requirements? Our first priority is not to because requirements are a sort of combo.
+           ;; Should this be a preserve-combos? No, it would require that we included check that the card rule is not a
+           ;; combo selection, or else we would have a risk of skipping all combo rules and resolving by replacing the
+           ;; cost 10-11 card, which would either fail or be deterministic for arrow/bow (Deady Arrow and Modified Bow
+           ;; are from the expansion), the requirement type most likely to be resolved.
            preserve-reqs? true]
       (if (or (> idx-to-resolve last-idx) (< idx-to-replace 0))
         (if (and
