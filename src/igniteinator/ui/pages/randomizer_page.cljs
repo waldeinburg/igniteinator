@@ -2,10 +2,12 @@
   (:require [igniteinator.router :refer [resolve-to-href]]
             [igniteinator.text :refer [txt]]
             [igniteinator.ui.components.bool-input :refer [switch]]
+            [igniteinator.ui.components.button-with-confirm-dialog :refer [button-with-confirm-dialog]]
             [igniteinator.ui.components.card-list :refer [card-list]]
             [igniteinator.ui.components.form-item :refer [form-item]]
             [igniteinator.ui.components.page :refer [page]]
             [igniteinator.ui.components.tooltip :refer [tooltip]]
+            [igniteinator.ui.settings.boxes :refer [boxes-settings]]
             [igniteinator.util.event :as event]
             [igniteinator.util.re-frame :refer [<sub <sub-ref >evt]]
             [reagent-mui.icons.done :refer [done] :rename {done done-icon}]
@@ -27,7 +29,8 @@
         filter-utils (<sub :filter-utils)
         specs        (<sub :randomizer/specs)
         card-ids     (<sub :randomizer/card-ids-to-shuffle)]
-    [button {:variant    (if generated? :outlined :contained)
+    [button {:sx         {:mr 2}
+             :variant    (if generated? :outlined :contained)
              :color      (if generated? :secondary :primary)
              :start-icon (r/as-element [shuffle-icon])
              :on-click   #(>evt :randomizer/generate-market filter-utils specs card-ids)}
@@ -35,19 +38,45 @@
 
 (defn info-button []
   [tooltip "Information"
-   [icon-button {:sx       {:ml 2}
+   [icon-button {:sx       {:mr 2}
                  :href     (resolve-to-href :randomizer/info)
                  :on-click (event/link-on-click #(>evt :page/to-sub-page :randomizer/info))}
     [info-icon]]])
+
+(defn reset-button []
+  (if (<sub :randomizer/market-generated?)
+    [button-with-confirm-dialog
+     {:button-text           (txt :randomizer/reset-button-text)
+      :dialog-title          (txt :randomizer/reset-dialog-title)
+      :dialog-text           (txt :randomizer/reset-dialog-text)
+      :dialog-open-sub       :randomizer/reset-dialog-open?
+      :set-dialog-open-event :randomizer/set-reset-dialog-open?
+      :on-confirm            #(>evt :randomizer/reset)
+      :button-color          :secondary
+      :button-sx             {:mr 2}
+      :dialog-text-component :<>}]))                        ; text with :p
 
 (defn copy-to-cards-page-button []
   (if (<sub :randomizer/market-generated?)
     [tooltip (txt :copy-to-cards-page-tooltip)
      [button {:variant  :outlined
-              :sx       {:ml 2}
               :on-click #(>evt :randomizer/copy-to-cards-page)}
       [file-copy-icon {:sx {:mr 0.5}}]
       (txt :copy-to-cards-page-button)]]))
+
+(defn main-button-row []
+  [box {:sx        {:mb 2}
+        :display   :flex
+        :flex-wrap :wrap
+        :row-gap   1}
+   [generate-market-button]
+   [info-button]
+   [reset-button]
+   [copy-to-cards-page-button]])
+
+(defn randomizer-settings []
+  (if (not (<sub :randomizer/market-generated?))
+    [boxes-settings]))
 
 (defn unresolved-alert []
   (if (<sub :randomizer/some-unresolved)
@@ -124,10 +153,8 @@
 
 (defn randomizer-page []
   (page (txt :randomizer/page-title)
-    [box {:sx {:mb 2}}
-     [generate-market-button]
-     [info-button]
-     [copy-to-cards-page-button]]
+    [main-button-row]
+    [randomizer-settings]
     (if (<sub :randomizer/market-generated?)
       [:<>
        [market-toolbar]

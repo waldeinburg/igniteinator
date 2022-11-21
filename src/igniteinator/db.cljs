@@ -78,7 +78,8 @@
                              :replace-using-specs? true
                              :edit?                false
                              :changed?             false
-                             :show-specs?          false}
+                             :show-specs?          false
+                             :reset-dialog-open?   false}
    :card-load-state         {:en nil}
    :cards                   nil
    :types                   nil

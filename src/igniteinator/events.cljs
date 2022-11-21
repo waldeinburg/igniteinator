@@ -724,6 +724,12 @@
 (reg-event-db-assoc :randomizer/set-changed?)
 (reg-event-db-assoc :randomizer/set-replace-using-specs?)
 (reg-event-db-assoc :randomizer/set-show-specs?)
+(reg-event-db-assoc :randomizer/set-reset-dialog-open?)
+
+(reg-event-db
+  :randomizer/reset
+  (fn [db _]
+    (assoc-in db [:randomizer :selected-cards] nil)))
 
 (reg-event-fx
   :randomizer/generate-market

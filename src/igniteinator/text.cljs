@@ -90,6 +90,12 @@
    :randomizer/page-title             {:en "Randomizer"}
    :randomizer/info-page-title        {:en "Randomizer information"}
    :randomizer/metadata-page-title    {:en "Randomizer metadata"}
+   :randomizer/reset-button-text      {:en "Reset"}
+   :randomizer/reset-dialog-title     {:en "Reset market?"}
+   :randomizer/reset-dialog-text      {:en [:<>
+                                            [:p "Are you sure you want to reset the current generated market?"]
+                                            [:p [:strong "Tip:"] " You can use the Copy to Cards Page button or the "
+                                             "Share button (in the top menu) to save the current market."]]}
    })
 
 ;; Convenience functions to minimize the boilerplate retrieving strings.

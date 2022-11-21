@@ -662,6 +662,7 @@
 (reg-sub-db :randomizer/changed?)
 (reg-sub-db :randomizer/replace-using-specs?)
 (reg-sub-db :randomizer/show-specs?)
+(reg-sub-db :randomizer/reset-dialog-open?)
 
 (reg-sub
   :randomizer/market

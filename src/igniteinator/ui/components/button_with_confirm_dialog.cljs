@@ -1,12 +1,13 @@
 (ns igniteinator.ui.components.button-with-confirm-dialog
-  (:require [igniteinator.util.re-frame :refer [<sub-ref >evt]]
-            [igniteinator.text :refer [txt txt-c]]
+  (:require [igniteinator.text :refer [txt txt-c]]
             [igniteinator.ui.components.dialog :refer [dialog]]
+            [igniteinator.util.re-frame :refer [<sub-ref >evt]]
             [reagent-mui.material.button :refer [button]]))
 
 (defn confirm-dialog [{:keys [dialog-title dialog-text
                               dialog-open-sub set-dialog-open-event on-dialog-close
-                              on-confirm]}]
+                              on-confirm dialog-text-component]
+                       :or   {dialog-text-component :p}}]
   (let [on-close (fn []
                    (if on-dialog-close
                      on-dialog-close)
@@ -24,7 +25,7 @@
                                   :variant  :contained
                                   :color    :secondary}
                           (txt-c :cancel)]]}
-     [:p dialog-text]]))
+     [dialog-text-component dialog-text]]))
 
 (defn button-with-confirm-dialog [{:keys [button-text set-dialog-open-event
                                           button-color button-sx]
