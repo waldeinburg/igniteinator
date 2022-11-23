@@ -69,7 +69,7 @@
    ;; (https://developer.apple.com/design/human-interface-guidelines/sf-symbols/overview/)
    :a2hs-instructions-ios             {:en "Click the \"Share\" icon, then find \"Add to Home Screen\"."}
    :settings.boxes/label              {:en "Boxes"}
-   :settings.boxes/ks                 {:en "Kickstarter"}
+   :settings.boxes/ks                 {:en "Kickstarter exclusives"}
    :settings.size/label               {:en "Card size"}
    :settings.size/size-0              {:en "S"}
    :settings.size/size-1              {:en "M"}
