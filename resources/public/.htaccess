@@ -9,6 +9,6 @@ RewriteRule (.*) %{REQUEST_URI}/ [R=301,L]
 RewriteRule ^index\.html$ / [R=301,L]
 
 # Routing.
-RewriteRule ^((cards|setups)(/[^/]+)?|epic|randomizer(/data)?)/?$ index.html [L]
+RewriteRule ^((cards|setups)(/[^/]+)?|epic|randomizer(/(info|data))?)/?$ index.html [L]
 
 ErrorDocument 404 /404.html
